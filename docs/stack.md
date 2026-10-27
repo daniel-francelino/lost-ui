@@ -111,12 +111,12 @@ The apps are separate repositories (no workspace), so the library cannot be cons
 
 ## 8. Implementation status
 
-Done and verified (2026-10-27): `tsc --noEmit`, `vite build` plus declaration emit, Prettier; the packed tarball installs in an empty project, Tailwind 4.3.3 compiles its CSS, all 79 effect modules import in Node except the two tweet cards (they need a bundler for `react-tweet` CSS modules), and 73 of 82 exported components render with `renderToString` (the other 9 need required props or a provider).
+Done and verified (2026-10-27):
 
-Not done:
+- `tsc --noEmit`, `vite build` plus declaration emit and Prettier pass.
+- **Tests (S10).** Vitest 3 with jsdom and Testing Library; one test file per component, 81 files and 182 tests, all passing. Each test renders the component's stories through `composeStories`, so stories and tests cannot drift apart. Canvas, WebGL (`cobe`) and `canvas-confetti` are stubbed in jsdom, so the tests prove the DOM and the behaviour, not the pixels. axe checks are not added yet.
+- **Storybook (S9).** Storybook 10 (`react-vite`) with docs, a11y and a light/dark theme switch; 99 stories, one or more per component. Run `npm run storybook`. A static build opens in Chromium with zero console or page errors in all 99 stories.
+- **Folder per component.** `src/effects/<name>/` and `src/ui/<name>/` hold the component, its stories, its test and an `index.ts`. The package exposes each one as `lost-ui/effects/<name>` and `lost-ui/ui/<name>`.
+- A packed tarball installs in an empty project, Tailwind 4.3.3 compiles its CSS, all 79 effect modules import in Node except the two tweet cards (they need a bundler for `react-tweet` CSS modules), and 74 of 83 exported components render with `renderToString` (the other 9 need required props or a provider).
 
-- **Storybook, Vitest and axe (S9, S10).** No stories or tests exist. Nothing has been looked at in a browser, so animations, canvas effects and the colour migration are unverified visually.
-- **Stricter compiler options.** The library uses `strict`, `noUnused*` and `erasableSyntaxOnly`, but not the apps' `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess` or `noPropertyAccessFromIndexSignature`.
-- **ESLint, Husky, Changesets (S11, S12).** Only Prettier is configured.
-- **Integration inside the two apps.** Neither app imports `lost-ui` yet.
-- **The `ui` and `admin` tiers (section 2).** Only `Button` and `ScrollArea` exist, as dependencies of the effects.
+Not done: see [pending.md](pending.md). In short: ESLint, Husky and Changesets; the apps' stricter compiler options; integration inside the two apps; the `admin` tier of section 2 (only `Button` and `ScrollArea` exist in `ui`, as dependencies of the effects); and the visual issues found in Storybook that are still open.

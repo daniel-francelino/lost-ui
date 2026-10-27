@@ -4,4 +4,4 @@ export function placeholderImage(width: number, height: number, label = "") {
 }
 
 export const sampleVideo =
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm";

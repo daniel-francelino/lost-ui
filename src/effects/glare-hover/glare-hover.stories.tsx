@@ -17,7 +17,7 @@ export const Default: Story = {
     width: "18rem",
     height: "12rem",
     color: "#ffffff",
-    background: "var(--card)",
-    children: <p className="text-sm">Hover for a glare</p>,
+    background: "var(--primary)",
+    children: <p className="text-sm text-primary-foreground">Hover for a glare</p>,
   },
 };

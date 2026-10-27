@@ -16,9 +16,9 @@ export const Default: Story = {
   args: {},
   render: (args) => (
     <ScrollVelocityContainer {...args} className="w-full py-12 text-4xl font-bold">
-      <ScrollVelocityRow baseVelocity={3}>Scroll velocity </ScrollVelocityRow>
+      <ScrollVelocityRow baseVelocity={3}>Scroll velocity &nbsp;•&nbsp; </ScrollVelocityRow>
       <ScrollVelocityRow baseVelocity={3} direction={-1}>
-        Another row{" "}
+        Another row &nbsp;•&nbsp;
       </ScrollVelocityRow>
     </ScrollVelocityContainer>
   ),

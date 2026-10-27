@@ -2,11 +2,16 @@
 
 Items agreed to be done later. Move an item out of this file when it is done and note it in the relevant document.
 
-| Item | Detail | Reference |
-| --- | --- | --- |
-| ESLint | ESLint 9 flat config with the same rules as the apps (no hex colours, no raw Tailwind palette, no `any`, import rules between layers). Only Prettier is configured today | stack.md S12 |
-| Husky + lint-staged | Pre-commit formatting and lint, as in both apps | stack.md S12 |
-| Changesets | Versioning and changelog flow for the two consumers | stack.md S11 |
-| Distribution | How the apps install the library (registry or link). Postponed by the owner | stack.md S14 |
-| Stricter compiler options | `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` as in the apps | stack.md section 8 |
-| Integration in the apps | Replace nothing yet; first import `lost-ui` in one page of each app and test the `source(none)` case in memoria-print | stack.md section 4 |
+| Item                                | Detail                                                                                                                                                                                                    | Reference                          |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| ESLint                              | ESLint 9 flat config with the same rules as the apps (no hex colours, no raw Tailwind palette, no `any`, import rules between layers). Only Prettier is configured today                                  | stack.md S12                       |
+| Husky + lint-staged                 | Pre-commit formatting and lint, as in both apps                                                                                                                                                           | stack.md S12                       |
+| Changesets                          | Versioning and changelog flow for the two consumers                                                                                                                                                       | stack.md S11                       |
+| Distribution                        | How the apps install the library (registry or link). Postponed by the owner                                                                                                                               | stack.md S14                       |
+| Stricter compiler options           | `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` as in the apps                                                                                             | stack.md section 8                 |
+| Integration in the apps             | Replace nothing yet; first import `lost-ui` in one page of each app and test the `source(none)` case in memoria-print                                                                                     | stack.md section 4                 |
+| Globe renders as a solid black disc | Seen in headless Chromium (default WebGL); cause not confirmed: software WebGL in headless mode or a bug with `cobe` and the neutral theme. Check in a real browser first                                 | `effects/globe`                    |
+| Visual review in a real browser     | Only a headless Chromium was used, and only a light theme. Check dark mode, hover and scroll effects, and the colour migration of `ui/button`, `rainbow-button`, `shimmer-button` and `hero-video-dialog` | magic-ui-integration.md section 10 |
+| axe checks                          | Add automated accessibility assertions to the tests of interactive components                                                                                                                             | stack.md S10                       |
+| Component docs                      | Write usage notes (when to use, props that matter) in the stories; today they only have examples                                                                                                          | Storybook                          |
+| Dependency advisories               | `npm audit` reports 3 findings (1 moderate, 2 critical) in `vitest` 3 transitive packages (`tinypool`, `@vitest/mocker`). Dev-only; vitest 4 failed to install alongside Storybook 10                     | package.json                       |
