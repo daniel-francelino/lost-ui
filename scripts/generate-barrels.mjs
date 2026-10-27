@@ -11,8 +11,10 @@ const standalone = new Set([
   "icon-cloud",
 ]);
 
+const componentFile = /^(?!.*\.(stories|test)\.tsx$).*\.tsx$/;
+
 const files = readdirSync("src/effects")
-  .filter((file) => file.endsWith(".tsx"))
+  .filter((file) => componentFile.test(file))
   .map((file) => file.replace(".tsx", ""))
   .sort();
 

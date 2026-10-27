@@ -239,4 +239,5 @@ const CharBox = memo(
 CharBox.displayName = "CharBox";
 Text3DFlip.displayName = "Text3DFlip";
 
+export { Text3DFlip };
 export default Text3DFlip;
