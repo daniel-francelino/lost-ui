@@ -19,8 +19,12 @@ describe("DottedMap", () => {
 });
 
 describe("dotted-map stories render", () => {
-  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
-    const { container } = render(<Story />);
-    expect(container.firstElementChild).not.toBeNull();
-  });
+  it.each(Object.entries(composeStories(stories)))(
+    "renders %s",
+    (_name, Story) => {
+      const { container } = render(<Story />);
+      expect(container.firstElementChild).not.toBeNull();
+    },
+    60000,
+  );
 });

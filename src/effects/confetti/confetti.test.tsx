@@ -6,7 +6,9 @@ import confetti from "canvas-confetti";
 import * as stories from "./confetti.stories";
 
 vi.mock("canvas-confetti", () => ({
-  default: Object.assign(vi.fn(), { create: vi.fn(() => vi.fn()) }),
+  default: Object.assign(vi.fn(), {
+    create: vi.fn(() => Object.assign(vi.fn(), { reset: vi.fn() })),
+  }),
 }));
 
 const { Playground } = composeStories(stories);

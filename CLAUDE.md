@@ -11,7 +11,7 @@ Shared component library for aura-creative and memoria-print. Read `docs/README.
 
 ## Component layout
 
-Each component has its own folder under `src/effects/` (landing-page effects) or `src/ui/` (primitives):
+Each component has its own folder under `src/effects/` (landing-page effects) or `src/ui/` (shadcn primitives):
 
 ```
 src/effects/marquee/
@@ -19,26 +19,30 @@ src/effects/marquee/
   marquee.stories.tsx   Storybook stories (also used by the test)
   marquee.test.tsx      Vitest + Testing Library, renders the stories with composeStories
   index.ts              export * from "./marquee"
+  examples/             effects only: the official Magic UI examples, one file each
 ```
+
+The first story of an effect is `Playground` (interactive, drives the controls). Each file in `examples/` is also a story, named from the file (`marquee-demo-vertical` becomes `Vertical`), with its source shown in the docs through `?raw`. Examples keep their original code, so they may use literal colours and remote images; the colour rule below applies to the component, not to stories. `src/stories/` holds shims (`use-theme`, `link`) so examples written for Next.js run unchanged.
 
 Anything that belongs only to that component (constants, types, helpers, CSS variables) lives in its folder, not in `src/lib`.
 
 - Import shared code with relative paths: `../../lib/cn`, `../../ui/button`.
-- A component that needs a heavy optional peer (cobe, shiki, react-tweet…) is added to the `standalone` set in `scripts/generate-barrels.mjs`, then run `npm run barrels`. Otherwise run `npm run barrels` after adding a folder so `lost-ui/effects` exports it.
+- A component that needs a heavy optional peer (cobe, shiki, react-tweet, cmdk, vaul, react-hook-form…) is added to the `standalone` set of its layer in `scripts/generate-barrels.mjs`, then run `npm run barrels`. Otherwise run `npm run barrels` after adding a folder so `lost-ui/effects` or `lost-ui/ui` exports it.
 - Animations and keyframes are prefixed `lost-` (`animate-lost-*`) so they cannot override Tailwind's own.
 - Colours come from theme tokens (`bg-primary`, `var(--effect-from)`), not hex or the raw Tailwind palette. Exceptions are listed in `docs/magic-ui-integration.md`.
 
 ## Commands
 
-| Command             | Use                                                  |
-| ------------------- | ---------------------------------------------------- |
-| `npm test`          | Vitest, all tests                                    |
-| `npm run typecheck` | `tsc --noEmit`                                       |
-| `npm run build`     | library build and declarations                       |
-| `npm run storybook` | Storybook on port 6006                               |
-| `npm run barrels`   | regenerate `src/index.ts` and `src/effects/index.ts` |
+| Command             | Use                                                                     |
+| ------------------- | ----------------------------------------------------------------------- |
+| `npm test`          | Vitest, all tests                                                       |
+| `npm run typecheck` | `tsc --noEmit`                                                          |
+| `npm run build`     | library build and declarations                                          |
+| `npm run storybook` | Storybook on port 6006                                                  |
+| `npm run barrels`   | regenerate `src/index.ts`, `src/effects/index.ts` and `src/ui/index.ts` |
 
 ## Do not
 
 - Do not commit or push unless asked.
-- Do not edit `src/index.ts` or `src/effects/index.ts` by hand; they are generated.
+- Do not edit `src/index.ts`, `src/effects/index.ts` or `src/ui/index.ts` by hand; they are generated.
+- Do not copy app-specific code into `src/ui/` (brand tokens, locale, Portuguese strings). Primitives use semantic tokens and English text; the apps pass their own copy.
