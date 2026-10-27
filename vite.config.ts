@@ -5,13 +5,22 @@ import react from "@vitejs/plugin-react";
 
 const root = import.meta.dirname;
 const sourceFile = /\.tsx?$/;
-const nonLibraryFile = /\.(stories|test)\.tsx?$/;
 
-function entriesOf(dir: string): Record<string, string> {
+function componentEntries(layer: string): Record<string, string> {
+  const layerDir = resolve(root, "src", layer);
   return Object.fromEntries(
-    readdirSync(resolve(root, "src", dir))
-      .filter((file) => sourceFile.test(file) && !nonLibraryFile.test(file))
-      .map((file) => [`${dir}/${file.replace(sourceFile, "")}`, resolve(root, "src", dir, file)]),
+    readdirSync(layerDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => [`${layer}/${entry.name}/index`, resolve(layerDir, entry.name, "index.ts")]),
+  );
+}
+
+function libEntries(): Record<string, string> {
+  const libDir = resolve(root, "src/lib");
+  return Object.fromEntries(
+    readdirSync(libDir)
+      .filter((file) => sourceFile.test(file))
+      .map((file) => [`lib/${file.replace(sourceFile, "")}`, resolve(libDir, file)]),
   );
 }
 
@@ -25,9 +34,10 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(root, "src/index.ts"),
-        ...entriesOf("effects"),
-        ...entriesOf("ui"),
-        ...entriesOf("lib"),
+        "effects/index": resolve(root, "src/effects/index.ts"),
+        ...componentEntries("effects"),
+        ...componentEntries("ui"),
+        ...libEntries(),
       },
       formats: ["es"],
     },

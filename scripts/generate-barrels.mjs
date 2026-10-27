@@ -11,14 +11,12 @@ const standalone = new Set([
   "icon-cloud",
 ]);
 
-const componentFile = /^(?!.*\.(stories|test)\.tsx$).*\.tsx$/;
-
-const files = readdirSync("src/effects")
-  .filter((file) => componentFile.test(file))
-  .map((file) => file.replace(".tsx", ""))
+const components = readdirSync("src/effects", { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
   .sort();
 
-const lines = files
+const lines = components
   .filter((name) => !standalone.has(name))
   .map((name) => `export * from "./${name}";`);
 writeFileSync("src/effects/index.ts", `${lines.join("\n")}\n`);
