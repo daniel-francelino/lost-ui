@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import RetroGridDemoExample from "./examples/retro-grid-demo";
+import retroGridDemoExampleSource from "./examples/retro-grid-demo.tsx?raw";
 
 import { RetroGrid } from "./retro-grid";
 
@@ -12,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { angle: 65 },
   render: (args) => (
     <div className="relative flex h-72 w-full max-w-xl items-center justify-center overflow-hidden rounded-lg border bg-background">
@@ -20,4 +22,12 @@ export const Default: Story = {
       <RetroGrid {...args} />
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <RetroGridDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: retroGridDemoExampleSource, language: "tsx" } },
+  },
 };

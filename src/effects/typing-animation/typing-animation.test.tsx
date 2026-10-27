@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./typing-animation.stories";
 
-const { Default, RotatingWords } = composeStories(stories);
+const { Playground, RotatingWords } = composeStories(stories);
 
 describe("TypingAnimation", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
@@ -18,7 +18,14 @@ describe("TypingAnimation", () => {
   });
 
   it("shows a cursor while typing", () => {
-    const { container } = render(<Default />);
+    const { container } = render(<Playground />);
+    expect(container.firstElementChild).not.toBeNull();
+  });
+});
+
+describe("typing-animation stories render", () => {
+  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
+    const { container } = render(<Story />);
     expect(container.firstElementChild).not.toBeNull();
   });
 });

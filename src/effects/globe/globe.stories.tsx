@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import GlobeDemoExample from "./examples/globe-demo";
+import globeDemoExampleSource from "./examples/globe-demo.tsx?raw";
 
 import { Globe } from "./globe";
 
@@ -12,11 +14,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { className: "size-80" },
   render: (args) => (
     <div className="relative size-80">
       <Globe {...args} />
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <GlobeDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: globeDemoExampleSource, language: "tsx" } },
+  },
 };

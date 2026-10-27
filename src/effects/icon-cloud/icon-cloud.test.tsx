@@ -4,16 +4,23 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./icon-cloud.stories";
 
-const { Default } = composeStories(stories);
+const { Playground } = composeStories(stories);
 
 describe("IconCloud", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
   it("draws the cloud on a canvas", () => {
-    const { container } = render(<Default />);
+    const { container } = render(<Playground />);
     expect(container.querySelector("canvas")).not.toBeNull();
+  });
+});
+
+describe("icon-cloud stories render", () => {
+  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
+    const { container } = render(<Story />);
+    expect(container.firstElementChild).not.toBeNull();
   });
 });

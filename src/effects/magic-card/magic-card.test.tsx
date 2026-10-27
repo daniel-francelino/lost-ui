@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./magic-card.stories";
 
-const { Default, Orb } = composeStories(stories);
+const { Playground, Orb } = composeStories(stories);
 
 describe("MagicCard", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
@@ -18,7 +18,14 @@ describe("MagicCard", () => {
   });
 
   it("renders its children", () => {
-    render(<Default />);
+    render(<Playground />);
     expect(screen.getByText("Magic card")).toBeInTheDocument();
+  });
+});
+
+describe("magic-card stories render", () => {
+  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
+    const { container } = render(<Story />);
+    expect(container.firstElementChild).not.toBeNull();
   });
 });

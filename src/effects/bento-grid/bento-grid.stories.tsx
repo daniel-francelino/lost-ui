@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import BentoDemoExample from "./examples/bento-demo";
+import bentoDemoExampleSource from "./examples/bento-demo.tsx?raw";
+import BentoDemoVerticalExample from "./examples/bento-demo-vertical";
+import bentoDemoVerticalExampleSource from "./examples/bento-demo-vertical.tsx?raw";
 import { BellIcon, CalendarIcon, FileTextIcon } from "lucide-react";
 
 import { BentoGrid, BentoCard } from "./bento-grid";
@@ -13,7 +17,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { children: null },
   render: () => (
     <BentoGrid className="lg:grid-rows-2">
@@ -47,4 +51,20 @@ export const Default: Story = {
       ))}
     </BentoGrid>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <BentoDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: bentoDemoExampleSource, language: "tsx" } },
+  },
+};
+
+export const Vertical: StoryObj = {
+  render: () => <BentoDemoVerticalExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: bentoDemoVerticalExampleSource, language: "tsx" } },
+  },
 };

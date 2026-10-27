@@ -1,4 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import TweetCardDemoExample from "./examples/tweet-card-demo";
+import tweetCardDemoExampleSource from "./examples/tweet-card-demo.tsx?raw";
+import TweetCardImagesExample from "./examples/tweet-card-images";
+import tweetCardImagesExampleSource from "./examples/tweet-card-images.tsx?raw";
+import TweetCardMetaPreviewExample from "./examples/tweet-card-meta-preview";
+import tweetCardMetaPreviewExampleSource from "./examples/tweet-card-meta-preview.tsx?raw";
 
 import { MagicTweet, TweetSkeleton, TweetNotFound } from "./tweet-card";
 
@@ -43,7 +49,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { tweet: sampleTweet, className: "w-96" },
 };
 
@@ -55,4 +61,28 @@ export const Loading: Story = {
 export const NotFound: Story = {
   args: { tweet: sampleTweet },
   render: () => <TweetNotFound />,
+};
+
+export const Default: StoryObj = {
+  render: () => <TweetCardDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: tweetCardDemoExampleSource, language: "tsx" } },
+  },
+};
+
+export const Images: StoryObj = {
+  render: () => <TweetCardImagesExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: tweetCardImagesExampleSource, language: "tsx" } },
+  },
+};
+
+export const MetaPreview: StoryObj = {
+  render: () => <TweetCardMetaPreviewExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: tweetCardMetaPreviewExampleSource, language: "tsx" } },
+  },
 };

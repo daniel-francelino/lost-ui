@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import AnimatedListDemoExample from "./examples/animated-list-demo";
+import animatedListDemoExampleSource from "./examples/animated-list-demo.tsx?raw";
 
 import { AnimatedList } from "./animated-list";
 
@@ -12,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { children: null, delay: 1000 },
   render: (args) => (
     <AnimatedList {...args}>
@@ -23,4 +25,12 @@ export const Default: Story = {
       ))}
     </AnimatedList>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <AnimatedListDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: animatedListDemoExampleSource, language: "tsx" } },
+  },
 };

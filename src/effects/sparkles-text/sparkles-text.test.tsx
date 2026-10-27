@@ -4,16 +4,23 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./sparkles-text.stories";
 
-const { Default } = composeStories(stories);
+const { Playground } = composeStories(stories);
 
 describe("SparklesText", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
   it("shows the text", () => {
-    render(<Default />);
+    render(<Playground />);
     expect(screen.getByText("Sparkles")).toBeInTheDocument();
+  });
+});
+
+describe("sparkles-text stories render", () => {
+  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
+    const { container } = render(<Story />);
+    expect(container.firstElementChild).not.toBeNull();
   });
 });

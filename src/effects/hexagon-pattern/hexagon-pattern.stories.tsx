@@ -1,4 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import HexagonPatternDashedExample from "./examples/hexagon-pattern-dashed";
+import hexagonPatternDashedExampleSource from "./examples/hexagon-pattern-dashed.tsx?raw";
+import HexagonPatternDemoExample from "./examples/hexagon-pattern-demo";
+import hexagonPatternDemoExampleSource from "./examples/hexagon-pattern-demo.tsx?raw";
+import HexagonPatternLinearGradientExample from "./examples/hexagon-pattern-linear-gradient";
+import hexagonPatternLinearGradientExampleSource from "./examples/hexagon-pattern-linear-gradient.tsx?raw";
+import HexagonPatternSpacingExample from "./examples/hexagon-pattern-spacing";
+import hexagonPatternSpacingExampleSource from "./examples/hexagon-pattern-spacing.tsx?raw";
 
 import { HexagonPattern } from "./hexagon-pattern";
 
@@ -12,7 +20,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: {
     radius: 30,
     gap: 4,
@@ -30,4 +38,36 @@ export const Default: Story = {
       />
     </div>
   ),
+};
+
+export const Dashed: StoryObj = {
+  render: () => <HexagonPatternDashedExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: hexagonPatternDashedExampleSource, language: "tsx" } },
+  },
+};
+
+export const Default: StoryObj = {
+  render: () => <HexagonPatternDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: hexagonPatternDemoExampleSource, language: "tsx" } },
+  },
+};
+
+export const LinearGradient: StoryObj = {
+  render: () => <HexagonPatternLinearGradientExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: hexagonPatternLinearGradientExampleSource, language: "tsx" } },
+  },
+};
+
+export const Spacing: StoryObj = {
+  render: () => <HexagonPatternSpacingExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: hexagonPatternSpacingExampleSource, language: "tsx" } },
+  },
 };

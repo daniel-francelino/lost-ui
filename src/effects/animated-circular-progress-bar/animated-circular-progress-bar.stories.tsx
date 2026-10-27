@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import AnimatedCircularProgressBarDemoExample from "./examples/animated-circular-progress-bar-demo";
+import animatedCircularProgressBarDemoExampleSource from "./examples/animated-circular-progress-bar-demo.tsx?raw";
 
 import { AnimatedCircularProgressBar } from "./animated-circular-progress-bar";
 
@@ -12,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: {
     value: 65,
     min: 0,
@@ -20,5 +22,13 @@ export const Default: Story = {
     gaugePrimaryColor: "var(--primary)",
     gaugeSecondaryColor: "var(--muted)",
     className: "size-40",
+  },
+};
+
+export const Default: StoryObj = {
+  render: () => <AnimatedCircularProgressBarDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: animatedCircularProgressBarDemoExampleSource, language: "tsx" } },
   },
 };

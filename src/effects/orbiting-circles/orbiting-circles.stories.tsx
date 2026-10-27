@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import OrbitingCirclesDemoExample from "./examples/orbiting-circles-demo";
+import orbitingCirclesDemoExampleSource from "./examples/orbiting-circles-demo.tsx?raw";
 
 import { OrbitingCircles } from "./orbiting-circles";
 
@@ -12,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { radius: 100, iconSize: 30, path: true },
   render: (args) => (
     <div className="relative flex size-72 items-center justify-center overflow-hidden">
@@ -28,4 +30,12 @@ export const Default: Story = {
       </OrbitingCircles>
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <OrbitingCirclesDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: orbitingCirclesDemoExampleSource, language: "tsx" } },
+  },
 };

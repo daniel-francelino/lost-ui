@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import RippleDemoExample from "./examples/ripple-demo";
+import rippleDemoExampleSource from "./examples/ripple-demo.tsx?raw";
 
 import { Ripple } from "./ripple";
 
@@ -12,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: {},
   render: (args) => (
     <div className="relative flex h-72 w-full max-w-xl items-center justify-center overflow-hidden rounded-lg border bg-background">
@@ -20,4 +22,12 @@ export const Default: Story = {
       <Ripple {...args} />
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <RippleDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: rippleDemoExampleSource, language: "tsx" } },
+  },
 };

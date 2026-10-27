@@ -4,16 +4,16 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./client-tweet-card.stories";
 
-const { Default } = composeStories(stories);
+const { Playground } = composeStories(stories);
 
 describe("ClientTweetCard", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
   it("shows a skeleton while the tweet loads", () => {
-    const { container } = render(<Default />);
+    const { container } = render(<Playground />);
     expect(container.querySelector(".animate-pulse")).not.toBeNull();
   });
 });

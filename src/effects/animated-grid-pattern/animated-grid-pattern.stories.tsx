@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import AnimatedGridPatternDemoExample from "./examples/animated-grid-pattern-demo";
+import animatedGridPatternDemoExampleSource from "./examples/animated-grid-pattern-demo.tsx?raw";
 
 import { AnimatedGridPattern } from "./animated-grid-pattern";
 
@@ -12,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { numSquares: 30, maxOpacity: 0.1, duration: 3, repeatDelay: 1 },
   render: (args) => (
     <div className="relative flex h-72 w-full max-w-xl items-center justify-center overflow-hidden rounded-lg border bg-background">
@@ -23,4 +25,12 @@ export const Default: Story = {
       />
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <AnimatedGridPatternDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: animatedGridPatternDemoExampleSource, language: "tsx" } },
+  },
 };

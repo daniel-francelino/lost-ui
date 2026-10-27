@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import ShinyButtonDemoExample from "./examples/shiny-button-demo";
+import shinyButtonDemoExampleSource from "./examples/shiny-button-demo.tsx?raw";
 
 import { ShinyButton } from "./shiny-button";
 
@@ -12,6 +14,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { children: "Shiny button" },
+};
+
+export const Default: StoryObj = {
+  render: () => <ShinyButtonDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: shinyButtonDemoExampleSource, language: "tsx" } },
+  },
 };

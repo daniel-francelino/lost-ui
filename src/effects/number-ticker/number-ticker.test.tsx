@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./number-ticker.stories";
 
-const { Default, CountingDown } = composeStories(stories);
+const { Playground, CountingDown } = composeStories(stories);
 
 describe("NumberTicker", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
@@ -18,7 +18,14 @@ describe("NumberTicker", () => {
   });
 
   it("starts from the start value", () => {
-    const { container } = render(<Default />);
+    const { container } = render(<Playground />);
     expect(container).toHaveTextContent("0");
+  });
+});
+
+describe("number-ticker stories render", () => {
+  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
+    const { container } = render(<Story />);
+    expect(container.firstElementChild).not.toBeNull();
   });
 });

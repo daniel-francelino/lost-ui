@@ -4,16 +4,23 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./dia-text-reveal.stories";
 
-const { Default } = composeStories(stories);
+const { Playground } = composeStories(stories);
 
 describe("DiaTextReveal", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
   it("renders the text", () => {
-    const { container } = render(<Default />);
+    const { container } = render(<Playground />);
     expect(container.textContent).toContain("Lost UI");
+  });
+});
+
+describe("dia-text-reveal stories render", () => {
+  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
+    const { container } = render(<Story />);
+    expect(container.firstElementChild).not.toBeNull();
   });
 });

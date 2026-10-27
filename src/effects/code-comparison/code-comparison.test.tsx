@@ -4,21 +4,28 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./code-comparison.stories";
 
-const { Default } = composeStories(stories);
+const { Playground } = composeStories(stories);
 
 describe("CodeComparison", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
   it("labels both sides with the filename", () => {
-    render(<Default />);
+    render(<Playground />);
     expect(screen.getAllByText("total.ts").length).toBeGreaterThan(0);
   });
 
   it("shows the code before it is highlighted", () => {
-    const { container } = render(<Default />);
+    const { container } = render(<Playground />);
     expect(container.textContent).toContain("items.reduce");
+  });
+});
+
+describe("code-comparison stories render", () => {
+  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
+    const { container } = render(<Story />);
+    expect(container.firstElementChild).not.toBeNull();
   });
 });

@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import ProgressiveBlurDemoExample from "./examples/progressive-blur-demo";
+import progressiveBlurDemoExampleSource from "./examples/progressive-blur-demo.tsx?raw";
 
 import { ProgressiveBlur } from "./progressive-blur";
 
@@ -12,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { position: "bottom", height: "40%" },
   render: (args) => (
     <div className="relative h-72 w-80 overflow-hidden rounded-lg border">
@@ -24,4 +26,12 @@ export const Default: Story = {
       <ProgressiveBlur {...args} />
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <ProgressiveBlurDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: progressiveBlurDemoExampleSource, language: "tsx" } },
+  },
 };

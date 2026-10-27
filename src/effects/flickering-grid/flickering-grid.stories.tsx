@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import FlickeringGridDemoExample from "./examples/flickering-grid-demo";
+import flickeringGridDemoExampleSource from "./examples/flickering-grid-demo.tsx?raw";
+import FlickeringGridRoundedDemoExample from "./examples/flickering-grid-rounded-demo";
+import flickeringGridRoundedDemoExampleSource from "./examples/flickering-grid-rounded-demo.tsx?raw";
 
 import { FlickeringGrid } from "./flickering-grid";
 
@@ -12,7 +16,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: {
     squareSize: 4,
     gridGap: 6,
@@ -27,4 +31,20 @@ export const Default: Story = {
       <FlickeringGrid {...args} />
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <FlickeringGridDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: flickeringGridDemoExampleSource, language: "tsx" } },
+  },
+};
+
+export const Rounded: StoryObj = {
+  render: () => <FlickeringGridRoundedDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: flickeringGridRoundedDemoExampleSource, language: "tsx" } },
+  },
 };

@@ -1,4 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import DottedMapDemoExample from "./examples/dotted-map-demo";
+import dottedMapDemoExampleSource from "./examples/dotted-map-demo.tsx?raw";
+import DottedMapDemo2Example from "./examples/dotted-map-demo-2";
+import dottedMapDemo2ExampleSource from "./examples/dotted-map-demo-2.tsx?raw";
+import DottedMapDemo3Example from "./examples/dotted-map-demo-3";
+import dottedMapDemo3ExampleSource from "./examples/dotted-map-demo-3.tsx?raw";
 
 import { DottedMap } from "./dotted-map";
 
@@ -12,7 +18,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: {
     width: 150,
     height: 75,
@@ -27,4 +33,28 @@ export const Default: Story = {
       <DottedMap {...args} />
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <DottedMapDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: dottedMapDemoExampleSource, language: "tsx" } },
+  },
+};
+
+export const Example2: StoryObj = {
+  render: () => <DottedMapDemo2Example />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: dottedMapDemo2ExampleSource, language: "tsx" } },
+  },
+};
+
+export const Example3: StoryObj = {
+  render: () => <DottedMapDemo3Example />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: dottedMapDemo3ExampleSource, language: "tsx" } },
+  },
 };

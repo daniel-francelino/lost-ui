@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 
 import * as stories from "./tweet-card.stories";
 
-const { Default, Loading, NotFound } = composeStories(stories);
+const { Playground, Loading, NotFound } = composeStories(stories);
 
 describe("TweetCard", () => {
-  it("renders the default story", () => {
-    const { container } = render(<Default />);
+  it("renders the playground story", () => {
+    const { container } = render(<Playground />);
     expect(container.firstElementChild).not.toBeNull();
   });
 
@@ -23,8 +23,15 @@ describe("TweetCard", () => {
   });
 
   it("shows the author and the text", () => {
-    render(<Default />);
+    render(<Playground />);
     expect(screen.getByText("Lost UI")).toBeInTheDocument();
     expect(screen.getByText(/mostly naming things/)).toBeInTheDocument();
+  });
+});
+
+describe("tweet-card stories render", () => {
+  it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
+    const { container } = render(<Story />);
+    expect(container.firstElementChild).not.toBeNull();
   });
 });

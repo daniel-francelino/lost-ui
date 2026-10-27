@@ -1,4 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import AnimatedBeamBidirectionalExample from "./examples/animated-beam-bidirectional";
+import animatedBeamBidirectionalExampleSource from "./examples/animated-beam-bidirectional.tsx?raw";
+import AnimatedBeamDemoExample from "./examples/animated-beam-demo";
+import animatedBeamDemoExampleSource from "./examples/animated-beam-demo.tsx?raw";
+import AnimatedBeamMultipleInputsExample from "./examples/animated-beam-multiple-inputs";
+import animatedBeamMultipleInputsExampleSource from "./examples/animated-beam-multiple-inputs.tsx?raw";
+import AnimatedBeamMultipleOutputsExample from "./examples/animated-beam-multiple-outputs";
+import animatedBeamMultipleOutputsExampleSource from "./examples/animated-beam-multiple-outputs.tsx?raw";
+import AnimatedBeamUnidirectionalExample from "./examples/animated-beam-unidirectional";
+import animatedBeamUnidirectionalExampleSource from "./examples/animated-beam-unidirectional.tsx?raw";
 import { useRef } from "react";
 
 import { AnimatedBeam } from "./animated-beam";
@@ -43,7 +53,47 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { containerRef: { current: null }, fromRef: { current: null }, toRef: { current: null } },
   render: (args) => <BeamDemo {...args} />,
+};
+
+export const Bidirectional: StoryObj = {
+  render: () => <AnimatedBeamBidirectionalExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: animatedBeamBidirectionalExampleSource, language: "tsx" } },
+  },
+};
+
+export const Default: StoryObj = {
+  render: () => <AnimatedBeamDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: animatedBeamDemoExampleSource, language: "tsx" } },
+  },
+};
+
+export const MultipleInputs: StoryObj = {
+  render: () => <AnimatedBeamMultipleInputsExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: animatedBeamMultipleInputsExampleSource, language: "tsx" } },
+  },
+};
+
+export const MultipleOutputs: StoryObj = {
+  render: () => <AnimatedBeamMultipleOutputsExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: animatedBeamMultipleOutputsExampleSource, language: "tsx" } },
+  },
+};
+
+export const Unidirectional: StoryObj = {
+  render: () => <AnimatedBeamUnidirectionalExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: animatedBeamUnidirectionalExampleSource, language: "tsx" } },
+  },
 };

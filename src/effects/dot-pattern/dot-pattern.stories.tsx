@@ -1,4 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import DotPatternDemoExample from "./examples/dot-pattern-demo";
+import dotPatternDemoExampleSource from "./examples/dot-pattern-demo.tsx?raw";
+import DotPatternLinearGradientExample from "./examples/dot-pattern-linear-gradient";
+import dotPatternLinearGradientExampleSource from "./examples/dot-pattern-linear-gradient.tsx?raw";
+import DotPatternWithGlowEffectExample from "./examples/dot-pattern-with-glow-effect";
+import dotPatternWithGlowEffectExampleSource from "./examples/dot-pattern-with-glow-effect.tsx?raw";
 
 import { DotPattern } from "./dot-pattern";
 
@@ -12,7 +18,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { glow: true },
   render: (args) => (
     <div className="relative flex h-72 w-full max-w-xl items-center justify-center overflow-hidden rounded-lg border bg-background">
@@ -23,4 +29,28 @@ export const Default: Story = {
       />
     </div>
   ),
+};
+
+export const Default: StoryObj = {
+  render: () => <DotPatternDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: dotPatternDemoExampleSource, language: "tsx" } },
+  },
+};
+
+export const LinearGradient: StoryObj = {
+  render: () => <DotPatternLinearGradientExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: dotPatternLinearGradientExampleSource, language: "tsx" } },
+  },
+};
+
+export const WithGlowEffect: StoryObj = {
+  render: () => <DotPatternWithGlowEffectExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: dotPatternWithGlowEffectExampleSource, language: "tsx" } },
+  },
 };

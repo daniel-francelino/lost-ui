@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import ComicTextDemoExample from "./examples/comic-text-demo";
+import comicTextDemoExampleSource from "./examples/comic-text-demo.tsx?raw";
 
 import { ComicText } from "./comic-text";
 
@@ -12,6 +14,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { children: "BOOM!" },
+};
+
+export const Default: StoryObj = {
+  render: () => <ComicTextDemoExample />,
+  parameters: {
+    layout: "padded",
+    docs: { source: { code: comicTextDemoExampleSource, language: "tsx" } },
+  },
 };

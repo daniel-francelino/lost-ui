@@ -12,6 +12,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: { id: "1628832338187636740", className: "w-96" },
 };
