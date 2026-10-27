@@ -55,3 +55,7 @@ Element.prototype.scrollIntoView = () => {};
 afterEach(() => {
   cleanup();
 });
+
+Element.prototype.hasPointerCapture = () => false;
+Element.prototype.setPointerCapture = () => {};
+Element.prototype.releasePointerCapture = () => {};

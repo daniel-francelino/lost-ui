@@ -35,6 +35,7 @@ export default defineConfig({
       entry: {
         index: resolve(root, "src/index.ts"),
         "effects/index": resolve(root, "src/effects/index.ts"),
+        "ui/index": resolve(root, "src/ui/index.ts"),
         ...componentEntries("effects"),
         ...componentEntries("ui"),
         ...libEntries(),
