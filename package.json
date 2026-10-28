@@ -55,6 +55,14 @@
       "types": "./dist/forms/*/index.d.ts",
       "import": "./dist/forms/*/index.js"
     },
+    "./data": {
+      "types": "./dist/data/index.d.ts",
+      "import": "./dist/data/index.js"
+    },
+    "./data/*": {
+      "types": "./dist/data/*/index.d.ts",
+      "import": "./dist/data/*/index.js"
+    },
     "./i18n": {
       "types": "./dist/i18n/index.d.ts",
       "import": "./dist/i18n/index.js"

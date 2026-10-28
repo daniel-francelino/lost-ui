@@ -12,6 +12,7 @@ const standalone = {
     "icon-cloud",
   ]),
   charts: new Set(),
+  data: new Set(),
   forms: new Set([
     "form-input-date",
     "form-pin-input",
@@ -51,6 +52,7 @@ const effects = writeBarrel("effects");
 const ui = writeBarrel("ui");
 const charts = writeBarrel("charts");
 const forms = writeBarrel("forms");
+const data = writeBarrel("data");
 
 writeFileSync(
   "src/index.ts",
@@ -59,10 +61,11 @@ writeFileSync(
     'export { useIsDark } from "./lib/use-is-dark";',
     'export * from "./ui";',
     'export * from "./effects";',
+    'export * from "./data";',
     'export * from "./i18n";',
     "",
   ].join("\n"),
 );
 console.log(
-  `charts: ${charts}; forms: ${forms}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
+  `charts: ${charts}; forms: ${forms}; data: ${data}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
 );
