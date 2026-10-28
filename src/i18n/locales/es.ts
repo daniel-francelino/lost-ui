@@ -8,6 +8,18 @@ export const es: Messages = {
     dialog: "Diálogo",
     noResults: "Sin resultados",
   },
+  appShell: {
+    skipToContent: "Saltar al contenido",
+    toggleSidebar: "Abrir o cerrar la barra lateral",
+    navigation: "Navegación principal",
+    bottomNavigation: "Navegación",
+    more: "Más",
+    signOut: "Cerrar sesión",
+    switchSpace: "Cambiar de espacio",
+    spaces: "Espacios",
+    notifications: "Notificaciones",
+    unread: "{{count}} sin leer",
+  },
   header: {
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",

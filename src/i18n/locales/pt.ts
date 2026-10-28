@@ -8,6 +8,18 @@ export const pt: Messages = {
     dialog: "Caixa de diálogo",
     noResults: "Nenhum resultado",
   },
+  appShell: {
+    skipToContent: "Saltar para o conteúdo",
+    toggleSidebar: "Abrir ou fechar a barra lateral",
+    navigation: "Navegação principal",
+    bottomNavigation: "Navegação",
+    more: "Mais",
+    signOut: "Sair",
+    switchSpace: "Trocar de espaço",
+    spaces: "Espaços",
+    notifications: "Notificações",
+    unread: "{{count}} não lidas",
+  },
   header: {
     openMenu: "Abrir menu",
     closeMenu: "Fechar menu",

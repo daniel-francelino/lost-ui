@@ -6,6 +6,18 @@ export const en = {
     dialog: "Dialog",
     noResults: "No results",
   },
+  appShell: {
+    skipToContent: "Skip to content",
+    toggleSidebar: "Open or close the sidebar",
+    navigation: "Main navigation",
+    bottomNavigation: "Navigation",
+    more: "More",
+    signOut: "Sign out",
+    switchSpace: "Switch space",
+    spaces: "Spaces",
+    notifications: "Notifications",
+    unread: "{{count}} unread",
+  },
   header: {
     openMenu: "Open menu",
     closeMenu: "Close menu",
