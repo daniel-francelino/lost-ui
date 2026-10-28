@@ -16,7 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "../../chart";
+} from "../../index";
 
 export const description = "An area chart with a legend";
 

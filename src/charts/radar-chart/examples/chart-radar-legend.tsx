@@ -16,7 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "../../chart";
+} from "../../index";
 
 export const description = "A radar chart with a legend";
 

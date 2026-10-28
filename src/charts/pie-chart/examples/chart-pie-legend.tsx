@@ -1,7 +1,7 @@
 import { Pie, PieChart } from "recharts";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../ui/card";
-import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } from "../../chart";
+import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } from "../../index";
 
 export const description = "A pie chart with a legend";
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
 
 export const description = "An interactive line chart";
 

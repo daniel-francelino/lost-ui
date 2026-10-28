@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
 
 export const description = "A radial chart with stacked sections";
 
