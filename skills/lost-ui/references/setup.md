@@ -1,5 +1,9 @@
 # Setup of an app
 
+## Install
+
+`npm i @danielsoaresf/lost-ui`. An app can install it under the short name `lost-ui` with `npm i "lost-ui@npm:@danielsoaresf/lost-ui"` (`package.json` then has `"lost-ui": "npm:@danielsoaresf/lost-ui@^x.y.z"`); use whichever name the app's `package.json` has in every import below, `@danielsoaresf/lost-ui/...` or `lost-ui/...`. Never run a plain `npm i lost-ui` (another package).
+
 ## Styles
 
 ```css

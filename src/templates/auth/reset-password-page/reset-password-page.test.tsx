@@ -50,4 +50,9 @@ describe("ResetPasswordPage", () => {
 
     expect(await screen.findByRole("alert")).toHaveTextContent("The link has expired.");
   });
+
+  it("marks every required field with an asterisk", () => {
+    render(<Playground />);
+    expect(screen.getAllByText("*")).toHaveLength(2);
+  });
 });

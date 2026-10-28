@@ -1,4 +1,4 @@
-import { useLayoutEffect, type ReactNode } from "react";
+import { useLayoutEffect, useState, type ReactNode } from "react";
 
 import { lostI18n } from "./i18n";
 
@@ -8,10 +8,20 @@ export type LostI18nProviderProps = {
   children?: ReactNode;
 };
 
-/** Sets the language of the texts the components bring. Put it once, near the root. */
+function setLanguage(language: string | undefined) {
+  if (language && lostI18n.language !== language) void lostI18n.changeLanguage(language);
+}
+
+/**
+ * Sets the language of the texts the components bring. Put it once, near the root. The language
+ * is set before the first render, so a page rendered on the server (SSR) and hydrated in the
+ * browser has the same texts in both. The server keeps one language for the whole process.
+ */
 export function LostI18nProvider({ language, children }: LostI18nProviderProps) {
+  useState(() => setLanguage(language));
+
   useLayoutEffect(() => {
-    if (language && lostI18n.language !== language) void lostI18n.changeLanguage(language);
+    setLanguage(language);
   }, [language]);
 
   return <>{children}</>;

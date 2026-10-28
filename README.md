@@ -33,6 +33,20 @@ npm i react react-dom tailwindcss tw-animate-css motion   # skip what the app al
 
 Required peers: `react` and `react-dom` (19), `tailwindcss` (4), `tw-animate-css` and `motion` (13 or 14).
 
+#### Shorter imports (optional)
+
+To import from `lost-ui/...` instead of `@danielsoaresf/lost-ui/...`, install the package under an alias. npm puts it in `node_modules/lost-ui`, so TypeScript and the bundler resolve it with no extra config:
+
+```bash
+npm i "lost-ui@npm:@danielsoaresf/lost-ui"
+```
+
+```tsx
+import { LoginPage } from "lost-ui/templates/auth/login-page";
+```
+
+`package.json` keeps `"lost-ui": "npm:@danielsoaresf/lost-ui@^0.1.0"`. Never run a plain `npm i lost-ui`: the unscoped name on npm is another package. Everything below uses the scoped name; drop the `@danielsoaresf/` prefix if you use the alias.
+
 ### 2. Install the optional peers of what you use
 
 A component that needs an extra package imports it by its own path, so the app only installs what it uses:

@@ -33,6 +33,13 @@ describe("FormField", () => {
     expect(screen.queryByText("Use letters and digits.")).toBeNull();
   });
 
+  it("turns the border of the control red when the field is invalid", () => {
+    const { container } = render(<WithError />);
+    expect(container.querySelector("[data-slot='form-field']")).toHaveClass(
+      "[&_[aria-invalid=true]]:border-destructive",
+    );
+  });
+
   it("marks the field as invalid", () => {
     const { container } = render(<WithError />);
     expect(container.querySelector("[data-slot='form-field']")).toHaveAttribute("data-invalid");

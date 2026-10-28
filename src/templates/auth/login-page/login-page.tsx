@@ -81,7 +81,7 @@ export function LoginPage({
         )
       }
     >
-      <Form className="grid gap-6" noValidate onSubmit={() => void run(values)}>
+      <Form greedy className="grid gap-6" noValidate onSubmit={() => void run(values)}>
         <FormInput
           name="identifier"
           label={
@@ -93,6 +93,7 @@ export function LoginPage({
           autoCapitalize="none"
           spellCheck={false}
           autoFocus
+          required
           rules={required}
           value={values.identifier}
           onValueChange={(identifierValue) =>
@@ -113,6 +114,7 @@ export function LoginPage({
               </TemplateLink>
             )
           }
+          required
           rules={required}
           value={values.password}
           onValueChange={(password) => setValues((v) => ({ ...v, password }))}

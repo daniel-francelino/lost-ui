@@ -40,9 +40,9 @@ describe("LoginPage", () => {
     expect(screen.getByLabelText(/^Password/)).toBeInTheDocument();
   });
 
-  it("does not mark the fields as required with an asterisk", () => {
+  it("marks every required field with an asterisk", () => {
     render(<Playground />);
-    expect(screen.queryByText("*")).toBeNull();
+    expect(screen.getAllByText("*")).toHaveLength(2);
   });
 
   it("puts the forgot password link on the line of the password label", () => {
@@ -105,7 +105,7 @@ describe("LoginPage", () => {
 
     await user.click(screen.getByRole("button", { name: "Sign in" }));
 
-    expect(await screen.findAllByText(/required/i)).not.toHaveLength(0);
+    expect(await screen.findAllByText(/required/i)).toHaveLength(2);
     expect(onSubmit).not.toHaveBeenCalled();
   });
 

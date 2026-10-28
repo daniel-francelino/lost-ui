@@ -20,6 +20,12 @@ the frame of an app. `app` needs `sonner` and is imported by path (`@danielsoare
 
 `app`, `app-nav`, `app-shell`, `app-sidebar`, `app-topbar`, `banner`, `bottom-nav`, `container`, `error-page`, `footer`, `footer-columns`, `header`, `main`, `notification-button`, `notification-item`, `notification-preferences`, `page-header`, `settings-section`, `sidebar`, `space-switcher`, `theme`, `user-menu`
 
+## ai-chat (`@danielsoaresf/lost-ui/ai-chat`)
+
+the pieces of an AI chat screen. No SDK needed: messages have the shape of the Vercel AI SDK `UIMessage`, so `useChat().messages` goes in as it is. See `references/ai-chat.md`.
+
+`chat-attachment`, `chat-message`, `chat-messages`, `chat-palette`, `chat-parts`, `chat-prompt`, `chat-prompt-submit`, `chat-reasoning`, `chat-shimmer`, `chat-suggestions`, `chat-tool`
+
 ## forms (`@danielsoaresf/lost-ui/forms`)
 
 `form-input-date`, `form-pin-input`, `form-input-phone`, `form-country-select`, `form-emoji-picker` and `form-builder` need optional peers and are imported by path.

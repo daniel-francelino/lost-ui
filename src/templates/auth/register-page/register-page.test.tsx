@@ -46,9 +46,9 @@ describe("RegisterPage", () => {
     expect(screen.getByText("At least 8 characters.")).toBeInTheDocument();
   });
 
-  it("does not mark the fields as required with an asterisk", () => {
+  it("marks every required field with an asterisk", () => {
     render(<Playground />);
-    expect(screen.queryByText("*")).toBeNull();
+    expect(screen.getAllByText("*")).toHaveLength(3);
   });
 
   it("shows the other ways to sign up", () => {

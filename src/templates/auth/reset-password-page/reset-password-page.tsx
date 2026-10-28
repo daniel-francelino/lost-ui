@@ -41,7 +41,7 @@ export function ResetPasswordPage({
       title={title ?? t("auth.resetTitle")}
       description={description ?? t("auth.resetDescription")}
     >
-      <Form className="space-y-4" noValidate onSubmit={() => void run({ password })}>
+      <Form greedy className="space-y-4" noValidate onSubmit={() => void run({ password })}>
         <FormInputPassword
           name="password"
           label={t("auth.newPassword")}

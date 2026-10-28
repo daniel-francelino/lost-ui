@@ -1,3 +1,4 @@
+import { renderToString } from "react-dom/server";
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -126,6 +127,15 @@ describe("LostI18nProvider", () => {
       </LostI18nProvider>,
     );
     expect(screen.getByText("Escolher uma data")).toBeInTheDocument();
+  });
+
+  it("renders the language on the server, so the browser hydrates the same text", () => {
+    const html = renderToString(
+      <LostI18nProvider language="pt-BR">
+        <Probe />
+      </LostI18nProvider>,
+    );
+    expect(html).toContain("Escolher uma data");
   });
 
   it("fills the placeholders of a text", () => {

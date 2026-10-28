@@ -10,7 +10,7 @@ src/
     data/        DataTable, Empty, Timeline, TreeView, UserInfo
     charts/      Recharts wrapper and data-driven charts
     effects/     landing-page effects (Magic UI)
-    ai-chat/     reserved: AI chat screen
+    ai-chat/     the pieces of an AI chat: messages, prompt, reasoning, tool calls (see ai-chat.md)
     editor/      reserved: Notion-like editor
     calendar/    reserved: Google Calendar-like screen
   templates/     pages and layouts the apps reuse, by category: auth, errors, backoffice (see below)
@@ -119,7 +119,7 @@ Decisions:
 
 ## Reserved modules
 
-`ai-chat`, `editor` and `calendar` have a README each and no code. Kortex already has a Notion-like editor (`NotionEditor`, Tiptap) and a calendar (`appointments/*View`); memoria-print has a calendar (`erp/calendar`). They are the starting point when those modules are built.
+`ai-chat` is built (see [ai-chat.md](ai-chat.md)). `editor` and `calendar` have a README each and no code. Kortex already has a Notion-like editor (`NotionEditor`, Tiptap) and a calendar (`appointments/*View`); memoria-print has a calendar (`erp/calendar`). They are the starting point when those modules are built.
 
 ## Motion
 

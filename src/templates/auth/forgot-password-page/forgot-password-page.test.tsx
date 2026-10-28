@@ -50,4 +50,9 @@ describe("ForgotPasswordPage", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Too many tries");
     expect(screen.getByLabelText(/^Email/)).toBeInTheDocument();
   });
+
+  it("marks every required field with an asterisk", () => {
+    render(<Playground />);
+    expect(screen.getAllByText("*")).toHaveLength(1);
+  });
 });

@@ -102,6 +102,7 @@ export function RegisterPage({
       }
     >
       <Form
+        greedy
         className="grid gap-6"
         noValidate
         onSubmit={() => {
@@ -114,6 +115,7 @@ export function RegisterPage({
             name="name"
             label={t("auth.name")}
             autoComplete="name"
+            required
             rules={[...required, rules.minLength(2)]}
             value={values.name}
             onValueChange={set("name")}
@@ -127,6 +129,7 @@ export function RegisterPage({
             autoComplete="username"
             autoCapitalize="none"
             spellCheck={false}
+            required
             rules={[...required, rules.pattern(/^[a-z0-9._-]{3,30}$/)]}
             value={values.username}
             onValueChange={set("username")}
@@ -140,6 +143,7 @@ export function RegisterPage({
             placeholder={emailPlaceholder}
             type="email"
             autoComplete="email"
+            required
             rules={[...required, rules.email()]}
             value={values.email}
             onValueChange={set("email")}
@@ -151,6 +155,7 @@ export function RegisterPage({
               name="password"
               label={t("auth.password")}
               autoComplete="new-password"
+              required
               rules={[...required, rules.minLength(minPasswordLength)]}
               value={values.password}
               onValueChange={set("password")}
@@ -159,6 +164,7 @@ export function RegisterPage({
               name="confirmPassword"
               label={t("auth.confirmPassword")}
               autoComplete="new-password"
+              required
               rules={[
                 ...required,
                 rules.matches(() => latest.current.password, t("auth.passwordsDiffer")),

@@ -50,6 +50,7 @@ Load only what the task needs.
 | tables, empty states, timeline, tree                                                   | [recipes](references/recipes.md) + [api/data](references/api/data.md)           |
 | modal, slideover, chip, kbd, stepper, link, page transition                            | [api/elements](references/api/elements.md)                                      |
 | charts                                                                                 | [api/charts](references/api/charts.md)                                          |
+| AI chat: messages, prompt, reasoning, tool calls, streaming                            | [ai-chat](references/ai-chat.md) + [api/ai-chat](references/api/ai-chat.md)     |
 | shadcn primitives (button, dialog, select…)                                            | [catalog](references/catalog.md); the props are the shadcn / Radix ones         |
 | landing-page effects                                                                   | the library's `docs/effects-inventory.md`                                       |
 | "is there a component for X?"                                                          | [catalog](references/catalog.md)                                                |

@@ -60,6 +60,7 @@ export function ForgotPasswordPage({
           <MailCheckIcon aria-hidden="true" className="mx-auto size-10 text-muted-foreground" />
         ) : (
           <Form
+            greedy
             className="space-y-4"
             noValidate
             onSubmit={() => void run({ email }).then((ok) => ok && setSent(true))}

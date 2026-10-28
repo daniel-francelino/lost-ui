@@ -12,6 +12,7 @@ Shared component library for **aura-creative** and **memoria-print**.
 | [skills/lost-ui](../skills/lost-ui/SKILL.md)       | Claude Code skill to build screens with the library in an app                  | Implemented                     |
 | [forms.md](forms.md)                               | QForm-style validation, the 26 form components and FormBuilder                 | Implemented                     |
 | [nuxt-components.md](nuxt-components.md)           | Data, Element and Navigation components of Nuxt UI, and the DataTable          | Implemented                     |
+| [ai-chat.md](ai-chat.md)                           | AI chat components, the message format, how to use them with the Vercel AI SDK | Implemented                     |
 | [i18n.md](i18n.md)                                 | Languages (en, es, pt), the provider, adding texts and languages               | Implemented                     |
 | [notifications.md](notifications.md)               | Toasts: kinds, colours, icons and the theme tokens behind them                 | Implemented                     |
 | [pending.md](pending.md)                           | Work agreed for later (ESLint, Husky, Changesets, open visual issues)          | Living list                     |
