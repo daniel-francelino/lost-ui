@@ -20,13 +20,88 @@ It has the primitives, Nuxt UI style pieces, the frame of an internal app (sideb
 
 A **component** is a piece you place in a screen. A **template** is the screen, or the frame of one, and the app only gives it props and handlers. See [docs/structure.md](docs/structure.md).
 
-## Install
+## Install in a project
+
+The package is public on npm: [`@danielsoaresf/lost-ui`](https://www.npmjs.com/package/@danielsoaresf/lost-ui). It needs React 19 and Tailwind CSS v4 in the app.
+
+### 1. Install the package and the required peers
 
 ```bash
 npm i @danielsoaresf/lost-ui
+npm i react react-dom tailwindcss tw-animate-css motion   # skip what the app already has
 ```
 
-To try a local build before publishing, install the tarball instead:
+Required peers: `react` and `react-dom` (19), `tailwindcss` (4), `tw-animate-css` and `motion` (13 or 14).
+
+### 2. Install the optional peers of what you use
+
+A component that needs an extra package imports it by its own path, so the app only installs what it uses:
+
+| You use                                   | Install                                          |
+| ----------------------------------------- | ------------------------------------------------ |
+| `App` (`.../app/app`), `Toaster`, `toast` | `sonner`                                         |
+| any chart (`.../charts`)                  | `recharts`                                       |
+| the shadcn `Form` primitive               | `react-hook-form`                                |
+| `Calendar`, `FormInputDate`               | `react-day-picker`                               |
+| `InputOTP`, `FormPinInput`                | `input-otp`                                      |
+| `FormInputPhone`, `FormCountrySelect`     | `libphonenumber-js`, `country-flag-icons`        |
+| `FormEmojiPicker`                         | `emoji-picker-react`                             |
+| `Command`, `Drawer`                       | `cmdk`, `vaul`                                   |
+| `Resizable`, `Carousel`                   | `react-resizable-panels`, `embla-carousel-react` |
+
+The full list, with the effects that need `cobe`, `shiki`, `react-tweet`…, is in [skills/lost-ui/references/setup.md](skills/lost-ui/references/setup.md).
+
+### 3. Import the styles
+
+In the main CSS file of the app (the one that has `@import "tailwindcss"`):
+
+```css
+@import "tailwindcss";
+@import "@danielsoaresf/lost-ui/styles.css"; /* token mapping, no brand values */
+@import "@danielsoaresf/lost-ui/theme-neutral.css"; /* default values; leave out when the app defines its own */
+@import "@danielsoaresf/lost-ui/effects.css"; /* only if you use @danielsoaresf/lost-ui/effects */
+```
+
+`styles.css` already tells Tailwind to scan the library, so no `@source` line is needed. If the app uses `@import "tailwindcss" source(none)`, check that the classes of the library still appear. Without `theme-neutral.css`, the app must define the tokens (`--background`, `--primary`, `--radius`…). Dark mode is the `.dark` class on an ancestor.
+
+### 4. Wrap the app once
+
+```tsx
+import { App } from "@danielsoaresf/lost-ui/app/app"; // needs sonner
+
+<App language="en">{/* router outlet */}</App>;
+```
+
+`App` joins the language provider (`en`, `es`, `pt`), the tooltip provider and the toaster. Then import from the layers, for example `@danielsoaresf/lost-ui/ui`, `/elements`, `/forms`, `/data`, `/templates`.
+
+### 5. Check it works
+
+Render a button and a template:
+
+```tsx
+import { Button } from "@danielsoaresf/lost-ui/ui";
+import { NotFoundPage } from "@danielsoaresf/lost-ui/templates";
+```
+
+If a component shows without style, the CSS imports of step 3 are missing or the CSS file is not loaded. For TypeScript, use `"moduleResolution": "bundler"` (or `node16`/`nodenext`) in `tsconfig.json`, so the `exports` of the package are resolved. With Vite, if React appears twice (hook errors), add `resolve.dedupe: ["react", "react-dom"]`.
+
+### Use it with Claude Code
+
+The package ships a skill that teaches Claude Code the components and their props. Copy it into the app:
+
+```bash
+mkdir -p .claude/skills && cp -r node_modules/@danielsoaresf/lost-ui/skills/lost-ui .claude/skills/
+```
+
+On Windows PowerShell: `Copy-Item -Recurse node_modules\@danielsoaresf\lost-ui\skills\lost-ui .claude\skills\`. Do it again after updating the library, so the skill has the current props.
+
+### Update
+
+```bash
+npm i @danielsoaresf/lost-ui@latest
+```
+
+### Try a local build before publishing
 
 ```bash
 # in lost-ui
@@ -38,21 +113,9 @@ npm pack                               # danielsoaresf-lost-ui-0.1.0.tgz
 npm i ../lost-ui/danielsoaresf-lost-ui-0.1.0.tgz
 ```
 
-Required peers: `react`, `react-dom`, `tailwindcss`, `tw-animate-css` and `motion`. The others (`recharts`, `sonner`, `cmdk`, `react-hook-form`…) are optional and only needed by the components that use them; the list is in [skills/lost-ui/references/setup.md](skills/lost-ui/references/setup.md).
-
 ## Use
 
-Styles, in the CSS of the app:
-
-```css
-@import "tailwindcss";
-@import "@danielsoaresf/lost-ui/styles.css"; /* token mapping, no brand values */
-@import "@danielsoaresf/lost-ui/theme-neutral.css"; /* optional default values */
-```
-
-The app defines the values of the theme tokens (`--background`, `--primary`, `--radius`…). Dark mode is the `.dark` class on an ancestor.
-
-Wrap the app once and use the components:
+Use the components:
 
 ```tsx
 import { App } from "@danielsoaresf/lost-ui/app/app"; // needs sonner

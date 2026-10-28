@@ -11,7 +11,7 @@ description: Build UIs with lost-ui, the shared React 19 + Tailwind v4 component
 
 Before the first change in an app, check (do not assume):
 
-1. `lost-ui` is in the app's `package.json`, and which of its optional peers are installed (`react-day-picker`, `input-otp`, `libphonenumber-js`, `country-flag-icons`, `emoji-picker-react`, `sonner`, `cmdk`, `vaul`, `recharts`, `react-hook-form`, `react-resizable-panels`, `embla-carousel-react`). A component that needs a peer the app lacks needs that peer installed, not a replacement.
+1. `@danielsoaresf/lost-ui` is in the app's `package.json`, and which of its optional peers are installed (`react-day-picker`, `input-otp`, `libphonenumber-js`, `country-flag-icons`, `emoji-picker-react`, `sonner`, `cmdk`, `vaul`, `recharts`, `react-hook-form`, `react-resizable-panels`, `embla-carousel-react`). A component that needs a peer the app lacks needs that peer installed, not a replacement.
 2. The app's stylesheet imports `@danielsoaresf/lost-ui/styles.css` and defines the tokens (see [setup](references/setup.md)).
 3. Which router the app uses, so you can write `renderLink`, and where its auth/permission helpers are.
 
