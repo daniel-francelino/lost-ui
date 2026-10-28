@@ -1,0 +1,36 @@
+/**
+ * The look of what is written: headings, lists, quotes, code, tables, tasks, callouts and toggles.
+ * Theme tokens only, so it follows the colours of the app and its dark mode.
+ */
+export const proseClasses = [
+  "outline-none text-base leading-7",
+  "[&_p]:my-1.5",
+  "[&_h1]:mt-6 [&_h1]:mb-2 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:tracking-tight",
+  "[&_h2]:mt-5 [&_h2]:mb-2 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:tracking-tight",
+  "[&_h3]:mt-4 [&_h3]:mb-1.5 [&_h3]:text-xl [&_h3]:font-semibold",
+  "[&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-6",
+  "[&_li>p]:my-0.5",
+  "[&_ul[data-type=taskList]]:list-none [&_ul[data-type=taskList]]:pl-0",
+  "[&_ul[data-type=taskList]_li]:flex [&_ul[data-type=taskList]_li]:items-start [&_ul[data-type=taskList]_li]:gap-2",
+  "[&_ul[data-type=taskList]_li>label]:mt-1.5 [&_ul[data-type=taskList]_li>label]:select-none",
+  "[&_ul[data-type=taskList]_li>div]:min-w-0 [&_ul[data-type=taskList]_li>div]:flex-1",
+  "[&_ul[data-type=taskList]_li[data-checked=true]>div]:text-muted-foreground [&_ul[data-type=taskList]_li[data-checked=true]>div]:line-through",
+  "[&_blockquote]:my-3 [&_blockquote]:border-l-4 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground",
+  "[&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.9em]",
+  "[&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:bg-muted [&_pre]:p-4 [&_pre]:font-mono [&_pre]:text-sm",
+  "[&_pre_code]:bg-transparent [&_pre_code]:p-0",
+  "[&_hr]:my-6 [&_hr]:border-border",
+  "[&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4",
+  "[&_mark]:rounded-sm [&_mark]:bg-warning/30 [&_mark]:px-0.5 [&_mark]:text-inherit",
+  "[&_img]:my-3 [&_img]:max-w-full [&_img]:rounded-lg",
+  "[&_img.ProseMirror-selectednode]:ring-2 [&_img.ProseMirror-selectednode]:ring-ring",
+  "[&_div[data-type=callout]]:my-3 [&_div[data-type=callout]]:flex [&_div[data-type=callout]]:gap-3 [&_div[data-type=callout]]:rounded-lg [&_div[data-type=callout]]:border [&_div[data-type=callout]]:bg-muted [&_div[data-type=callout]]:p-3",
+  "[&_div[data-type=callout]]:before:content-[attr(data-emoji)] [&_div[data-type=callout]]:before:text-xl [&_div[data-type=callout]]:before:leading-7",
+  "[&_div[data-type=callout]>*]:min-w-0 [&_div[data-type=callout]>*]:flex-1",
+  "[&_table]:my-3 [&_table]:w-full [&_table]:table-fixed [&_table]:border-collapse",
+  "[&_th]:border [&_th]:bg-muted [&_th]:p-2 [&_th]:text-left [&_th]:font-medium",
+  "[&_td]:border [&_td]:p-2 [&_td]:align-top",
+  "[&_.selectedCell]:bg-accent",
+  "[&_p.is-editor-empty:first-child]:before:pointer-events-none [&_p.is-editor-empty:first-child]:before:float-left [&_p.is-editor-empty:first-child]:before:h-0 [&_p.is-editor-empty:first-child]:before:text-muted-foreground [&_p.is-editor-empty:first-child]:before:content-[attr(data-placeholder)]",
+  "[&_.is-empty]:before:pointer-events-none",
+].join(" ");

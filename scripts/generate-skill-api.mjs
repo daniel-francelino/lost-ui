@@ -9,6 +9,7 @@ const layers = {
   elements: "src/components/elements",
   app: "src/components/app",
   "ai-chat": "src/components/ai-chat",
+  editor: "src/components/editor",
   forms: "src/components/forms",
   data: "src/components/data",
   charts: "src/components/charts",
@@ -23,6 +24,8 @@ const notes = {
   app: "the frame of an app. `app` needs `sonner` and is imported by path (`@danielsoaresf/lost-ui/app/app`). `app-nav` has the `NavItem` types and helpers, no component.",
   "ai-chat":
     "the pieces of an AI chat screen. No SDK needed: messages have the shape of the Vercel AI SDK `UIMessage`, so `useChat().messages` goes in as it is. See `references/ai-chat.md`.",
+  editor:
+    "a Notion-style block editor on Tiptap (`/` menu, selection toolbar, block handle, tables, tasks, callouts, toggles). Needs the Tiptap peers; see `references/editor.md`.",
   forms:
     "`form-input-date`, `form-pin-input`, `form-input-phone`, `form-country-select`, `form-emoji-picker` and `form-builder` need optional peers and are imported by path.",
   data: "data display.",

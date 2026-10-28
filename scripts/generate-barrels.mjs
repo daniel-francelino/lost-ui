@@ -25,6 +25,7 @@ const standalone = {
   templates: new Set(),
   app: new Set(["app"]),
   "ai-chat": new Set(),
+  editor: new Set(),
   ui: new Set([
     "calendar",
     "carousel",
@@ -60,6 +61,7 @@ const ui = writeBarrel("ui");
 const elements = writeBarrel("elements");
 const app = writeBarrel("app");
 const aiChat = writeBarrel("ai-chat");
+const editor = writeBarrel("editor");
 // templates are grouped by category (`auth`, `errors`, `backoffice`, later `marketing`, `ecommerce`…):
 // each category folder has its own barrel and the root barrel re-exports the categories
 const templateCategories = readdirSync("src/templates", { withFileTypes: true })
@@ -100,5 +102,5 @@ writeFileSync(
   ].join("\n"),
 );
 console.log(
-  `templates: ${templates}; app: ${app}; ai-chat: ${aiChat}; elements: ${elements}; charts: ${charts}; forms: ${forms}; data: ${data}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
+  `templates: ${templates}; app: ${app}; ai-chat: ${aiChat}; editor: ${editor}; elements: ${elements}; charts: ${charts}; forms: ${forms}; data: ${data}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
 );
