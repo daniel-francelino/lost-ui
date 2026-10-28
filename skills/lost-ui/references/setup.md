@@ -45,7 +45,9 @@ Required: `react`, `react-dom`, `tailwindcss`, `tw-animate-css`, `motion`. Optio
 
 ## Import paths
 
-- Layer entry: `@danielsoaresf/lost-ui/ui`, `/elements`, `/app`, `/forms`, `/data`, `/charts`, `/templates`, `/effects`, `/i18n`. The root `lost-ui` exports `ui`, `elements`, `effects`, `data` and `i18n`.
+- **One import:** `@danielsoaresf/lost-ui` exports every component that needs no optional peer of its own, the templates and `i18n`: `import { Button, EventCalendar, LoginPage } from "@danielsoaresf/lost-ui"`. `@danielsoaresf/lost-ui/components` is the components alone, `@danielsoaresf/lost-ui/templates` the pages alone.
+- **Not in it** (their own entries, because they need peers for the whole layer): `@danielsoaresf/lost-ui/charts` (recharts) and `@danielsoaresf/lost-ui/editor` (Tiptap).
+- Layer entry, for a leaner import: `@danielsoaresf/lost-ui/ui`, `/elements`, `/app`, `/forms`, `/data`, `/ai-chat`, `/calendar`, `/effects`, `/templates`, `/i18n`.
 - One component: `@danielsoaresf/lost-ui/<layer>/<folder>`, e.g. `@danielsoaresf/lost-ui/forms/form-input`.
 - By path only (they need a peer): `@danielsoaresf/lost-ui/forms/{form-input-date,form-pin-input,form-input-phone,form-country-select,form-emoji-picker,form-builder}`, `@danielsoaresf/lost-ui/ui/{calendar,carousel,command,drawer,form,input-otp,resizable,sonner}`, `@danielsoaresf/lost-ui/app/app`.
 - `@danielsoaresf/lost-ui/lib/cn` exports `cn`.

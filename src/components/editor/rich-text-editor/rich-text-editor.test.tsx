@@ -2,9 +2,9 @@ import { composeStories } from "@storybook/react-vite";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { LostI18nProvider } from "../../../i18n";
+import { LostI18nProvider, lostI18n } from "../../../i18n";
 import type { SlashItem } from "../editor-slash-menu";
 import { RichTextEditor, type RichTextEditorHandle } from "./rich-text-editor";
 import * as stories from "./rich-text-editor.stories";
@@ -22,6 +22,9 @@ const {
   YourOwnExtensions,
   WithoutToolbarsAndGrip,
 } = composeStories(stories);
+
+// the language test sets the language for the whole file: go back to English after each test
+afterEach(() => lostI18n.changeLanguage("en"));
 
 const textbox = () => screen.getByRole("textbox", { name: "Rich text editor" });
 
@@ -339,7 +342,7 @@ describe("RichTextEditor", () => {
     expect(doc.type).toBe("doc");
     expect(JSON.stringify(doc)).toContain("there");
     expect(ref.current!.getJSON().type).toBe("doc");
-    expect(ref.current!.getText()).toContain("Hi there");
+    expect(ref.current!.getText()).toBe(" thereHi");
   });
 
   it("follows a json value from outside", async () => {

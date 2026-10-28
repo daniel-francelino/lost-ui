@@ -2,7 +2,7 @@
 
 > **Status: first version implemented and tested in jsdom (2026-10-28).** `@danielsoaresf/lost-ui/editor`, in `src/components/editor/`. Needs the Tiptap peers (below). Not exported from the root entry. Based on the editor of kortex (`kortex-app/app/components/editor/`, Vue). Related: [structure.md](structure.md), [ai-chat.md](ai-chat.md).
 
-`RichTextEditor` is a block editor on [Tiptap 3](https://tiptap.dev): type `/` for blocks, select text for its toolbar, drag the grip beside a block to move it. It writes **HTML**.
+`RichTextEditor` is a block editor on [Tiptap 3](https://tiptap.dev): type `/` for blocks, select text for its toolbar, drag the grip beside a block to move it. It writes **HTML** or the Tiptap **JSON** (`format`).
 
 | Piece               | What it does                                                                                                                                                            |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -27,7 +27,31 @@ import { RichTextEditor } from "@danielsoaresf/lost-ui/editor";
 />;
 ```
 
-The `ref` gives `focus()`, `getHTML()`, `setContent(html)`, `clear()` and `editor` (the Tiptap `Editor`, for what is not covered). `surface="plain"` has no frame, for a whole page, and leaves room at the left for the grip.
+The `ref` gives `focus()`, `getHTML()`, `getJSON()`, `getText()`, `setContent(content)`, `clear()` and `editor` (the Tiptap `Editor`, for what is not covered). `surface="plain"` has no frame, for a whole page, and leaves room at the left for the grip.
+
+## Made to fit any use
+
+| Prop                             | Use                                                                                                                       |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `format`                         | `"html"` (default) or `"json"`: the content comes and goes as a string or as the Tiptap document                          |
+| `extensions`                     | your own Tiptap extensions: nodes, marks, mentions, character count (keep the array stable with `useMemo`)                |
+| `slashItems`                     | blocks of your own for the `/` menu, after the built-in ones (`SlashItem`: title, description, icon, `run`)               |
+| `blocks`                         | which built-in blocks `/` offers                                                                                          |
+| `bubbleMenu`, `renderBubbleMenu` | turn the toolbar over the selected text off, or give your own tools for it                                                |
+| `blockHandle`                    | hides the grip and the plus                                                                                               |
+| `autofocus`                      | `true`, `"start"` or `"end"`                                                                                              |
+| `onReady`, `ref`                 | the Tiptap `Editor` once it exists; `ref` gives `focus`, `getHTML`, `getJSON`, `getText`, `setContent`, `clear`, `editor` |
+| `editorClassName`, `className`   | classes of the writing area and of the frame                                                                              |
+
+```tsx
+<RichTextEditor<"json">
+  format="json"
+  value={doc}
+  onValueChange={setDoc}
+  slashItems={myBlocks}
+  extensions={myExtensions}
+/>
+```
 
 ## Peers
 

@@ -13,10 +13,15 @@ It has the primitives, Nuxt UI style pieces, the frame of an internal app (sideb
 | `app`       | `@danielsoaresf/lost-ui/app`                         | frame of an app: `AppShell`, `AppSidebar`, `AppTopbar`, `BottomNav`, `UserMenu`, `ErrorPage`  |
 | `forms`     | `@danielsoaresf/lost-ui/forms`                       | fields validated by `rules` (like Quasar's QForm) and `FormBuilder`                           |
 | `data`      | `@danielsoaresf/lost-ui/data`                        | `DataTable`, `Empty`, `Timeline`, `TreeView`, `UserInfo`                                      |
+| `ai-chat`   | `@danielsoaresf/lost-ui/ai-chat`                     | AI chat: messages, prompt, reasoning, tool calls                                              |
+| `calendar`  | `@danielsoaresf/lost-ui/calendar`                    | month, week and day views of any kind of event                                                |
+| `editor`    | `@danielsoaresf/lost-ui/editor`                      | Notion-style block editor on Tiptap                                                           |
 | `charts`    | `@danielsoaresf/lost-ui/charts`                      | data-driven charts on Recharts                                                                |
 | `effects`   | `@danielsoaresf/lost-ui/effects`                     | landing-page effects (Magic UI)                                                               |
 | `templates` | `@danielsoaresf/lost-ui/templates/<category>/<page>` | whole pages and layouts, by category: `auth`, `errors`, `backoffice`                          |
 | `i18n`      | `@danielsoaresf/lost-ui/i18n`                        | provider and hooks for en, es and pt                                                          |
+
+**One import is enough:** `import { Button, EventCalendar, LoginPage } from "@danielsoaresf/lost-ui"` gives every component and every template that needs no optional peer of its own, so you do not have to know the path of each. Charts (recharts) and the editor (Tiptap) need their peers for the whole layer, so they keep their own entries, `@danielsoaresf/lost-ui/charts` and `@danielsoaresf/lost-ui/editor`; a component with a peer of its own (the date picker, `Toaster`…) is imported by its path.
 
 A **component** is a piece you place in a screen. A **template** is the screen, or the frame of one, and the app only gives it props and handlers. See [docs/structure.md](docs/structure.md).
 

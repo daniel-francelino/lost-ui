@@ -32,6 +32,12 @@ a Notion-style block editor on Tiptap (`/` menu, selection toolbar, block handle
 
 `editor-block-handle`, `editor-bubble-menu`, `editor-slash-menu`, `editor-table-bar`, `rich-text-editor`
 
+## calendar (`@danielsoaresf/lost-ui/calendar`)
+
+month, week and day views of events (`EventCalendar` is the whole screen), a list of calendars to show or hide, and the date helpers. No peers. See `references/calendar.md`.
+
+`calendar-date-nav`, `calendar-event-chip`, `calendar-list`, `calendar-model`, `day-view`, `event-calendar`, `month-view`, `time-grid`, `week-view`
+
 ## forms (`@danielsoaresf/lost-ui/forms`)
 
 `form-input-date`, `form-pin-input`, `form-input-phone`, `form-country-select`, `form-emoji-picker` and `form-builder` need optional peers and are imported by path.

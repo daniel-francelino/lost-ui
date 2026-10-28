@@ -19,9 +19,10 @@ duplicate, delete), and the plus beside it adds a block below.
 
 The toolbar that floats over the selected text: bold, italic, underline, strike, code, highlight, colour, link.
 
-| Prop       | Type             | Default | Description |
-| ---------- | ---------------- | ------- | ----------- |
-| **editor** | `Editor \| null` |         |             |
+| Prop       | Type             | Default | Description                                                         |
+| ---------- | ---------------- | ------- | ------------------------------------------------------------------- |
+| **editor** | `Editor \| null` |         |                                                                     |
+| children   | `ReactNode`      |         | Replaces the default tools: your own buttons for the selected text. |
 
 ## EditorSlashMenu
 
@@ -55,20 +56,29 @@ The toolbar that floats over a table while the cursor is in it: add and delete r
 
 A block editor in the style of Notion: type `/` for blocks, select text for its formatting,
 drag the grip to move a block. Headings, lists, tasks, quotes, code, tables, images, callouts and
-toggles. It writes HTML.
+toggles. It reads and writes HTML or the Tiptap JSON, takes your own Tiptap extensions and
+slash blocks, and gives you the Tiptap editor for the rest.
 
-| Prop          | Type                                | Default | Description                                                                             |
-| ------------- | ----------------------------------- | ------- | --------------------------------------------------------------------------------------- |
-| value         | `string`                            |         | The content as HTML, for a controlled editor.                                           |
-| defaultValue  | `string`                            | ``      |                                                                                         |
-| onValueChange | `((html: string) => void)`          |         | Called with the HTML after every change the user makes.                                 |
-| placeholder   | `string`                            |         |                                                                                         |
-| editable      | `boolean`                           | `true`  |                                                                                         |
-| minHeight     | `string`                            | `8rem`  | The least height of the writing area, e.g. `"12rem"`.                                   |
-| surface       | `"boxed" \| "plain"`                | `boxed` | `boxed` draws a bordered box around the editor; `plain` has no frame, for a whole page. |
-| onUploadImage | `((file: File) => Promise<string>)` |         | Uploads an image and gives back its URL. Without it the image block is left out.        |
-| onUploadError | `((error: unknown) => void)`        |         | Called when `onUploadImage` fails.                                                      |
-| blocks        | `EditorBlock[]`                     |         | Which blocks the `/` menu offers. All of them by default.                               |
-| blockHandle   | `boolean`                           | `true`  | Hides the grip and the plus beside each block.                                          |
-| className     | `string`                            |         |                                                                                         |
-| ref           | `Ref<RichTextEditorHandle>`         |         |                                                                                         |
+| Prop             | Type                                | Default | Description                                                                                                    |
+| ---------------- | ----------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
+| format           | `EditorFormat`                      |         | In what shape the content comes and goes: `html` (default) or `json`.                                          |
+| value            | `string \| JSONContent`             |         | The content, for a controlled editor.                                                                          |
+| defaultValue     | `string \| JSONContent`             |         |                                                                                                                |
+| onValueChange    | `((value: EditorValue<F>) => void)` |         | Called with the content after every change the user makes.                                                     |
+| placeholder      | `string`                            |         |                                                                                                                |
+| editable         | `boolean`                           | `true`  |                                                                                                                |
+| minHeight        | `string`                            | `8rem`  | The least height of the writing area, e.g. `"12rem"`.                                                          |
+| surface          | `"boxed" \| "plain"`                | `boxed` | `boxed` draws a bordered box around the editor; `plain` has no frame, for a whole page.                        |
+| onUploadImage    | `((file: File) => Promise<string>)` |         | Uploads an image and gives back its URL. Without it the image block is left out.                               |
+| onUploadError    | `((error: unknown) => void)`        |         | Called when `onUploadImage` fails.                                                                             |
+| blocks           | `EditorBlock[]`                     |         | Which of the built-in blocks the `/` menu offers. All of them by default.                                      |
+| slashItems       | `SlashItem[]`                       |         | Blocks of your own, added to the `/` menu after the built-in ones.                                             |
+| extensions       | `Extensions`                        |         | More Tiptap extensions: your own nodes and marks, mentions, character count. Keep the array stable (`useMemo`… |
+| bubbleMenu       | `boolean`                           | `true`  | The toolbar over the selected text. `false` turns it off.                                                      |
+| renderBubbleMenu | `((editor: Editor) => ReactNode)`   |         | Your own tools for the toolbar over the selected text, instead of the default ones.                            |
+| blockHandle      | `boolean`                           | `true`  | Hides the grip and the plus beside each block.                                                                 |
+| autofocus        | `boolean \| "start" \| "end"`       | `false` | Puts the cursor in the editor when it opens: `true` where it was, `"start"` or `"end"` of the content.         |
+| onReady          | `((editor: Editor) => void)`        |         | Called once the Tiptap editor exists.                                                                          |
+| className        | `string`                            |         |                                                                                                                |
+| editorClassName  | `string`                            |         | Classes of the writing area itself, e.g. a font size.                                                          |
+| ref              | `Ref<RichTextEditorHandle>`         |         |                                                                                                                |
