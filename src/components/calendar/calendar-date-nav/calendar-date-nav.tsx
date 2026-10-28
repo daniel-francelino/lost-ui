@@ -88,11 +88,7 @@ export function CalendarDateNav({
         {title}
       </h2>
       {onViewChange && views.length > 1 && (
-        <div
-          role="group"
-          aria-label={t("calendar.views")}
-          className="flex rounded-lg border p-0.5"
-        >
+        <div role="group" aria-label={t("calendar.views")} className="flex rounded-lg border p-0.5">
           {views.map((name) => (
             <Button
               key={name}

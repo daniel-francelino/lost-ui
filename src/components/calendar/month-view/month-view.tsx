@@ -84,7 +84,11 @@ export function MonthView({
       </div>
       <div className="grid min-h-0 flex-1 grid-rows-6">
         {weeks.map((week) => (
-          <div key={week[0]!.getTime()} role="row" className="grid grid-cols-7 border-b last:border-b-0">
+          <div
+            key={week[0]!.getTime()}
+            role="row"
+            className="grid grid-cols-7 border-b last:border-b-0"
+          >
             {week.map((day) => {
               const inMonth = day.getMonth() === date.getMonth();
               const today = isSameDay(day, now);
@@ -116,7 +120,8 @@ export function MonthView({
                     }}
                     className={cn(
                       "flex size-6 items-center justify-center self-start rounded-full text-xs outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50",
-                      today && "bg-primary font-semibold text-primary-foreground hover:bg-primary/90",
+                      today &&
+                        "bg-primary font-semibold text-primary-foreground hover:bg-primary/90",
                     )}
                   >
                     {day.getDate()}

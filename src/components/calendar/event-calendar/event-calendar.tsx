@@ -153,7 +153,11 @@ export function EventCalendar({
               onCreate={
                 onCreate &&
                 ((range) =>
-                  onCreate({ ...range, start: startOfDay(range.start), end: startOfDay(range.end) }))
+                  onCreate({
+                    ...range,
+                    start: startOfDay(range.start),
+                    end: startOfDay(range.end),
+                  }))
               }
             />
           )}

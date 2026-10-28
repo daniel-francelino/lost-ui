@@ -103,16 +103,21 @@ export function TimeGrid({
   };
 
   return (
-    <div
-      data-slot="time-grid"
-      className={cn("flex min-h-0 flex-1 flex-col", className)}
-    >
-      <div role="row" className="grid border-b pr-[var(--scrollbar,0px)]" style={{ gridTemplateColumns: columns }}>
+    <div data-slot="time-grid" className={cn("flex min-h-0 flex-1 flex-col", className)}>
+      <div
+        role="row"
+        className="grid border-b pr-[var(--scrollbar,0px)]"
+        style={{ gridTemplateColumns: columns }}
+      >
         <div />
         {days.map((day) => {
           const today = isSameDay(day, now);
           return (
-            <div key={day.getTime()} role="columnheader" className="flex flex-col items-center gap-0.5 py-1.5">
+            <div
+              key={day.getTime()}
+              role="columnheader"
+              className="flex flex-col items-center gap-0.5 py-1.5"
+            >
               <span className="text-xs font-medium text-muted-foreground uppercase">
                 {formatWeekday(day, locale)}
               </span>
@@ -143,7 +148,10 @@ export function TimeGrid({
             {t("calendar.allDay")}
           </div>
           {allDay.map((list, index) => (
-            <div key={days[index]!.getTime()} className="flex min-w-0 flex-col gap-0.5 border-l p-0.5">
+            <div
+              key={days[index]!.getTime()}
+              className="flex min-w-0 flex-col gap-0.5 border-l p-0.5"
+            >
               {list.map((event) => (
                 <div key={event.id}>{draw(event, "chip")}</div>
               ))}
