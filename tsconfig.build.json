@@ -13,6 +13,7 @@
     "src/**/*.stories.tsx",
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
+    "src/**/*.fixtures.tsx",
     "src/stories",
     "src/test",
     "src/**/examples"

@@ -31,3 +31,24 @@ export const Split: Story = {
 export const Minimal: Story = {
   args: { description: undefined, logo: undefined, footer: undefined, children: undefined },
 };
+
+export const SingleCard: Story = { args: { variant: "card" } };
+
+export const WithLegal: Story = {
+  args: {
+    legal: (
+      <>
+        By clicking continue, you agree to our <a href="/terms">Terms of Service</a>.
+      </>
+    ),
+  },
+};
+
+export const SplitCard: Story = {
+  args: {
+    variant: "split-card",
+    aside: <div className="absolute inset-0 bg-muted" />,
+  },
+};
+
+export const SplitCardWithoutImage: Story = { args: { variant: "split-card" } };

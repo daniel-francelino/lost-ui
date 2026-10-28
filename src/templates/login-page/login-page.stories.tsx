@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 
+import { authImage, authLegal, authProviders } from "../lib/auth.fixtures";
 import { LoginPage } from "./login-page";
 
 const meta = {
@@ -10,10 +11,14 @@ const meta = {
   parameters: { layout: "fullscreen" },
   args: {
     onSubmit: fn(),
-    logo: <strong className="text-xl">Acme</strong>,
-    description: "Back office of Acme.",
+    description: "Login to your Acme Inc account",
+    identifier: "email",
+    identifierPlaceholder: "m@example.com",
     forgotPasswordHref: "/recover-password",
     registerHref: "/register",
+    providers: authProviders,
+    legal: authLegal,
+    aside: authImage,
   },
 } satisfies Meta<typeof LoginPage>;
 
@@ -22,14 +27,22 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const EmailOnly: Story = { args: { identifier: "email" } };
+export const WithLogo: Story = { args: { logo: <strong className="text-xl">Acme</strong> } };
+
+export const WithoutImage: Story = { args: { aside: undefined } };
+
+export const WithoutProviders: Story = { args: { providers: [] } };
+
+export const UsernameOrEmail: Story = {
+  args: { identifier: "text", identifierPlaceholder: undefined },
+};
 
 export const ServerError: Story = { args: { onSubmit: fn(() => "Wrong email or password.") } };
 
-export const Split: Story = {
-  args: { variant: "split", aside: <p className="text-lg">Welcome back.</p> },
+export const SingleCard: Story = {
+  args: { variant: "card", logo: <strong className="text-xl">Acme</strong>, aside: undefined },
 };
 
-export const WithOtherWays: Story = {
-  args: { extra: <button type="button">Continue with Google</button> },
+export const HalfScreen: Story = {
+  args: { variant: "split", aside: <p className="text-lg">Welcome back.</p> },
 };

@@ -45,15 +45,31 @@ Need more control? Use `AppShell`, `AppSidebar`, `AppTopbar`, `UserMenu`, `Space
 
 ## Auth pages
 
+`LoginPage` is a card with the form on one side and an image on the other (the shadcn "login" block): welcome heading, email, password with "Forgot your password?" on the label line, the sign in button, "Or continue with" icon buttons, the sign up line, and the terms under the card.
+
 ```tsx
 import { LoginPage } from "lost-ui/templates";
 
 <LoginPage
-  logo={<Logo />}
-  description="Back office"
-  forgotPasswordHref="/admin/recover-password"
-  registerHref="/admin/register"
+  description="Login to your Acme Inc account"
+  identifier="email" // "text" also takes a username
+  identifierPlaceholder="m@example.com"
+  forgotPasswordHref="/recover-password"
+  registerHref="/register" // registerLabel to rename "Sign up"
   renderLink={renderLink}
+  providers={[{ id: "google", label: "Google", icon: <GoogleIcon />, onClick: signInWithGoogle }]}
+  legal={
+    <>
+      By clicking continue, you agree to our <a href="/terms">Terms of Service</a>.
+    </>
+  }
+  aside={
+    <img
+      src="/login.jpg"
+      alt=""
+      className="absolute inset-0 size-full object-cover dark:brightness-[0.2]"
+    />
+  }
   onSubmit={async ({ identifier, password }) => {
     const result = await signIn({ identifier, password });
     if (!result.ok) return errors[result.reason]; // a text is shown as the form error
@@ -61,6 +77,8 @@ import { LoginPage } from "lost-ui/templates";
   }}
 />;
 ```
+
+Without `aside` it is one narrow card. All the auth pages (`RegisterPage`, `ForgotPasswordPage`, `ResetPasswordPage`, `AuthMessagePage`) share the same `AuthLayout`: the same card, a centred title, the line of links (`footer`) inside the card and the small print (`legal`) under it. `RegisterPage` has the same `providers`, `legal` and `aside` as `LoginPage`, takes `emailHelp` for the text under the email, and shows the password and its confirmation side by side. `variant="card"` (one centred card on a plain page, the footer under it) and `variant="split"` (half of the screen) are still there.
 
 `RegisterPage` (`fields`, `minPasswordLength`, `loginHref`, `onSubmit(values)`), `ForgotPasswordPage` (`onSubmit({ email })`, then shows "check your email"), `ResetPasswordPage` (`onSubmit({ password })`), `AuthMessagePage` (`title`, `description`, `icon`, `actions`).
 
