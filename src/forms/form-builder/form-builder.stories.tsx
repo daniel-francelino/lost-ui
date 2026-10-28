@@ -113,6 +113,10 @@ export const AllFieldTypes: Story = {
       { control: "input-date", name: "q", label: "Date" },
       { control: "color-picker", name: "r", label: "Color" },
       { control: "file-upload", name: "s", label: "File", colSpan: "full" },
+      { control: "input-money", name: "t", label: "Money", currency: "USD", locale: "en-US" },
+      { control: "input-phone", name: "u", label: "Phone", defaultCountry: "PT", locale: "en" },
+      { control: "country-select", name: "v", label: "Country", locale: "en" },
+      { control: "emoji-picker", name: "w", label: "Emoji" },
     ],
   },
 };

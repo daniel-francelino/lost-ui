@@ -6,11 +6,15 @@ import { Button } from "../../ui/button";
 import { FormCheckbox, type FormCheckboxProps } from "../form-checkbox";
 import { FormCheckboxGroup, type FormCheckboxGroupProps } from "../form-checkbox-group";
 import { FormColorPicker, type FormColorPickerProps } from "../form-color-picker";
+import { FormCountrySelect, type FormCountrySelectProps } from "../form-country-select";
+import { FormEmojiPicker, type FormEmojiPickerProps } from "../form-emoji-picker";
 import { FormFileUpload, type FormFileUploadProps } from "../form-file-upload";
 import { FormInput, type FormInputProps } from "../form-input";
 import { FormInputDate, type FormInputDateProps } from "../form-input-date";
 import { FormInputMenu, type FormInputMenuProps } from "../form-input-menu";
+import { FormInputMoney, type FormInputMoneyProps } from "../form-input-money";
 import { FormInputNumber, type FormInputNumberProps } from "../form-input-number";
+import { FormInputPhone, type FormInputPhoneProps } from "../form-input-phone";
 import { FormInputRating, type FormInputRatingProps } from "../form-input-rating";
 import { FormInputTags, type FormInputTagsProps } from "../form-input-tags";
 import { FormInputTime, type FormInputTimeProps } from "../form-input-time";
@@ -46,6 +50,10 @@ type FieldPropsMap = {
   "input-date": FormInputDateProps;
   "color-picker": FormColorPickerProps;
   "file-upload": FormFileUploadProps;
+  "input-money": FormInputMoneyProps;
+  "input-phone": FormInputPhoneProps;
+  "country-select": FormCountrySelectProps;
+  "emoji-picker": FormEmojiPickerProps;
 };
 
 export type FormBuilderFieldType = keyof FieldPropsMap;
@@ -81,6 +89,10 @@ const components: { [K in FormBuilderFieldType]: ComponentType<FieldPropsMap[K]>
   "input-date": FormInputDate,
   "color-picker": FormColorPicker,
   "file-upload": FormFileUpload,
+  "input-money": FormInputMoney,
+  "input-phone": FormInputPhone,
+  "country-select": FormCountrySelect,
+  "emoji-picker": FormEmojiPicker,
 };
 
 const columnClass = {

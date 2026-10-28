@@ -27,6 +27,26 @@ describe("FormBuilder", () => {
     expect(screen.getByRole("radiogroup", { name: "Rating" })).toBeInTheDocument();
     expect(screen.getByLabelText("Pin input")).toBeInTheDocument();
     expect(screen.getByLabelText(/^File/)).toHaveAttribute("type", "file");
+    expect(screen.getByRole("textbox", { name: "Money" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Phone" })).toHaveAttribute("type", "tel");
+    expect(screen.getByRole("combobox", { name: "Country" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Emoji/ })).toBeInTheDocument();
+  });
+
+  it("collects the values of the money, phone and country fields", async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<AllFieldTypes onSubmit={onSubmit} />);
+
+    await user.type(screen.getByRole("textbox", { name: "Money" }), "2550");
+    await user.type(screen.getByRole("textbox", { name: "Phone" }), "912345678");
+    await user.type(screen.getByRole("combobox", { name: "Country" }), "portu");
+    await user.click(screen.getByRole("option", { name: /Portugal/ }));
+    await user.click(screen.getByRole("button", { name: "Submit" }));
+
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ t: 25.5, u: "+351912345678", v: "PT" }),
+    );
   });
 
   it("lays the fields in the requested number of columns", () => {

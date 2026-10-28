@@ -38,6 +38,10 @@ export const Range: Story = {
   },
 };
 
+export const WithTime: Story = {
+  args: { label: "Meeting", time: true, defaultValue: new Date(2026, 0, 15, 14, 30) },
+};
+
 export const Required: Story = {
   args: { label: "Birthday", required: true, rules: [rules.required("Choose a date")] },
 };
