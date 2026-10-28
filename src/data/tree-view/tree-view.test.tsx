@@ -24,6 +24,9 @@ const {
 } = composeStories(stories);
 
 const item = (name: string) => screen.getByRole("treeitem", { name });
+/** Like `item`, for rows whose name also holds what the app draws inside them. */
+const row = (name: string) =>
+  screen.getByRole("treeitem", { name: new RegExp(name.replace(".", "\\.")) });
 const labels = () => screen.getAllByRole("treeitem").map((node) => node.textContent);
 
 describe("TreeView", () => {

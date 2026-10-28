@@ -131,7 +131,8 @@ describe("sortNodes", () => {
       id: "length",
       compare: (a, b) => a.name.length - b.name.length,
     };
-    expect(ids(sortNodes(nodesOf(people), byLength, "asc"))).toEqual(["c", "b", "a"]);
+    // "Zoë" and "Ana" tie at three letters and keep their order
+    expect(ids(sortNodes(nodesOf(people), byLength, "asc"))).toEqual(["a", "c", "b"]);
   });
 
   it("keeps the order of the data without a column and does not change the input", () => {

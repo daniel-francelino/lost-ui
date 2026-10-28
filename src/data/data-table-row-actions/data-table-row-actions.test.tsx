@@ -1,11 +1,17 @@
 import { composeStories } from "@storybook/react-vite";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { LostI18nProvider, lostI18n } from "../../i18n";
+import { DataTableRowActions } from "./data-table-row-actions";
 import * as stories from "./data-table-row-actions.stories";
 
 const { Playground, Menu, ForcedMenu, Blocked, Disabled, NoActions } = composeStories(stories);
+
+afterEach(async () => {
+  await lostI18n.changeLanguage("en");
+});
 
 describe("DataTableRowActions", () => {
   it("shows up to two actions as buttons named after the row", () => {
@@ -105,13 +111,18 @@ describe("DataTableRowActions", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("is named in the current language", async () => {
-    const { lostI18n } = await import("../../i18n");
-    await lostI18n.changeLanguage("pt");
-
-    render(<ForcedMenu />);
+  it("is named in the current language", () => {
+    render(
+      <LostI18nProvider language="pt">
+        <DataTableRowActions row={{ id: "1" }} label="Ada" actions={[]} forceMenu />
+        <DataTableRowActions
+          row={{ id: "1" }}
+          label="Ada"
+          actions={[{ id: "edit", label: "Editar", onSelect: vi.fn() }]}
+          forceMenu
+        />
+      </LostI18nProvider>,
+    );
     expect(screen.getByRole("button", { name: "Ações de Ada" })).toBeInTheDocument();
-
-    await lostI18n.changeLanguage("en");
   });
 });

@@ -33,7 +33,7 @@ export const Searchable: Story = {
 };
 
 export const Paginated: Story = {
-  args: { pageSize: 5, pageSizeOptions: [5, 10, 25], searchable: true },
+  args: { defaultPageSize: 5, pageSizeOptions: [5, 10, 25], searchable: true },
 };
 
 export const SelectableRows: Story = {

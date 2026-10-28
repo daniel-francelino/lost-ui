@@ -160,18 +160,17 @@ describe("Timeline", () => {
   });
 
   it("passes the state of the item to the slots", () => {
-    const seen: boolean[] = [];
+    const seen: string[] = [];
     render(
       <Timeline
         defaultValue={0}
         items={[{ title: "A" }, { title: "B" }]}
         renderTitle={(item, state) => {
-          seen.push(state.active);
+          seen.push(`${String(item.title)}:${state.active}:${state.current}`);
           return item.title;
         }}
       />,
     );
-    expect(seen).toEqual([true, false, true, false].slice(0, seen.length));
-    expect(seen.slice(0, 2)).toEqual([true, false]);
+    expect(seen).toEqual(["A:true:true", "B:false:false"]);
   });
 });

@@ -1,12 +1,18 @@
 import { composeStories } from "@storybook/react-vite";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { LostI18nProvider, lostI18n } from "../../i18n";
+import { Empty } from "./empty";
 import * as stories from "./empty.stories";
 
 const { Playground, WithActions, WithLink, WithAvatar, Loading, Variants, Sizes, WithContent } =
   composeStories(stories);
+
+afterEach(async () => {
+  await lostI18n.changeLanguage("en");
+});
 
 describe("Empty", () => {
   it("shows a title and a description", () => {
@@ -68,14 +74,13 @@ describe("Empty", () => {
     expect(screen.getByText("Loading")).toHaveClass("sr-only");
   });
 
-  it("tells the loading text in the current language", async () => {
-    const { lostI18n } = await import("../../i18n");
-    await lostI18n.changeLanguage("pt");
-
-    render(<Loading />);
+  it("tells the loading text in the current language", () => {
+    render(
+      <LostI18nProvider language="pt">
+        <Empty loading />
+      </LostI18nProvider>,
+    );
     expect(screen.getByText("Carregando")).toBeInTheDocument();
-
-    await lostI18n.changeLanguage("en");
   });
 
   it("applies each variant", () => {

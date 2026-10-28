@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 
-import { lostI18n } from "../../i18n";
+import { LostI18nProvider, lostI18n } from "../../i18n";
 import { DataTable } from "./data-table";
 import { columns, people, type Person } from "./data-table.fixtures";
 import * as stories from "./data-table.stories";
@@ -154,9 +154,11 @@ describe("DataTable", () => {
 
       await user.click(screen.getByRole("button", { name: "Columns" }));
       await user.click(await screen.findByRole("menuitemcheckbox", { name: "Joined" }));
-      expect(screen.getByRole("columnheader", { name: "Joined" })).toBeInTheDocument();
-
       await user.click(screen.getByRole("menuitemcheckbox", { name: "Email" }));
+      // the open menu hides the table from screen readers
+      await user.keyboard("{Escape}");
+
+      expect(screen.getByRole("columnheader", { name: "Joined" })).toBeInTheDocument();
       expect(screen.queryByRole("columnheader", { name: "Email" })).toBeNull();
     });
 
@@ -540,9 +542,9 @@ describe("DataTable", () => {
       const all = screen.getByRole("checkbox", { name: "Select all rows on this page" });
 
       await user.click(all);
-      // the 3rd row is blocked, so it is left out
+      // the rows of Alan Turing and Margaret Hamilton are blocked, so they are left out
       expect(screen.getByRole("checkbox", { name: "Select Alan Turing" })).not.toBeChecked();
-      expect(screen.getByText("5 selected")).toBeInTheDocument();
+      expect(screen.getByText("4 selected")).toBeInTheDocument();
       expect(all).toBeChecked();
 
       await user.click(all);
@@ -830,7 +832,11 @@ describe("DataTable", () => {
       const user = userEvent.setup();
       await lostI18n.changeLanguage("pt");
       try {
-        render(<Paginated selectable searchable />);
+        render(
+          <LostI18nProvider language="pt">
+            <DataTable data={people} columns={columns} defaultPageSize={5} selectable searchable />
+          </LostI18nProvider>,
+        );
 
         expect(screen.getByRole("searchbox", { name: "Pesquisar" })).toBeInTheDocument();
         expect(
