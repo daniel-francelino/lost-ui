@@ -78,6 +78,40 @@ export const WithIcons: Story = {
   },
 };
 
+export const Masked: Story = {
+  args: { label: "Phone", mask: "(##) #####-####", placeholder: "(00) 00000-0000" },
+};
+
+export const MaskedWithoutLiterals: Story = {
+  args: {
+    label: "Phone",
+    mask: "(##) #####-####",
+    unmask: true,
+    help: "The field shows the mask but the value is only the digits.",
+  },
+};
+
+export const MaskedAlternatives: Story = {
+  args: {
+    label: "CPF or CNPJ",
+    mask: ["###.###.###-##", "##.###.###/####-##"],
+    help: "The mask changes after the 11th digit.",
+  },
+};
+
+export const MaskedLetters: Story = {
+  args: { label: "Plate", mask: "AAA-#X##", help: "A letter in upper case, # a digit." },
+};
+
+export const CustomMaskToken: Story = {
+  args: {
+    label: "Colour",
+    mask: "\\#HHHHHH",
+    maskTokens: { H: { pattern: /[0-9a-f]/i, transform: (char) => char.toUpperCase() } },
+    help: "H is a hexadecimal digit; \\# is a literal #.",
+  },
+};
+
 export const Loading: Story = { args: { label: "Checking", loading: true, defaultValue: "ada" } };
 
 export const ExternalError: Story = {

@@ -16,6 +16,11 @@ const {
   AsyncRule,
   WithHelpAndHint,
   WithIcons,
+  Masked,
+  MaskedWithoutLiterals,
+  MaskedAlternatives,
+  MaskedLetters,
+  CustomMaskToken,
   Loading,
   ExternalError,
   Disabled,
@@ -259,5 +264,149 @@ describe("FormInput", () => {
     await handle!.validate();
 
     expect(screen.getByLabelText(/Name/)).toHaveFocus();
+  });
+
+  describe("mask", () => {
+    it("shapes what is typed and keeps the literals in the value", async () => {
+      const onValueChange = vi.fn();
+      const user = userEvent.setup();
+      render(<Masked onValueChange={onValueChange} />);
+
+      const input = screen.getByLabelText("Phone");
+      await user.type(input, "11987654321");
+
+      expect(input).toHaveValue("(11) 98765-4321");
+      expect(onValueChange).toHaveBeenLastCalledWith("(11) 98765-4321");
+    });
+
+    it("ignores characters the mask does not accept", async () => {
+      const user = userEvent.setup();
+      render(<Masked />);
+
+      const input = screen.getByLabelText("Phone");
+      await user.type(input, "1a2b");
+
+      expect(input).toHaveValue("(12");
+    });
+
+    it("does not take more characters than the mask holds", async () => {
+      const user = userEvent.setup();
+      render(<Masked />);
+
+      const input = screen.getByLabelText("Phone");
+      await user.type(input, "119876543219999");
+
+      expect(input).toHaveValue("(11) 98765-4321");
+    });
+
+    it("deletes through a literal with backspace", async () => {
+      const user = userEvent.setup();
+      render(<Masked />);
+
+      const input = screen.getByLabelText("Phone");
+      await user.type(input, "1198");
+      expect(input).toHaveValue("(11) 98");
+
+      await user.keyboard("{Backspace}");
+      expect(input).toHaveValue("(11) 9");
+      await user.keyboard("{Backspace}");
+      expect(input).toHaveValue("(11");
+    });
+
+    it("shapes a value that was given without the literals", () => {
+      render(<Masked defaultValue="11987654321" />);
+      expect(screen.getByLabelText("Phone")).toHaveValue("(11) 98765-4321");
+    });
+
+    it("keeps the caret where the user typed", async () => {
+      const user = userEvent.setup();
+      render(<Masked defaultValue="1198765" />);
+
+      const input = screen.getByLabelText("Phone") as HTMLInputElement;
+      await user.type(input, "9", { initialSelectionStart: 3, initialSelectionEnd: 3 });
+
+      expect(input).toHaveValue("(19) 18765");
+      expect(input.selectionStart).toBe(4);
+    });
+
+    it("keeps only the typed characters in the value with unmask", async () => {
+      const onValueChange = vi.fn();
+      const user = userEvent.setup();
+      render(<MaskedWithoutLiterals onValueChange={onValueChange} />);
+
+      const input = screen.getByLabelText("Phone");
+      await user.type(input, "11987");
+
+      expect(input).toHaveValue("(11) 987");
+      expect(onValueChange).toHaveBeenLastCalledWith("11987");
+    });
+
+    it("submits the unmasked value under the field name", async () => {
+      const user = userEvent.setup();
+      const { container } = render(<MaskedWithoutLiterals name="phone" />);
+
+      await user.type(screen.getByLabelText("Phone"), "119");
+
+      expect(container.querySelector('input[type="hidden"][name="phone"]')).toHaveValue("119");
+      expect(screen.getByLabelText("Phone")).not.toHaveAttribute("name");
+    });
+
+    it("submits the masked text when the value keeps the literals", async () => {
+      const user = userEvent.setup();
+      const { container } = render(<Masked name="phone" />);
+
+      await user.type(screen.getByLabelText("Phone"), "119");
+
+      expect(screen.getByLabelText("Phone")).toHaveAttribute("name", "phone");
+      expect(container.querySelector('input[type="hidden"]')).toBeNull();
+    });
+
+    it("switches between masks as more characters are typed", async () => {
+      const user = userEvent.setup();
+      render(<MaskedAlternatives />);
+
+      const input = screen.getByLabelText("CPF or CNPJ");
+      await user.type(input, "12345678901");
+      expect(input).toHaveValue("123.456.789-01");
+
+      await user.type(input, "2");
+      expect(input).toHaveValue("12.345.678/9012");
+    });
+
+    it("changes the case of the letters", async () => {
+      const user = userEvent.setup();
+      render(<MaskedLetters />);
+
+      const input = screen.getByLabelText("Plate");
+      await user.type(input, "abc1d23");
+
+      expect(input).toHaveValue("ABC-1D23");
+    });
+
+    it("accepts custom tokens and an escaped literal", async () => {
+      const user = userEvent.setup();
+      render(<CustomMaskToken />);
+
+      const input = screen.getByLabelText("Colour");
+      await user.type(input, "ff00zz9a");
+
+      expect(input).toHaveValue("#FF009A");
+    });
+
+    it("runs the rules on the masked value", async () => {
+      const user = userEvent.setup();
+      render(
+        <Masked
+          rules={[(value: string) => value.length === 15 || "Incomplete phone"]}
+          lazyRules={false}
+        />,
+      );
+
+      await user.type(screen.getByLabelText("Phone"), "11");
+      expect(await screen.findByText("Incomplete phone")).toBeInTheDocument();
+
+      await user.type(screen.getByLabelText("Phone"), "987654321");
+      await waitFor(() => expect(screen.queryByText("Incomplete phone")).toBeNull());
+    });
   });
 });
