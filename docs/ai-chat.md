@@ -92,9 +92,32 @@ const { messages, status, sendMessage, stop, regenerate } = useChat();
 - **Server rendering**: nothing is hidden before hydration; the entrance of content is a rise, never `opacity: 0`.
 - **Prompt**: `Enter` sends, `Shift+Enter` breaks the line; with `submitOnEnter={false}`, `Ctrl/Cmd+Enter` sends. A second send is ignored while `submitted` or `streaming`. Text is trimmed; an empty text without files is not sent.
 
+## The page
+
+`AiChatPage` (`@danielsoaresf/lost-ui/templates/ai-chat/ai-chat-page`) is the whole screen: the list of conversations at the side (a drawer on a phone), the title, the conversation, the prompt and a note under it. With no messages it welcomes the user and shows the suggestions as cards. It fills its parent, so put it in something with a height.
+
+```tsx
+<AiChatPage
+  conversations={conversations} // { id, title?, group? }: equal neighbouring `group`s share a heading
+  activeConversationId={id}
+  onSelectConversation={setId}
+  onNewConversation={() => setId(null)}
+  onDeleteConversation={remove} // optional: adds a delete button to each one
+  messages={messages}
+  status={status}
+  onSend={(text, files) => sendMessage({ text })}
+  onStop={stop}
+  onReload={regenerate}
+  suggestions={["Plan a launch"]}
+  renderText={(text) => <Markdown>{text}</Markdown>}
+  note="The assistant can make mistakes."
+/>
+```
+
+The app owns the data (conversations, messages, status) and the handlers say what the user did. Under each answer there are copy and, on the last one, regenerate buttons; `getActions` replaces them.
+
 ## Not done yet
 
 - Queue of prompts while the answer streams (Nuxt UI marks it "soon").
 - Edit and branch a message, feedback bar, voice input, inline citations, model picker.
-- A page template (`templates/ai-chat`) with a conversation list and the chat; add it with the first app that needs it.
 - Checked in jsdom only; layout, scroll and the shimmer were not looked at in a real browser.

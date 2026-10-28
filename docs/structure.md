@@ -13,7 +13,7 @@ src/
     ai-chat/     the pieces of an AI chat: messages, prompt, reasoning, tool calls (see ai-chat.md)
     editor/      reserved: Notion-like editor
     calendar/    reserved: Google Calendar-like screen
-  templates/     pages and layouts the apps reuse, by category: auth, errors, backoffice (see below)
+  templates/     pages and layouts the apps reuse, by category: auth, errors, backoffice, ai-chat (see below)
   i18n/          languages (en, es, pt), provider, hooks
   lib/           shared helpers (cn, use-controlled, theme-colors…)
   stories/       shims used by stories
@@ -26,13 +26,14 @@ The public paths do not carry `components`: `@danielsoaresf/lost-ui/ui`, `@danie
 
 `src/templates/` is not a component layer. A **component** is a piece you place in a screen; a **template** is the screen (or the frame of one) and is reused between projects: you give it props and handlers and the app keeps its data, routes and permissions.
 
-| Template (category)                                                                                              | What it is                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `auth/`: `AuthLayout`, `LoginPage`, `RegisterPage`, `ForgotPasswordPage`, `ResetPasswordPage`, `AuthMessagePage` | sign in, sign up, recover and reset the password, "waiting for approval" / "confirm your email" |
-| `errors/`: `NotFoundPage`, `ForbiddenPage`, `ErrorFallback`                                                      | error pages to put inside the layout of the app (the full screen one is `ErrorPage`, in `app`)  |
-| `backoffice/`: `BackofficeLayout`                                                                                | the whole internal layout from props: sidebar, top bar, bottom bar, user menu                   |
-| `backoffice/`: `NotificationsPage`                                                                               | list by day, filters, loading / error / empty states, load more                                 |
-| `backoffice/`: `SettingsLayout`, `SettingsIndexPage`, `ProfilePage`                                              | tabs between settings pages, the grid of areas, name and password                               |
+| Template (category)                                                                                              | What it is                                                                                                  |
+| ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `auth/`: `AuthLayout`, `LoginPage`, `RegisterPage`, `ForgotPasswordPage`, `ResetPasswordPage`, `AuthMessagePage` | sign in, sign up, recover and reset the password, "waiting for approval" / "confirm your email"             |
+| `errors/`: `NotFoundPage`, `ForbiddenPage`, `ErrorFallback`                                                      | error pages to put inside the layout of the app (the full screen one is `ErrorPage`, in `app`)              |
+| `backoffice/`: `BackofficeLayout`                                                                                | the whole internal layout from props: sidebar, top bar, bottom bar, user menu                               |
+| `ai-chat/`: `AiChatPage`                                                                                         | the chat screen: list of conversations (a drawer on a phone), welcome with suggestions, messages and prompt |
+| `backoffice/`: `NotificationsPage`                                                                               | list by day, filters, loading / error / empty states, load more                                             |
+| `backoffice/`: `SettingsLayout`, `SettingsIndexPage`, `ProfilePage`                                              | tabs between settings pages, the grid of areas, name and password                                           |
 
 The small pieces they use are components, in `components/app`: `NotificationItem`, `NotificationPreferences`, `SettingsSection`, `PageHeader`. Helpers shared by the templates (`useSubmit`, `SubmitButton`, `FormError`…) are in `templates/lib`.
 

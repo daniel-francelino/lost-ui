@@ -48,7 +48,7 @@ data display.
 
 pages and layouts reused between projects, grouped by category (`auth`, `errors`, `backoffice`): import `@danielsoaresf/lost-ui/templates/<category>/<folder>`. `lib` holds helpers, not for import.
 
-`auth/auth-layout`, `auth/auth-message-page`, `auth/forgot-password-page`, `auth/login-page`, `auth/register-page`, `auth/reset-password-page`, `backoffice/backoffice-layout`, `backoffice/notifications-page`, `backoffice/profile-page`, `backoffice/settings-index-page`, `backoffice/settings-layout`, `errors/error-fallback`, `errors/forbidden-page`, `errors/not-found-page`
+`ai-chat/ai-chat-page`, `auth/auth-layout`, `auth/auth-message-page`, `auth/forgot-password-page`, `auth/login-page`, `auth/register-page`, `auth/reset-password-page`, `backoffice/backoffice-layout`, `backoffice/notifications-page`, `backoffice/profile-page`, `backoffice/settings-index-page`, `backoffice/settings-layout`, `errors/error-fallback`, `errors/forbidden-page`, `errors/not-found-page`
 
 ## effects (`@danielsoaresf/lost-ui/effects`)
 

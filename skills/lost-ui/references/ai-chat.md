@@ -69,3 +69,23 @@ const { messages, status, sendMessage, stop, regenerate } = useChat();
 - `ChatTool` takes `actions` for approve / deny buttons; the app decides what they do.
 - Texts (placeholder, button names) come from `LostI18nProvider`; set the language once at the root.
 - Do not build a message bubble, a prompt textarea or an auto-scroll by hand.
+
+## The whole screen: `AiChatPage`
+
+`@danielsoaresf/lost-ui/templates/ai-chat/ai-chat-page` is the chat screen with the list of conversations (a drawer on a phone), the welcome with suggestions, the messages and the prompt. Give its parent a height. Props: [api/templates](api/templates.md).
+
+```tsx
+<AiChatPage
+  conversations={conversations}
+  activeConversationId={id}
+  onSelectConversation={setId}
+  onNewConversation={() => setId(null)}
+  messages={messages}
+  status={status}
+  onSend={(text, files) => sendMessage({ text })}
+  onStop={stop}
+  onReload={regenerate}
+  suggestions={["Plan a launch"]}
+  renderText={(text) => <Markdown>{text}</Markdown>}
+/>
+```
