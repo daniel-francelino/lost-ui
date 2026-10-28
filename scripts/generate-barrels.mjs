@@ -26,6 +26,7 @@ const standalone = {
   app: new Set(["app"]),
   "ai-chat": new Set(),
   editor: new Set(),
+  calendar: new Set(),
   ui: new Set([
     "calendar",
     "carousel",
@@ -62,6 +63,7 @@ const elements = writeBarrel("elements");
 const app = writeBarrel("app");
 const aiChat = writeBarrel("ai-chat");
 const editor = writeBarrel("editor");
+const calendar = writeBarrel("calendar");
 // templates are grouped by category (`auth`, `errors`, `backoffice`, later `marketing`, `ecommerce`…):
 // each category folder has its own barrel and the root barrel re-exports the categories
 const templateCategories = readdirSync("src/templates", { withFileTypes: true })
@@ -88,19 +90,25 @@ const charts = writeBarrel("charts");
 const forms = writeBarrel("forms");
 const data = writeBarrel("data");
 
+// one entry for every component that needs no optional peer of its own. `charts` (recharts) and
+// `editor` (Tiptap) need their peers for the whole layer, so they keep their own entry
+const everywhere = ["ui", "elements", "app", "forms", "data", "ai-chat", "calendar", "effects"];
+writeFileSync(
+  "src/components/index.ts",
+  `${everywhere.map((layer) => `export * from "./${layer}";`).join("\n")}\n`,
+);
+
 writeFileSync(
   "src/index.ts",
   [
     'export { cn } from "./lib/cn";',
     'export { useIsDark } from "./lib/use-is-dark";',
-    'export * from "./components/ui";',
-    'export * from "./components/elements";',
-    'export * from "./components/effects";',
-    'export * from "./components/data";',
+    'export * from "./components";',
+    'export * from "./templates";',
     'export * from "./i18n";',
     "",
   ].join("\n"),
 );
 console.log(
-  `templates: ${templates}; app: ${app}; ai-chat: ${aiChat}; editor: ${editor}; elements: ${elements}; charts: ${charts}; forms: ${forms}; data: ${data}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
+  `templates: ${templates}; app: ${app}; ai-chat: ${aiChat}; editor: ${editor}; calendar: ${calendar}; elements: ${elements}; charts: ${charts}; forms: ${forms}; data: ${data}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
 );

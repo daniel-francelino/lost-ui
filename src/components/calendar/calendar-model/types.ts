@@ -1,7 +1,7 @@
 /** A date as a `Date` or as an ISO string (`"2026-10-28T14:00:00"`). */
 export type CalendarDate = Date | string;
 
-export type CalendarEvent = {
+export type CalendarEvent<T = unknown> = {
   id: string;
   title: string;
   start: CalendarDate;
@@ -15,6 +15,8 @@ export type CalendarEvent = {
   color?: string;
   location?: string;
   description?: string;
+  /** The object the event was made from, handed back to the handlers. */
+  data?: T;
 };
 
 /** A calendar the user can show or hide: "Work", "Personal". */
@@ -32,11 +34,14 @@ export type CalendarViewName = "month" | "week" | "day";
 export type CalendarRange = { start: Date; end: Date; allDay: boolean };
 
 /** An event with its dates as `Date`s, as the views use it. */
-export type NormalizedEvent = Omit<CalendarEvent, "start" | "end"> & { start: Date; end: Date };
+export type NormalizedEvent<T = unknown> = Omit<CalendarEvent<T>, "start" | "end"> & {
+  start: Date;
+  end: Date;
+};
 
 /** An event of a time grid, with where it sits in the day and in its column. */
-export type PositionedEvent = {
-  event: NormalizedEvent;
+export type PositionedEvent<T = unknown> = {
+  event: NormalizedEvent<T>;
   /** Minutes from the start of the day. */
   top: number;
   /** Minutes it lasts, at least 15. */
@@ -48,3 +53,21 @@ export type PositionedEvent = {
 };
 
 export type WeekStart = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+/** The part of an object that gives a field of an event: its name, or a function that reads it. */
+export type EventAccessor<T, V> = (keyof T & string) | ((item: T) => V);
+
+/** How to read an event out of any object: name the fields or give a function for each. Fields not named are read by their own name (`id`, `title`, `start`, `end`…). */
+export type EventAccessors<T> = {
+  id?: EventAccessor<T, string>;
+  title?: EventAccessor<T, string>;
+  start?: EventAccessor<T, CalendarDate>;
+  end?: EventAccessor<T, CalendarDate>;
+  allDay?: EventAccessor<T, boolean | undefined>;
+  calendarId?: EventAccessor<T, string | undefined>;
+  color?: EventAccessor<T, string | undefined>;
+  location?: EventAccessor<T, string | undefined>;
+};
+
+/** The days a calendar shows: from the first to the day after the last. Apps load events for it. */
+export type CalendarVisibleRange = { start: Date; end: Date; view: CalendarViewName };

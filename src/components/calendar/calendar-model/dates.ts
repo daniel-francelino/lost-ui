@@ -1,11 +1,19 @@
-import type { CalendarDate, CalendarEvent, NormalizedEvent, WeekStart } from "./types";
+import type {
+  CalendarDate,
+  CalendarEvent,
+  CalendarViewName,
+  CalendarVisibleRange,
+  EventAccessors,
+  NormalizedEvent,
+  WeekStart,
+} from "./types";
 
 export const MINUTES_PER_DAY = 1440;
 
 export const toDate = (value: CalendarDate): Date =>
   value instanceof Date ? value : new Date(value);
 
-export function normalizeEvent(event: CalendarEvent): NormalizedEvent {
+export function normalizeEvent<T>(event: CalendarEvent<T>): NormalizedEvent<T> {
   const start = toDate(event.start);
   const end = toDate(event.end);
   return { ...event, start, end: end < start ? start : end };
@@ -71,7 +79,7 @@ export const snapMinutes = (minutes: number, step = 15): number =>
   Math.round(minutes / step) * step;
 
 /** Does the event touch this day? A day-long event ends at the start of the day it ends on, so it counts that day. */
-export function eventOnDay(event: NormalizedEvent, day: Date): boolean {
+export function eventOnDay(event: NormalizedEvent<unknown>, day: Date): boolean {
   const from = startOfDay(day);
   const to = addDays(from, 1);
   if (event.allDay) return startOfDay(event.start) <= from && startOfDay(event.end) >= from;
@@ -79,9 +87,50 @@ export function eventOnDay(event: NormalizedEvent, day: Date): boolean {
   return event.start < to && end > from;
 }
 
-export const eventsOnDay = (events: NormalizedEvent[], day: Date): NormalizedEvent[] =>
+export const eventsOnDay = <T>(events: NormalizedEvent<T>[], day: Date): NormalizedEvent<T>[] =>
   events.filter((event) => eventOnDay(event, day));
 
 /** Sorts by start, then longest first, so the chips of a day read in order. */
-export const byStart = (a: NormalizedEvent, b: NormalizedEvent): number =>
+export const byStart = (a: NormalizedEvent<unknown>, b: NormalizedEvent<unknown>): number =>
   a.start.getTime() - b.start.getTime() || b.end.getTime() - a.end.getTime();
+
+/** Reads an event out of any object with the accessors; the object itself goes in `data`. */
+export function toCalendarEvent<T>(item: T, accessors: EventAccessors<T> = {}): CalendarEvent<T> {
+  const read = <V>(field: keyof EventAccessors<T> & string): V => {
+    const accessor = accessors[field] ?? field;
+    return (
+      typeof accessor === "function"
+        ? (accessor as (value: T) => V)(item)
+        : (item as Record<string, unknown>)[accessor]
+    ) as V;
+  };
+  return {
+    id: read<string>("id"),
+    title: read<string>("title"),
+    start: read("start"),
+    end: read("end"),
+    allDay: read<boolean | undefined>("allDay"),
+    calendarId: read<string | undefined>("calendarId"),
+    color: read<string | undefined>("color"),
+    location: read<string | undefined>("location"),
+    data: item,
+  };
+}
+
+/** The days the view draws: a month shows six weeks, a week seven days, a day one. `end` is the day after the last. */
+export function visibleRange(
+  view: CalendarViewName,
+  date: Date,
+  weekStartsOn: WeekStart = 0,
+): CalendarVisibleRange {
+  if (view === "month") {
+    const start = startOfWeek(startOfMonth(date), weekStartsOn);
+    return { view, start, end: addDays(start, 42) };
+  }
+  if (view === "week") {
+    const start = startOfWeek(date, weekStartsOn);
+    return { view, start, end: addDays(start, 7) };
+  }
+  const start = startOfDay(date);
+  return { view, start, end: addDays(start, 1) };
+}

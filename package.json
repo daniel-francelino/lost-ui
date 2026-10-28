@@ -70,6 +70,18 @@
       "types": "./dist/components/ai-chat/*/index.d.ts",
       "import": "./dist/components/ai-chat/*/index.js"
     },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./calendar": {
+      "types": "./dist/components/calendar/index.d.ts",
+      "import": "./dist/components/calendar/index.js"
+    },
+    "./calendar/*": {
+      "types": "./dist/components/calendar/*/index.d.ts",
+      "import": "./dist/components/calendar/*/index.js"
+    },
     "./editor": {
       "types": "./dist/components/editor/index.d.ts",
       "import": "./dist/components/editor/index.js"

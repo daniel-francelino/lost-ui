@@ -8,7 +8,7 @@ import * as weekStories from "../week-view/week-view.stories";
 const { Playground, MondayFirst, Zoomed } = composeStories(weekStories);
 
 const column = (label: RegExp) => screen.getByRole("gridcell", { name: label });
-const eventBox = (container: HTMLElement, title: string) =>
+const eventBox = (_container: HTMLElement, title: string) =>
   screen
     .getByRole("button", { name: new RegExp(title) })
     .closest<HTMLElement>("[data-slot='time-grid-event']")!;

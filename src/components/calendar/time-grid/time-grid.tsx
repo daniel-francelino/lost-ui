@@ -12,30 +12,29 @@ import {
   normalizeEvent,
   snapMinutes,
 } from "../calendar-model/dates";
-import {
-  calendarLocale,
-  eventColor,
-  formatHour,
-  formatShortDate,
-  formatWeekday,
-} from "../calendar-model/format";
+import { useCalendarLocale } from "../calendar-model/locale";
+import { eventColor, formatHour, formatShortDate, formatWeekday } from "../calendar-model/format";
 import { layoutTimedEvents } from "../calendar-model/layout";
 import type { CalendarEvent, CalendarRange, CalendarSource } from "../calendar-model/types";
 
-export type TimeGridProps = {
+export type TimeGridProps<T = unknown> = {
   /** The days to draw as columns: seven for a week, one for a day. */
   days: Date[];
-  events: CalendarEvent[];
+  events: CalendarEvent<T>[];
   calendars?: CalendarSource[];
   /** Pixels per hour: the zoom of the grid. */
   hourHeight?: number;
   /** The hour the grid is scrolled to when it opens. */
   scrollToHour?: number;
-  onEventClick?: (event: CalendarEvent, mouse: MouseEvent<HTMLButtonElement>) => void;
+  onEventClick?: (event: CalendarEvent<T>, mouse: MouseEvent<HTMLButtonElement>) => void;
   onDayClick?: (date: Date) => void;
   /** An empty part of the grid was clicked: one hour from that time, snapped to 15 minutes. */
   onCreate?: (range: CalendarRange) => void;
-  renderEvent?: (event: CalendarEvent, color: string) => ReactNode;
+  renderEvent?: (event: CalendarEvent<T>, color: string) => ReactNode;
+  /** The step, in minutes, a click on an empty time snaps to. */
+  snap?: number;
+  /** How long, in minutes, the event created by a click lasts. */
+  defaultDuration?: number;
   /** The moment taken as "now", for the red line. Without it the clock is used and the line moves. */
   now?: Date;
   className?: string;
@@ -54,7 +53,7 @@ function useClock(fixed: Date | undefined): Date {
 }
 
 /** The days of a week or a day as columns over a column of hours: all-day row, timed events side by side, and the line of now. */
-export function TimeGrid({
+export function TimeGrid<T = unknown>({
   days,
   events,
   calendars,
@@ -64,11 +63,13 @@ export function TimeGrid({
   onDayClick,
   onCreate,
   renderEvent,
+  snap = 15,
+  defaultDuration = 60,
   now: nowProp,
   className,
-}: TimeGridProps) {
-  const { t, language } = useLostTranslation();
-  const locale = calendarLocale(language);
+}: TimeGridProps<T>) {
+  const { t } = useLostTranslation();
+  const locale = useCalendarLocale();
   const now = useClock(nowProp);
   const scroller = useRef<HTMLDivElement>(null);
   const normalized = useMemo(() => events.map(normalizeEvent).sort(byStart), [events]);
@@ -83,11 +84,15 @@ export function TimeGrid({
   const create = (day: Date, mouse: MouseEvent<HTMLDivElement>) => {
     if (!onCreate) return;
     const offset = mouse.clientY - mouse.currentTarget.getBoundingClientRect().top;
-    const minutes = Math.min(snapMinutes((offset / hourHeight) * 60), 23 * 60);
-    onCreate({ start: atMinutes(day, minutes), end: atMinutes(day, minutes + 60), allDay: false });
+    const minutes = Math.min(snapMinutes((offset / hourHeight) * 60, snap), 24 * 60 - snap);
+    onCreate({
+      start: atMinutes(day, minutes),
+      end: atMinutes(day, minutes + defaultDuration),
+      allDay: false,
+    });
   };
 
-  const draw = (event: CalendarEvent, variant: "chip" | "block") => {
+  const draw = (event: CalendarEvent<T>, variant: "chip" | "block") => {
     const color = eventColor(event, calendars);
     return renderEvent ? (
       renderEvent(event, color)

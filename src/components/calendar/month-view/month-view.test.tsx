@@ -86,8 +86,8 @@ describe("MonthView", () => {
     const onDayClick = vi.fn();
     render(<BusyDay onDayClick={onDayClick} />);
     const day = within(cell(/Oct 28, 2026/));
-    expect(day.getAllByRole("button", { name: /^(?!Go to)/ }).length).toBeLessThanOrEqual(4);
-    await user.click(day.getByRole("button", { name: "3 more" }));
+    expect(day.getAllByRole("button", { name: /Design review|Lunch|Gym|Extra/ })).toHaveLength(2);
+    await user.click(day.getByRole("button", { name: "4 more" }));
     expect(onDayClick).toHaveBeenCalledWith(new Date(2026, 9, 28));
   });
 

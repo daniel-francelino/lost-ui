@@ -6,12 +6,8 @@ import type { LostKey } from "../../../i18n";
 import { useLostTranslation } from "../../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { addDays, addMonths } from "../calendar-model/dates";
-import {
-  calendarLocale,
-  formatDayTitle,
-  formatMonthTitle,
-  formatWeekTitle,
-} from "../calendar-model/format";
+import { useCalendarLocale } from "../calendar-model/locale";
+import { formatDayTitle, formatMonthTitle, formatWeekTitle } from "../calendar-model/format";
 import type { CalendarViewName, WeekStart } from "../calendar-model/types";
 
 export type CalendarDateNavProps = {
@@ -39,8 +35,8 @@ export function CalendarDateNav({
   actions,
   className,
 }: CalendarDateNavProps) {
-  const { t, language } = useLostTranslation();
-  const locale = calendarLocale(language);
+  const { t } = useLostTranslation();
+  const locale = useCalendarLocale();
 
   const step = (direction: 1 | -1) =>
     onDateChange(

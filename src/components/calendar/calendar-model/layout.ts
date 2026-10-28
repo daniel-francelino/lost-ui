@@ -8,7 +8,10 @@ const MIN_MINUTES = 15;
  * one taking the first column where it fits (as Google Calendar does). Day-long events are not
  * laid out here.
  */
-export function layoutTimedEvents(events: NormalizedEvent[], day: Date): PositionedEvent[] {
+export function layoutTimedEvents<T>(
+  events: NormalizedEvent<T>[],
+  day: Date,
+): PositionedEvent<T>[] {
   const dayStart = startOfDay(day);
   const dayEnd = addDays(dayStart, 1);
 

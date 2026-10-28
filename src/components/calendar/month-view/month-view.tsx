@@ -11,12 +11,8 @@ import {
   normalizeEvent,
   startOfDay,
 } from "../calendar-model/dates";
-import {
-  calendarLocale,
-  eventColor,
-  formatShortDate,
-  formatWeekday,
-} from "../calendar-model/format";
+import { useCalendarLocale } from "../calendar-model/locale";
+import { eventColor, formatShortDate, formatWeekday } from "../calendar-model/format";
 import type {
   CalendarEvent,
   CalendarRange,
@@ -24,28 +20,28 @@ import type {
   WeekStart,
 } from "../calendar-model/types";
 
-export type MonthViewProps = {
+export type MonthViewProps<T = unknown> = {
   /** Any day of the month to show. */
   date: Date;
-  events: CalendarEvent[];
+  events: CalendarEvent<T>[];
   calendars?: CalendarSource[];
   weekStartsOn?: WeekStart;
   /** How many events a day shows before "N more". */
   maxEvents?: number;
-  onEventClick?: (event: CalendarEvent, mouse: MouseEvent<HTMLButtonElement>) => void;
+  onEventClick?: (event: CalendarEvent<T>, mouse: MouseEvent<HTMLButtonElement>) => void;
   /** The number of a day, or "N more", was clicked: usually goes to that day. */
   onDayClick?: (date: Date) => void;
   /** An empty part of a day was clicked: whole-day range of that day. */
   onCreate?: (range: CalendarRange) => void;
   /** Draws an event its own way. */
-  renderEvent?: (event: CalendarEvent, color: string) => ReactNode;
+  renderEvent?: (event: CalendarEvent<T>, color: string) => ReactNode;
   /** The moment taken as "now", to mark today. Defaults to the clock. */
   now?: Date;
   className?: string;
 };
 
 /** A month as six weeks of days, each with its events as chips. */
-export function MonthView({
+export function MonthView<T = unknown>({
   date,
   events,
   calendars,
@@ -57,9 +53,9 @@ export function MonthView({
   renderEvent,
   now = new Date(),
   className,
-}: MonthViewProps) {
-  const { t, language } = useLostTranslation();
-  const locale = calendarLocale(language);
+}: MonthViewProps<T>) {
+  const { t } = useLostTranslation();
+  const locale = useCalendarLocale();
   const days = useMemo(() => monthGrid(date, weekStartsOn), [date, weekStartsOn]);
   const normalized = useMemo(() => events.map(normalizeEvent).sort(byStart), [events]);
   const weeks = Array.from({ length: 6 }, (_, week) => days.slice(week * 7, week * 7 + 7));
