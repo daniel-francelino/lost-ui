@@ -5,7 +5,21 @@ export const es: Messages = {
     close: "Cerrar",
     loading: "Cargando",
     search: "Buscar",
+    dialog: "Diálogo",
     noResults: "Sin resultados",
+  },
+  header: {
+    openMenu: "Abrir menú",
+    closeMenu: "Cerrar menú",
+  },
+  errorPage: {
+    backHome: "Volver al inicio",
+    generic: "Algo salió mal",
+    unauthorized: "No autorizado",
+    forbidden: "Acceso prohibido",
+    notFound: "Página no encontrada",
+    serverError: "Error del servidor",
+    unavailable: "Servicio no disponible",
   },
   form: {
     submit: "Enviar",

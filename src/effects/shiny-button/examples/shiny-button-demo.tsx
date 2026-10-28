@@ -1,5 +1,0 @@
-import { ShinyButton } from "../../shiny-button";
-
-export default function ShinyButtonDemo() {
-  return <ShinyButton>Shiny Button</ShinyButton>;
-}

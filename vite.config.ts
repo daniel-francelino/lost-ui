@@ -7,13 +7,16 @@ const root = import.meta.dirname;
 const sourceFile = /\.tsx?$/;
 
 function componentEntries(layer: string): Record<string, string> {
-  const layerDir = resolve(root, "src", layer);
+  const layerDir = resolve(root, "src/components", layer);
   return Object.fromEntries(
     readdirSync(layerDir, { withFileTypes: true })
       .filter(
         (entry) => entry.isDirectory() && existsSync(resolve(layerDir, entry.name, "index.ts")),
       )
-      .map((entry) => [`${layer}/${entry.name}/index`, resolve(layerDir, entry.name, "index.ts")]),
+      .map((entry) => [
+        `components/${layer}/${entry.name}/index`,
+        resolve(layerDir, entry.name, "index.ts"),
+      ]),
   );
 }
 
@@ -36,14 +39,18 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(root, "src/index.ts"),
-        "effects/index": resolve(root, "src/effects/index.ts"),
-        "ui/index": resolve(root, "src/ui/index.ts"),
-        "charts/index": resolve(root, "src/charts/index.ts"),
-        "forms/index": resolve(root, "src/forms/index.ts"),
         "i18n/index": resolve(root, "src/i18n/index.ts"),
-        "data/index": resolve(root, "src/data/index.ts"),
+        "components/effects/index": resolve(root, "src/components/effects/index.ts"),
+        "components/ui/index": resolve(root, "src/components/ui/index.ts"),
+        "components/elements/index": resolve(root, "src/components/elements/index.ts"),
+        "components/app/index": resolve(root, "src/components/app/index.ts"),
+        "components/charts/index": resolve(root, "src/components/charts/index.ts"),
+        "components/forms/index": resolve(root, "src/components/forms/index.ts"),
+        "components/data/index": resolve(root, "src/components/data/index.ts"),
         ...componentEntries("effects"),
         ...componentEntries("ui"),
+        ...componentEntries("elements"),
+        ...componentEntries("app"),
         ...componentEntries("charts"),
         ...componentEntries("forms"),
         ...componentEntries("data"),

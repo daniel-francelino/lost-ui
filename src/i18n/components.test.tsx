@@ -3,19 +3,19 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { FormBuilder } from "../forms/form-builder";
-import { FormColorPicker } from "../forms/form-color-picker";
-import { FormCountrySelect } from "../forms/form-country-select";
-import { FormEmojiPicker } from "../forms/form-emoji-picker";
-import { FormFileUpload } from "../forms/form-file-upload";
-import { FormInputDate } from "../forms/form-input-date";
-import { FormInputMenu } from "../forms/form-input-menu";
-import { FormInputNumber } from "../forms/form-input-number";
-import { FormInputPhone } from "../forms/form-input-phone";
-import { FormInputTags } from "../forms/form-input-tags";
-import { FormSelectMenu } from "../forms/form-select-menu";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
-import { PaginationNext, PaginationPrevious } from "../ui/pagination";
+import { FormBuilder } from "../components/forms/form-builder";
+import { FormColorPicker } from "../components/forms/form-color-picker";
+import { FormCountrySelect } from "../components/forms/form-country-select";
+import { FormEmojiPicker } from "../components/forms/form-emoji-picker";
+import { FormFileUpload } from "../components/forms/form-file-upload";
+import { FormInputDate } from "../components/forms/form-input-date";
+import { FormInputMenu } from "../components/forms/form-input-menu";
+import { FormInputNumber } from "../components/forms/form-input-number";
+import { FormInputPhone } from "../components/forms/form-input-phone";
+import { FormInputTags } from "../components/forms/form-input-tags";
+import { FormSelectMenu } from "../components/forms/form-select-menu";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../components/ui/dialog";
+import { PaginationNext, PaginationPrevious } from "../components/ui/pagination";
 import { LostI18nProvider, lostI18n } from ".";
 
 afterEach(async () => {

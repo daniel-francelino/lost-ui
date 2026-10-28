@@ -3,7 +3,21 @@ export const en = {
     close: "Close",
     loading: "Loading",
     search: "Search",
+    dialog: "Dialog",
     noResults: "No results",
+  },
+  header: {
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+  },
+  errorPage: {
+    backHome: "Back to home",
+    generic: "Something went wrong",
+    unauthorized: "Unauthorized",
+    forbidden: "Forbidden",
+    notFound: "Page not found",
+    serverError: "Server error",
+    unavailable: "Service unavailable",
   },
   form: {
     submit: "Submit",

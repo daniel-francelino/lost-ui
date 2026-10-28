@@ -17,20 +17,36 @@
       "import": "./dist/index.js"
     },
     "./effects": {
-      "types": "./dist/effects/index.d.ts",
-      "import": "./dist/effects/index.js"
+      "types": "./dist/components/effects/index.d.ts",
+      "import": "./dist/components/effects/index.js"
     },
     "./effects/*": {
-      "types": "./dist/effects/*/index.d.ts",
-      "import": "./dist/effects/*/index.js"
+      "types": "./dist/components/effects/*/index.d.ts",
+      "import": "./dist/components/effects/*/index.js"
     },
     "./ui": {
-      "types": "./dist/ui/index.d.ts",
-      "import": "./dist/ui/index.js"
+      "types": "./dist/components/ui/index.d.ts",
+      "import": "./dist/components/ui/index.js"
     },
     "./ui/*": {
-      "types": "./dist/ui/*/index.d.ts",
-      "import": "./dist/ui/*/index.js"
+      "types": "./dist/components/ui/*/index.d.ts",
+      "import": "./dist/components/ui/*/index.js"
+    },
+    "./elements": {
+      "types": "./dist/components/elements/index.d.ts",
+      "import": "./dist/components/elements/index.js"
+    },
+    "./elements/*": {
+      "types": "./dist/components/elements/*/index.d.ts",
+      "import": "./dist/components/elements/*/index.js"
+    },
+    "./app": {
+      "types": "./dist/components/app/index.d.ts",
+      "import": "./dist/components/app/index.js"
+    },
+    "./app/*": {
+      "types": "./dist/components/app/*/index.d.ts",
+      "import": "./dist/components/app/*/index.js"
     },
     "./lib/cn": {
       "types": "./dist/lib/cn.d.ts",
@@ -40,28 +56,28 @@
     "./effects.css": "./styles/effects.css",
     "./theme-neutral.css": "./styles/theme-neutral.css",
     "./charts": {
-      "types": "./dist/charts/index.d.ts",
-      "import": "./dist/charts/index.js"
+      "types": "./dist/components/charts/index.d.ts",
+      "import": "./dist/components/charts/index.js"
     },
     "./charts/*": {
-      "types": "./dist/charts/*/index.d.ts",
-      "import": "./dist/charts/*/index.js"
+      "types": "./dist/components/charts/*/index.d.ts",
+      "import": "./dist/components/charts/*/index.js"
     },
     "./forms": {
-      "types": "./dist/forms/index.d.ts",
-      "import": "./dist/forms/index.js"
+      "types": "./dist/components/forms/index.d.ts",
+      "import": "./dist/components/forms/index.js"
     },
     "./forms/*": {
-      "types": "./dist/forms/*/index.d.ts",
-      "import": "./dist/forms/*/index.js"
+      "types": "./dist/components/forms/*/index.d.ts",
+      "import": "./dist/components/forms/*/index.js"
     },
     "./data": {
-      "types": "./dist/data/index.d.ts",
-      "import": "./dist/data/index.js"
+      "types": "./dist/components/data/index.d.ts",
+      "import": "./dist/components/data/index.js"
     },
     "./data/*": {
-      "types": "./dist/data/*/index.d.ts",
-      "import": "./dist/data/*/index.js"
+      "types": "./dist/components/data/*/index.d.ts",
+      "import": "./dist/components/data/*/index.js"
     },
     "./i18n": {
       "types": "./dist/i18n/index.d.ts",

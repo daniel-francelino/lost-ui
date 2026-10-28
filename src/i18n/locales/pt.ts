@@ -5,7 +5,21 @@ export const pt: Messages = {
     close: "Fechar",
     loading: "Carregando",
     search: "Pesquisar",
+    dialog: "Caixa de diálogo",
     noResults: "Nenhum resultado",
+  },
+  header: {
+    openMenu: "Abrir menu",
+    closeMenu: "Fechar menu",
+  },
+  errorPage: {
+    backHome: "Voltar ao início",
+    generic: "Algo deu errado",
+    unauthorized: "Não autorizado",
+    forbidden: "Acesso proibido",
+    notFound: "Página não encontrada",
+    serverError: "Erro do servidor",
+    unavailable: "Serviço indisponível",
   },
   form: {
     submit: "Enviar",
