@@ -2,7 +2,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { fn } from "storybook/test";
 
-import { RichTextEditor } from "./rich-text-editor";
+import { Extension, type JSONContent } from "@tiptap/core";
+import { StarIcon } from "lucide-react";
+
+import type { SlashItem } from "../editor-slash-menu";
+import { RichTextEditor, type RichTextEditorProps } from "./rich-text-editor";
 
 const article = `
 <h1>Launch plan</h1>
@@ -65,9 +69,72 @@ export const Controlled: Story = {
     const [html, setHtml] = useState("<p>Edit me, the HTML is below.</p>");
     return (
       <div className="grid gap-3">
-        <RichTextEditor {...args} value={html} onValueChange={setHtml} />
+        <RichTextEditor<"html">
+          {...(args as RichTextEditorProps<"html">)}
+          value={html}
+          onValueChange={setHtml}
+        />
         <pre className="overflow-x-auto rounded-lg bg-muted p-3 text-xs">{html}</pre>
       </div>
     );
   },
+};
+
+export const AsJson: Story = {
+  render: (args) => {
+    const [doc, setDoc] = useState<JSONContent>({
+      type: "doc",
+      content: [{ type: "paragraph", content: [{ type: "text", text: "Stored as a document." }] }],
+    });
+    return (
+      <div className="grid gap-3">
+        <RichTextEditor<"json">
+          {...(args as RichTextEditorProps<"json">)}
+          format="json"
+          value={doc}
+          onValueChange={setDoc}
+        />
+        <pre className="overflow-x-auto rounded-lg bg-muted p-3 text-xs">
+          {JSON.stringify(doc, null, 2)}
+        </pre>
+      </div>
+    );
+  },
+};
+
+const shout: SlashItem = {
+  id: "paragraph",
+  title: "Shout",
+  description: "A loud line (your own block)",
+  icon: <StarIcon />,
+  keywords: ["loud", "yell"],
+  run: ({ editor, range }) =>
+    void editor.chain().focus().deleteRange(range).insertContent("<h2>SHOUT</h2>").run(),
+};
+
+const customBlocks = [shout];
+
+export const YourOwnBlocks: Story = { args: { slashItems: customBlocks } };
+
+const sparkle = Extension.create({
+  name: "sparkle",
+  addKeyboardShortcuts: () => ({ "Mod-Shift-s": () => true }),
+});
+const myExtensions = [sparkle];
+
+export const YourOwnExtensions: Story = {
+  args: {
+    extensions: myExtensions,
+    renderBubbleMenu: (editor) => (
+      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}>
+        My bold
+      </button>
+    ),
+    autofocus: "end",
+    defaultValue: "<p>Select a word: the toolbar is yours.</p>",
+  },
+};
+
+export const WithoutToolbarsAndGrip: Story = {
+  args: { bubbleMenu: false, blockHandle: false, defaultValue: "<p>Just writing.</p>" },
 };

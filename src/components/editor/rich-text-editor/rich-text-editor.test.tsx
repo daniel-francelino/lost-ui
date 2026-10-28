@@ -5,11 +5,23 @@ import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { LostI18nProvider } from "../../../i18n";
+import type { SlashItem } from "../editor-slash-menu";
 import { RichTextEditor, type RichTextEditorHandle } from "./rich-text-editor";
 import * as stories from "./rich-text-editor.stories";
 
-const { Playground, WithContent, Plain, ReadOnly, WithImageUpload, SomeBlocks, Controlled } =
-  composeStories(stories);
+const {
+  Playground,
+  WithContent,
+  Plain,
+  ReadOnly,
+  WithImageUpload,
+  SomeBlocks,
+  Controlled,
+  AsJson,
+  YourOwnBlocks,
+  YourOwnExtensions,
+  WithoutToolbarsAndGrip,
+} = composeStories(stories);
 
 const textbox = () => screen.getByRole("textbox", { name: "Rich text editor" });
 
@@ -304,5 +316,114 @@ describe("RichTextEditor", () => {
     expect(
       await screen.findByRole("textbox", { name: "Editor de texto rico" }),
     ).toBeInTheDocument();
+  });
+
+  it("reads and writes the Tiptap document when the format is json", async () => {
+    const onValueChange = vi.fn();
+    const ref = createRef<RichTextEditorHandle>();
+    render(
+      <RichTextEditor
+        ref={ref}
+        format="json"
+        defaultValue={{
+          type: "doc",
+          content: [{ type: "paragraph", content: [{ type: "text", text: "Hi" }] }],
+        }}
+        onValueChange={onValueChange}
+      />,
+    );
+    const editor = await ready(ref);
+    expect(textbox()).toHaveTextContent("Hi");
+    act(() => void editor.commands.insertContent(" there"));
+    const [doc] = onValueChange.mock.lastCall as [{ type: string }];
+    expect(doc.type).toBe("doc");
+    expect(JSON.stringify(doc)).toContain("there");
+    expect(ref.current!.getJSON().type).toBe("doc");
+    expect(ref.current!.getText()).toContain("Hi there");
+  });
+
+  it("follows a json value from outside", async () => {
+    const doc = (text: string) => ({
+      type: "doc" as const,
+      content: [{ type: "paragraph", content: [{ type: "text", text }] }],
+    });
+    const { rerender } = render(<RichTextEditor format="json" value={doc("One")} />);
+    await waitFor(() => expect(textbox()).toHaveTextContent("One"));
+    rerender(<RichTextEditor format="json" value={doc("Two")} />);
+    await waitFor(() => expect(textbox()).toHaveTextContent("Two"));
+  });
+
+  it("works as a json field in a story", async () => {
+    render(<AsJson />);
+    await waitFor(() => expect(textbox()).toHaveTextContent("Stored as a document."));
+    expect(screen.getByText(/"type": "doc"/)).toBeInTheDocument();
+  });
+
+  it("adds the blocks of the app to the slash menu, and runs them", async () => {
+    const user = userEvent.setup();
+    const ref = createRef<RichTextEditorHandle>();
+    render(<YourOwnBlocks ref={ref} />);
+    const editor = await ready(ref);
+    act(() => void editor.chain().focus().insertContent("/shou").run());
+    await user.click(await screen.findByRole("option", { name: /Shout/ }));
+    expect(ref.current!.getHTML()).toContain("<h2>SHOUT</h2>");
+  });
+
+  it("takes new blocks without making a new editor", async () => {
+    const ref = createRef<RichTextEditorHandle>();
+    const { rerender } = render(<RichTextEditor ref={ref} />);
+    const editor = await ready(ref);
+    const extra: SlashItem = {
+      id: "paragraph",
+      title: "Zebra",
+      description: "",
+      icon: null,
+      keywords: [],
+      run: () => {},
+    };
+    rerender(<RichTextEditor ref={ref} slashItems={[extra]} />);
+    expect(ref.current!.editor).toBe(editor);
+    act(() => void editor.chain().focus().insertContent("/zeb").run());
+    expect(await screen.findByRole("option", { name: /Zebra/ })).toBeInTheDocument();
+  });
+
+  it("takes the Tiptap extensions of the app", async () => {
+    const ref = createRef<RichTextEditorHandle>();
+    render(<YourOwnExtensions ref={ref} />);
+    const editor = await ready(ref);
+    expect(
+      editor.extensionManager.extensions.some((extension) => extension.name === "sparkle"),
+    ).toBe(true);
+  });
+
+  it("replaces the tools of the toolbar with the ones of the app", async () => {
+    const ref = createRef<RichTextEditorHandle>();
+    render(<YourOwnExtensions ref={ref} />);
+    const editor = await ready(ref);
+    act(() => void editor.chain().focus().setTextSelection({ from: 1, to: 6 }).run());
+    expect(
+      await screen.findByRole("button", { name: "My bold", hidden: true }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Italic", hidden: true })).toBeNull();
+  });
+
+  it("can leave out the toolbar and the grip", async () => {
+    const { container } = render(<WithoutToolbarsAndGrip />);
+    await waitFor(() => expect(textbox()).toHaveTextContent("Just writing."));
+    expect(container.querySelector("[data-slot='editor-bubble-menu']")).toBeNull();
+    expect(container.querySelector("[data-slot='editor-block-handle']")).toBeNull();
+  });
+
+  it("puts the cursor in the editor and hands over the Tiptap editor", async () => {
+    const onReady = vi.fn();
+    render(<RichTextEditor autofocus="end" defaultValue="<p>Text</p>" onReady={onReady} />);
+    await waitFor(() => expect(onReady).toHaveBeenCalledOnce());
+    expect(onReady.mock.calls[0]![0].isEditable).toBe(true);
+    await waitFor(() => expect(textbox()).toHaveFocus());
+  });
+
+  it("takes classes for the writing area", async () => {
+    render(<RichTextEditor editorClassName="text-lg" />);
+    await waitFor(() => expect(textbox()).toHaveClass("text-lg"));
   });
 });

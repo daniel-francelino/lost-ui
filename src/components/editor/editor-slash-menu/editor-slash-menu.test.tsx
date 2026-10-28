@@ -10,7 +10,7 @@ const items = createSlashItems(translate, { onImage: () => {} });
 function editorWith(html: string) {
   return new Editor({
     element: document.createElement("div"),
-    extensions: createEditorExtensions({ placeholder: "", slashItems: [] }),
+    extensions: createEditorExtensions({ placeholder: "", getSlashItems: () => [] }),
     content: html,
   });
 }

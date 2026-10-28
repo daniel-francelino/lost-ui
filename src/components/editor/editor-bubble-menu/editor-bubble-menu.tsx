@@ -21,7 +21,11 @@ import { useLostTranslation } from "../../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 
-export type EditorBubbleMenuProps = { editor: Editor | null };
+export type EditorBubbleMenuProps = {
+  editor: Editor | null;
+  /** Replaces the default tools: your own buttons for the selected text. */
+  children?: ReactNode;
+};
 
 const colors = [
   { key: "colorDefault", value: null },
@@ -61,7 +65,7 @@ function Tool({
 }
 
 /** The toolbar that floats over the selected text: bold, italic, underline, strike, code, highlight, colour, link. */
-export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps) {
+export function EditorBubbleMenu({ editor, children }: EditorBubbleMenuProps) {
   const { t } = useLostTranslation();
   const [linking, setLinking] = useState(false);
   const [url, setUrl] = useState("");
@@ -108,7 +112,9 @@ export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps) {
         aria-label={t("editor.bubble.label")}
         className="flex items-center gap-0.5 rounded-lg border bg-popover p-1 text-popover-foreground shadow-md"
       >
-        {linking ? (
+        {children ? (
+          children
+        ) : linking ? (
           <form
             className="flex items-center gap-1"
             onSubmit={(event) => {

@@ -101,11 +101,11 @@ export const EditorSlashMenu = forwardRef<EditorSlashMenuHandle, EditorSlashMenu
 );
 
 /** The extension that opens the menu when the user types `/` and runs the block that is picked. */
-export const SlashCommand = Extension.create<{ items: SlashItem[] }>({
+export const SlashCommand = Extension.create<{ getItems: () => SlashItem[] }>({
   name: "slashCommand",
 
   addOptions() {
-    return { items: [] };
+    return { getItems: () => [] };
   },
 
   addProseMirrorPlugins() {
@@ -114,7 +114,7 @@ export const SlashCommand = Extension.create<{ items: SlashItem[] }>({
         editor: this.editor,
         char: "/",
         startOfLine: false,
-        items: ({ query }) => filterSlashItems(this.options.items, query),
+        items: ({ query }) => filterSlashItems(this.options.getItems(), query),
         command: ({ editor, range, props }) => props.run({ editor, range }),
         render: () => {
           let renderer: ReactRenderer<EditorSlashMenuHandle, EditorSlashMenuProps> | null = null;

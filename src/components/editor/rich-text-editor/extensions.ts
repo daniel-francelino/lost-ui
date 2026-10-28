@@ -18,7 +18,10 @@ import { ToggleNode } from "./toggle-node";
 /** Everything the editor can write: the basics of Tiptap, tasks, tables, images, callouts, toggles and the slash menu. */
 export function createEditorExtensions(options: {
   placeholder: string;
-  slashItems: SlashItem[];
+  /** Read each time the menu opens, so the blocks can change without a new editor. */
+  getSlashItems: () => SlashItem[];
+  /** More Tiptap extensions of the app: its own nodes, marks, mentions. */
+  extra?: Extensions | undefined;
 }): Extensions {
   return [
     StarterKit.configure({ link: { openOnClick: false, autolink: true } }),
@@ -36,6 +39,7 @@ export function createEditorExtensions(options: {
     Image,
     CalloutNode,
     ToggleNode,
-    SlashCommand.configure({ items: options.slashItems }),
+    SlashCommand.configure({ getItems: options.getSlashItems }),
+    ...(options.extra ?? []),
   ];
 }
