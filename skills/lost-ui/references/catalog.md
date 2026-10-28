@@ -40,9 +40,9 @@ data display.
 
 ## templates (`lost-ui/templates`)
 
-pages and layouts reused between projects. `lib` holds helpers, not for import.
+pages and layouts reused between projects, grouped by category (`auth`, `errors`, `backoffice`): import `lost-ui/templates/<category>/<folder>`. `lib` holds helpers, not for import.
 
-`auth-layout`, `auth-message-page`, `backoffice-layout`, `error-fallback`, `forbidden-page`, `forgot-password-page`, `login-page`, `not-found-page`, `notifications-page`, `profile-page`, `register-page`, `reset-password-page`, `settings-index-page`, `settings-layout`
+`auth/auth-layout`, `auth/auth-message-page`, `auth/forgot-password-page`, `auth/login-page`, `auth/register-page`, `auth/reset-password-page`, `backoffice/backoffice-layout`, `backoffice/notifications-page`, `backoffice/profile-page`, `backoffice/settings-index-page`, `backoffice/settings-layout`, `errors/error-fallback`, `errors/forbidden-page`, `errors/not-found-page`
 
 ## effects (`lost-ui/effects`)
 

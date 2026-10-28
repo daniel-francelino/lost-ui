@@ -13,7 +13,7 @@ src/
     ai-chat/     reserved: AI chat screen
     editor/      reserved: Notion-like editor
     calendar/    reserved: Google Calendar-like screen
-  templates/     pages and layouts the apps reuse (see below)
+  templates/     pages and layouts the apps reuse, by category: auth, errors, backoffice (see below)
   i18n/          languages (en, es, pt), provider, hooks
   lib/           shared helpers (cn, use-controlled, theme-colors…)
   stories/       shims used by stories
@@ -26,17 +26,19 @@ The public paths do not carry `components`: `lost-ui/ui`, `lost-ui/elements`, `l
 
 `src/templates/` is not a component layer. A **component** is a piece you place in a screen; a **template** is the screen (or the frame of one) and is reused between projects: you give it props and handlers and the app keeps its data, routes and permissions.
 
-| Template                                                                                                | What it is                                                                                      |
-| ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `AuthLayout`, `LoginPage`, `RegisterPage`, `ForgotPasswordPage`, `ResetPasswordPage`, `AuthMessagePage` | sign in, sign up, recover and reset the password, "waiting for approval" / "confirm your email" |
-| `NotFoundPage`, `ForbiddenPage`, `ErrorFallback`                                                        | error pages to put inside the layout of the app (the full screen one is `ErrorPage`, in `app`)  |
-| `BackofficeLayout`                                                                                      | the whole internal layout from props: sidebar, top bar, bottom bar, user menu                   |
-| `NotificationsPage`                                                                                     | list by day, filters, loading / error / empty states, load more                                 |
-| `SettingsLayout`, `SettingsIndexPage`, `ProfilePage`                                                    | tabs between settings pages, the grid of areas, name and password                               |
+| Template (category)                                                                                              | What it is                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `auth/`: `AuthLayout`, `LoginPage`, `RegisterPage`, `ForgotPasswordPage`, `ResetPasswordPage`, `AuthMessagePage` | sign in, sign up, recover and reset the password, "waiting for approval" / "confirm your email" |
+| `errors/`: `NotFoundPage`, `ForbiddenPage`, `ErrorFallback`                                                      | error pages to put inside the layout of the app (the full screen one is `ErrorPage`, in `app`)  |
+| `backoffice/`: `BackofficeLayout`                                                                                | the whole internal layout from props: sidebar, top bar, bottom bar, user menu                   |
+| `backoffice/`: `NotificationsPage`                                                                               | list by day, filters, loading / error / empty states, load more                                 |
+| `backoffice/`: `SettingsLayout`, `SettingsIndexPage`, `ProfilePage`                                              | tabs between settings pages, the grid of areas, name and password                               |
 
 The small pieces they use are components, in `components/app`: `NotificationItem`, `NotificationPreferences`, `SettingsSection`, `PageHeader`. Helpers shared by the templates (`useSubmit`, `SubmitButton`, `FormError`…) are in `templates/lib`.
 
-Rules for a template: router-agnostic (`renderLink`), no data fetching (it receives items and calls handlers; a handler returns a text to show it as the error), texts from `i18n`, and it imports components, never the other way round. The public path is `lost-ui/templates`.
+Rules for a template: router-agnostic (`renderLink`), no data fetching (it receives items and calls handlers; a handler returns a text to show it as the error), texts from `i18n`, and it imports components, never the other way round. The public path is `lost-ui/templates` (everything) or `lost-ui/templates/<category>/<page>` (one page).
+
+A template lives in a **category folder** (`src/templates/<category>/<page>/`), so the folder can grow with `marketing`, `ecommerce`, `landing-page`… Each category has a generated `index.ts`; a new category is just a new folder, then `npm run barrels`. `templates/lib` is not a category (shared helpers).
 
 ## Where a component goes
 

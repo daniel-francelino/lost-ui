@@ -58,7 +58,28 @@ const effects = writeBarrel("effects");
 const ui = writeBarrel("ui");
 const elements = writeBarrel("elements");
 const app = writeBarrel("app");
-const templates = writeBarrel("templates");
+// templates are grouped by category (`auth`, `errors`, `backoffice`, later `marketing`, `ecommerce`…):
+// each category folder has its own barrel and the root barrel re-exports the categories
+const templateCategories = readdirSync("src/templates", { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && entry.name !== "lib")
+  .map((entry) => entry.name)
+  .sort();
+let templates = 0;
+for (const category of templateCategories) {
+  const pages = readdirSync(`src/templates/${category}`, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && existsSync(`src/templates/${category}/${e.name}/index.ts`))
+    .map((e) => e.name)
+    .sort();
+  writeFileSync(
+    `src/templates/${category}/index.ts`,
+    `${pages.map((name) => `export * from "./${name}";`).join("\n")}\n`,
+  );
+  templates += pages.length;
+}
+writeFileSync(
+  "src/templates/index.ts",
+  `${templateCategories.map((name) => `export * from "./${name}";`).join("\n")}\n`,
+);
 const charts = writeBarrel("charts");
 const forms = writeBarrel("forms");
 const data = writeBarrel("data");

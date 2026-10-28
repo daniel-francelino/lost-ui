@@ -6,15 +6,36 @@ import react from "@vitejs/plugin-react";
 const root = import.meta.dirname;
 const sourceFile = /\.tsx?$/;
 
+// the templates are grouped by category: `templates/<category>/<page>/index` (and the category barrel)
+function templateEntries(): Record<string, string> {
+  const templatesDir = resolve(root, "src/templates");
+  const entries: Record<string, string> = {};
+  for (const category of readdirSync(templatesDir, { withFileTypes: true })) {
+    if (!category.isDirectory() || category.name === "lib") continue;
+    const categoryDir = resolve(templatesDir, category.name);
+    entries[`templates/${category.name}/index`] = resolve(categoryDir, "index.ts");
+    for (const page of readdirSync(categoryDir, { withFileTypes: true })) {
+      if (page.isDirectory() && existsSync(resolve(categoryDir, page.name, "index.ts"))) {
+        entries[`templates/${category.name}/${page.name}/index`] = resolve(
+          categoryDir,
+          page.name,
+          "index.ts",
+        );
+      }
+    }
+  }
+  return entries;
+}
+
 function componentEntries(layer: string): Record<string, string> {
-  const layerDir = resolve(root, layer === "templates" ? "src" : "src/components", layer);
+  const layerDir = resolve(root, "src/components", layer);
   return Object.fromEntries(
     readdirSync(layerDir, { withFileTypes: true })
       .filter(
         (entry) => entry.isDirectory() && existsSync(resolve(layerDir, entry.name, "index.ts")),
       )
       .map((entry) => [
-        `${layer === "templates" ? "" : "components/"}${layer}/${entry.name}/index`,
+        `components/${layer}/${entry.name}/index`,
         resolve(layerDir, entry.name, "index.ts"),
       ]),
   );
@@ -55,7 +76,7 @@ export default defineConfig({
         ...componentEntries("charts"),
         ...componentEntries("forms"),
         ...componentEntries("data"),
-        ...componentEntries("templates"),
+        ...templateEntries(),
         ...libEntries(),
       },
       formats: ["es"],
