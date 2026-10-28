@@ -12,12 +12,7 @@ import { ChartCenterLabel } from "../chart-center-label";
 import { ChartContainer } from "../chart-container";
 import { ChartTooltip } from "../chart-tooltip";
 import { ChartTooltipContent } from "../chart-tooltip-content";
-import {
-  buildSliceConfig,
-  sliceColor,
-  type CenterLabel,
-  type ChartRow,
-} from "../lib/chart-series";
+import { buildSliceConfig, sliceColor, type CenterLabel, type ChartRow } from "../lib/chart-series";
 
 export type RadialChartProps = {
   data: ChartRow[];
@@ -65,7 +60,10 @@ export function RadialChart({
         endAngle={endAngle}
       >
         {showTooltip && (
-          <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel nameKey={nameKey} />} />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent hideLabel nameKey={nameKey} />}
+          />
         )}
         {showGrid && <PolarGrid gridType="circle" />}
         <RadialBar dataKey={valueKey} background cornerRadius={10}>

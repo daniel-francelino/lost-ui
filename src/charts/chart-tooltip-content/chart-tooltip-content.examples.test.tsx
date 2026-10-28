@@ -2,7 +2,7 @@ import { composeStories } from "@storybook/react-vite";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import * as stories from "./chart-tooltip.stories";
+import * as stories from "./chart-tooltip-content.examples.stories";
 
 describe("Tooltip charts", () => {
   it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {

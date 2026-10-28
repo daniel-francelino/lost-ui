@@ -47,12 +47,19 @@ export function buildSeriesConfig(series: ChartSeries[]): ChartConfig {
   );
 }
 
-export function buildSliceConfig(rows: ChartRow[], nameKey: string, colorKey?: string): ChartConfig {
+export function buildSliceConfig(
+  rows: ChartRow[],
+  nameKey: string,
+  colorKey?: string,
+): ChartConfig {
   return Object.fromEntries(
     rows.map((row, index) => {
       const name = String(row[nameKey]);
       const color = colorKey ? row[colorKey] : undefined;
-      return [name, { label: name, color: typeof color === "string" ? color : paletteColor(index) }];
+      return [
+        name,
+        { label: name, color: typeof color === "string" ? color : paletteColor(index) },
+      ];
     }),
   );
 }

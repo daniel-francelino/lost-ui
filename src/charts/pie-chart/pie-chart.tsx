@@ -7,12 +7,7 @@ import { ChartLegend } from "../chart-legend";
 import { ChartLegendContent } from "../chart-legend-content";
 import { ChartTooltip } from "../chart-tooltip";
 import { ChartTooltipContent } from "../chart-tooltip-content";
-import {
-  buildSliceConfig,
-  sliceColor,
-  type CenterLabel,
-  type ChartRow,
-} from "../lib/chart-series";
+import { buildSliceConfig, sliceColor, type CenterLabel, type ChartRow } from "../lib/chart-series";
 
 export type PieChartProps = {
   data: ChartRow[];
@@ -50,7 +45,10 @@ export function PieChart({
     >
       <RechartsPieChart>
         {showTooltip && (
-          <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel nameKey={nameKey} />} />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent hideLabel nameKey={nameKey} />}
+          />
         )}
         <Pie
           data={data}
