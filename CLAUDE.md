@@ -11,7 +11,7 @@ Shared component library for aura-creative and memoria-print. Read `docs/README.
 
 ## Component layout
 
-Each component has its own folder under `src/effects/` (landing-page effects) or `src/ui/` (shadcn primitives):
+Each component has its own folder under `src/effects/` (landing-page effects), `src/ui/` (shadcn primitives) or `src/charts/` (Recharts wrapper and the official chart examples, see `docs/charts.md`):
 
 ```
 src/effects/marquee/
@@ -44,5 +44,5 @@ Anything that belongs only to that component (constants, types, helpers, CSS var
 ## Do not
 
 - Do not commit or push unless asked.
-- Do not edit `src/index.ts`, `src/effects/index.ts` or `src/ui/index.ts` by hand; they are generated.
+- Do not edit `src/index.ts`, `src/effects/index.ts`, `src/ui/index.ts` or `src/charts/index.ts` by hand; they are generated. `src/charts` is not exported from the root entry because Recharts is an optional peer.
 - Do not copy app-specific code into `src/ui/` (brand tokens, locale, Portuguese strings). Primitives use semantic tokens and English text; the apps pass their own copy.

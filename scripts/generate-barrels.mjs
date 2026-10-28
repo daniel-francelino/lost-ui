@@ -1,4 +1,4 @@
-import { readdirSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, writeFileSync } from "node:fs";
 
 const standalone = {
   effects: new Set([
@@ -11,6 +11,7 @@ const standalone = {
     "code-comparison",
     "icon-cloud",
   ]),
+  charts: new Set(),
   ui: new Set([
     "calendar",
     "carousel",
@@ -25,7 +26,7 @@ const standalone = {
 
 function folders(layer) {
   return readdirSync(`src/${layer}`, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
+    .filter((entry) => entry.isDirectory() && existsSync(`src/${layer}/${entry.name}/index.ts`))
     .map((entry) => entry.name)
     .sort();
 }
@@ -40,6 +41,7 @@ function writeBarrel(layer) {
 
 const effects = writeBarrel("effects");
 const ui = writeBarrel("ui");
+const charts = writeBarrel("charts");
 
 writeFileSync(
   "src/index.ts",
@@ -52,5 +54,5 @@ writeFileSync(
   ].join("\n"),
 );
 console.log(
-  `effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
+  `charts: ${charts}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
 );

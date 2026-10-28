@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { isAbsolute, resolve } from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
@@ -10,7 +10,9 @@ function componentEntries(layer: string): Record<string, string> {
   const layerDir = resolve(root, "src", layer);
   return Object.fromEntries(
     readdirSync(layerDir, { withFileTypes: true })
-      .filter((entry) => entry.isDirectory())
+      .filter(
+        (entry) => entry.isDirectory() && existsSync(resolve(layerDir, entry.name, "index.ts")),
+      )
       .map((entry) => [`${layer}/${entry.name}/index`, resolve(layerDir, entry.name, "index.ts")]),
   );
 }
@@ -36,8 +38,10 @@ export default defineConfig({
         index: resolve(root, "src/index.ts"),
         "effects/index": resolve(root, "src/effects/index.ts"),
         "ui/index": resolve(root, "src/ui/index.ts"),
+        "charts/index": resolve(root, "src/charts/index.ts"),
         ...componentEntries("effects"),
         ...componentEntries("ui"),
+        ...componentEntries("charts"),
         ...libEntries(),
       },
       formats: ["es"],
