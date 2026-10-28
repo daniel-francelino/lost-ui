@@ -8,5 +8,6 @@ describe("Line charts", () => {
   it.each(Object.entries(composeStories(stories)))("renders %s", (_name, Story) => {
     const { container } = render(<Story />);
     expect(container.querySelector("[data-slot='chart']")).not.toBeNull();
+    expect(container.querySelector(".recharts-surface")).not.toBeNull();
   });
 });

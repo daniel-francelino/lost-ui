@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A horizontal bar chart";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { BarChart } from "../bar-chart";
 
 const chartData = [
   { month: "January", desktop: 186 },
@@ -29,6 +28,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = seriesFromConfig(chartConfig);
+
 export function ChartBarHorizontal() {
   return (
     <Card>
@@ -37,28 +38,16 @@ export function ChartBarHorizontal() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              left: -20,
-            }}
-          >
-            <XAxis type="number" dataKey="desktop" hide />
-            <YAxis
-              dataKey="month"
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={5} />
-          </BarChart>
-        </ChartContainer>
+        <BarChart
+          data={chartData}
+          xKey="month"
+          series={series}
+          xTickFormatter={(value) => value.slice(0, 3)}
+          orientation="horizontal"
+          radius={5}
+          tooltipIndicator="dot"
+          tooltipProps={{ hideLabel: true }}
+        />
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">

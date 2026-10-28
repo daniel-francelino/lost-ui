@@ -111,12 +111,15 @@ The apps are separate repositories (no workspace), so the library cannot be cons
 
 ## 8. Implementation status
 
-Done and verified (2026-10-27):
+Verified on 2026-10-28: `tsc --noEmit`, `vite build` and Prettier pass; **980 tests in 170 files, all passing** (ui 116, effects 433, charts 178, forms 253); a packed tarball installs in an empty project and its entries import (`lost-ui`, `/ui`, `/effects`, `/charts`, `/forms` and the by-path entries); 585 Storybook stories open in headless Chromium, 4 with console errors that come from third-party images and a video used by Magic UI examples.
 
-- `tsc --noEmit`, `vite build` plus declaration emit and Prettier pass.
-- **Tests (S10).** Vitest 3 with jsdom and Testing Library; one test file per component, 81 files and 182 tests, all passing. Each test renders the component's stories through `composeStories`, so stories and tests cannot drift apart. Canvas, WebGL (`cobe`) and `canvas-confetti` are stubbed in jsdom, so the tests prove the DOM and the behaviour, not the pixels. axe checks are not added yet.
-- **Storybook (S9).** Storybook 10 (`react-vite`) with docs, a11y and a light/dark theme switch; 99 stories, one or more per component. Run `npm run storybook`. A static build opens in Chromium with zero console or page errors in all 99 stories.
-- **Folder per component.** `src/effects/<name>/` and `src/ui/<name>/` hold the component, its stories, its test and an `index.ts`. The package exposes each one as `lost-ui/effects/<name>` and `lost-ui/ui/<name>`.
-- A packed tarball installs in an empty project, Tailwind 4.3.3 compiles its CSS, all 79 effect modules import in Node except the two tweet cards (they need a bundler for `react-tweet` CSS modules), and 74 of 83 exported components render with `renderToString` (the other 9 need required props or a provider).
+| Layer         | Content                                                                   | Entry                          | Doc                                                |
+| ------------- | ------------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------- |
+| `src/ui`      | 45 shadcn primitives (one folder each)                                    | `lost-ui`, `lost-ui/ui/<name>` |                                                    |
+| `src/effects` | 79 Magic UI components with 170 examples                                  | `lost-ui/effects`              | [magic-ui-integration.md](magic-ui-integration.md) |
+| `src/charts`  | Recharts wrapper split into components, 6 data-driven charts, 70 examples | `lost-ui/charts`               | [charts.md](charts.md)                             |
+| `src/forms`   | QForm-style `Form`, 19 field components, `FormBuilder`, `rules`           | `lost-ui/forms`                | [forms.md](forms.md)                               |
 
-Not done: see [pending.md](pending.md). In short: ESLint, Husky and Changesets; the apps' stricter compiler options; integration inside the two apps; the `admin` tier of section 2 (only `Button` and `ScrollArea` exist in `ui`, as dependencies of the effects); and the visual issues found in Storybook that are still open.
+Tests run in jsdom: they prove structure, state and behaviour, not layout or pixels. Charts and the first set of effects were also looked at in headless Chromium in a light theme.
+
+Not done: see [pending.md](pending.md) (ESLint, Husky and Changesets, distribution, stricter compiler options, integration in the two apps, dark mode and real-browser review of forms, Nuxt UI parity gaps).

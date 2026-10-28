@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Dot, Line, LineChart } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A line chart with dots and colors";
+import type { ChartConfig } from "../../chart-container";
+import { LineChart } from "../line-chart";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -56,41 +54,15 @@ export function ChartLineDotsColors() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              top: 24,
-              left: 24,
-              right: 24,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" nameKey="visitors" hideLabel />}
-            />
-            <Line
-              dataKey="visitors"
-              type="natural"
-              stroke="var(--color-visitors)"
-              strokeWidth={2}
-              dot={({ payload, ...props }) => {
-                return (
-                  <Dot
-                    key={payload.browser}
-                    r={5}
-                    cx={props.cx}
-                    cy={props.cy}
-                    fill={payload.fill}
-                    stroke={payload.fill}
-                  />
-                );
-              }}
-            />
-          </LineChart>
-        </ChartContainer>
+        <LineChart
+          data={chartData}
+          xKey="browser"
+          series={[{ key: "visitors", label: chartConfig.visitors.label, color: "var(--chart-1)" }]}
+          dotColorKey="fill"
+          showXAxis={false}
+          tooltipIndicator="line"
+          tooltipProps={{ nameKey: "visitors", hideLabel: true }}
+        />
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">

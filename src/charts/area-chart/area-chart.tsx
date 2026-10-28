@@ -11,6 +11,7 @@ import {
   seriesFill,
   type ChartRow,
   type ChartSeries,
+  type TooltipContentOptions,
   type TooltipIndicator,
 } from "../lib/chart-series";
 
@@ -26,9 +27,12 @@ export type AreaChartProps = {
   showXAxis?: boolean;
   showYAxis?: boolean;
   xTickFormatter?: (value: string) => string;
+  xMinTickGap?: number;
   showLegend?: boolean;
   showTooltip?: boolean;
   tooltipIndicator?: TooltipIndicator;
+  tooltipProps?: TooltipContentOptions;
+  animate?: boolean;
   className?: string;
 };
 
@@ -44,9 +48,12 @@ export function AreaChart({
   showXAxis = true,
   showYAxis = false,
   xTickFormatter,
+  xMinTickGap,
   showLegend = false,
   showTooltip = true,
   tooltipIndicator = "dot",
+  tooltipProps,
+  animate = true,
   className,
 }: AreaChartProps) {
   const gradientId = useId().replace(/:/g, "");
@@ -68,13 +75,14 @@ export function AreaChart({
             axisLine={false}
             tickMargin={8}
             tickFormatter={xTickFormatter}
+            minTickGap={xMinTickGap}
           />
         )}
         {showYAxis && <YAxis tickLine={false} axisLine={false} tickMargin={8} />}
         {showTooltip && (
           <ChartTooltip
             cursor={false}
-            content={<ChartTooltipContent indicator={tooltipIndicator} />}
+            content={<ChartTooltipContent indicator={tooltipIndicator} {...tooltipProps} />}
           />
         )}
         {gradient && (
@@ -103,9 +111,10 @@ export function AreaChart({
             fillOpacity={gradient ? 1 : 0.4}
             stroke={seriesFill(item.key)}
             stackId={stackId}
+            isAnimationActive={animate}
           />
         ))}
-        {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+        {showLegend && <ChartLegend itemSorter={null} content={<ChartLegendContent />} />}
       </RechartsAreaChart>
     </ChartContainer>
   );

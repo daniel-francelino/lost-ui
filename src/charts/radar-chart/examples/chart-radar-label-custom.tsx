@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A radar chart with a custom label";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { RadarChart } from "../radar-chart";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -33,6 +32,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = seriesFromConfig(chartConfig);
+
 export function ChartRadarLabelCustom() {
   return (
     <Card>
@@ -41,48 +42,34 @@ export function ChartRadarLabelCustom() {
         <CardDescription>Showing total visitors for the last 6 months</CardDescription>
       </CardHeader>
       <CardContent className="pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
-          <RadarChart
-            data={chartData}
-            margin={{
-              top: 10,
-              right: 10,
-              bottom: 10,
-              left: 10,
-            }}
-          >
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-            <PolarAngleAxis
-              dataKey="month"
-              tick={({ x, y, textAnchor, index, ...props }) => {
-                const data = chartData[index];
-                const yValue = typeof y === "number" ? y : 0;
+        <RadarChart
+          data={chartData}
+          angleKey="month"
+          series={series}
+          angleTick={({ x, y, textAnchor, index, ...props }) => {
+            const data = chartData[index];
+            const yValue = typeof y === "number" ? y : 0;
 
-                return (
-                  <text
-                    x={x}
-                    y={yValue + (index === 0 ? -10 : 0)}
-                    textAnchor={textAnchor}
-                    fontSize={13}
-                    fontWeight={500}
-                    {...props}
-                  >
-                    <tspan>{data.desktop}</tspan>
-                    <tspan className="fill-muted-foreground">/</tspan>
-                    <tspan>{data.mobile}</tspan>
-                    <tspan x={x} dy={"1rem"} fontSize={12} className="fill-muted-foreground">
-                      {data.month}
-                    </tspan>
-                  </text>
-                );
-              }}
-            />
-
-            <PolarGrid />
-            <Radar dataKey="desktop" fill="var(--color-desktop)" fillOpacity={0.6} />
-            <Radar dataKey="mobile" fill="var(--color-mobile)" />
-          </RadarChart>
-        </ChartContainer>
+            return (
+              <text
+                x={x}
+                y={yValue + (index === 0 ? -10 : 0)}
+                textAnchor={textAnchor}
+                fontSize={13}
+                fontWeight={500}
+                {...props}
+              >
+                <tspan>{data.desktop}</tspan>
+                <tspan className="fill-muted-foreground">/</tspan>
+                <tspan>{data.mobile}</tspan>
+                <tspan x={x} dy={"1rem"} fontSize={12} className="fill-muted-foreground">
+                  {data.month}
+                </tspan>
+              </text>
+            );
+          }}
+          tooltipIndicator="line"
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

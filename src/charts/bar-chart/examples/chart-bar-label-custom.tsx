@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A bar chart with a custom label";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { BarChart } from "../bar-chart";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -36,6 +35,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = seriesFromConfig(chartConfig);
+
 export function ChartBarLabelCustom() {
   return (
     <Card>
@@ -44,45 +45,16 @@ export function ChartBarLabelCustom() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              right: 16,
-            }}
-          >
-            <CartesianGrid horizontal={false} />
-            <YAxis
-              dataKey="month"
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-              hide
-            />
-            <XAxis dataKey="desktop" type="number" hide />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4}>
-              <LabelList
-                dataKey="month"
-                position="insideLeft"
-                offset={8}
-                className="fill-(--color-label)"
-                fontSize={12}
-              />
-              <LabelList
-                dataKey="desktop"
-                position="right"
-                offset={8}
-                className="fill-foreground"
-                fontSize={12}
-              />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <BarChart
+          data={chartData}
+          xKey="month"
+          series={series}
+          xTickFormatter={(value) => value.slice(0, 3)}
+          orientation="horizontal"
+          categoryInside
+          labelKey="desktop"
+          tooltipIndicator="line"
+        />
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">

@@ -4,6 +4,7 @@ export * from "./chart-center-label";
 export * from "./chart-container";
 export * from "./chart-legend";
 export * from "./chart-legend-content";
+export * from "./chart-series";
 export * from "./chart-style";
 export * from "./chart-tooltip";
 export * from "./chart-tooltip-content";

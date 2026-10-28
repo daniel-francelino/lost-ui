@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A pie chart with stacked sections";
+import type { ChartConfig } from "../../chart-container";
+import { PieChart } from "../pie-chart";
 
 const desktopData = [
   { month: "january", desktop: 186, fill: "var(--color-january)" },
@@ -69,24 +67,22 @@ export function ChartPieStacked() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
-          <PieChart>
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  labelKey="visitors"
-                  nameKey="month"
-                  indicator="line"
-                  labelFormatter={(_, payload) => {
-                    return chartConfig[payload?.[0].dataKey as keyof typeof chartConfig].label;
-                  }}
-                />
-              }
-            />
-            <Pie data={desktopData} dataKey="desktop" outerRadius={60} />
-            <Pie data={mobileData} dataKey="mobile" innerRadius={70} outerRadius={90} />
-          </PieChart>
-        </ChartContainer>
+        <PieChart
+          data={mobileData}
+          nameKey="month"
+          valueKey="mobile"
+          config={chartConfig}
+          colorKey="fill"
+          inner={{ data: desktopData, valueKey: "desktop" }}
+          tooltipProps={{
+            labelKey: "visitors",
+            nameKey: "month",
+            labelFormatter: (_, payload) => {
+              return chartConfig[payload?.[0].dataKey as keyof typeof chartConfig].label;
+            },
+            indicator: "line",
+          }}
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

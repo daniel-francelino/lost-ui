@@ -1,4 +1,13 @@
-import { CartesianGrid, LabelList, Line, LineChart as RechartsLineChart, XAxis } from "recharts";
+import type { ReactElement } from "react";
+import {
+  CartesianGrid,
+  Dot,
+  LabelList,
+  Line,
+  LineChart as RechartsLineChart,
+  XAxis,
+  type LabelProps,
+} from "recharts";
 
 import { ChartContainer } from "../chart-container";
 import { ChartLegend } from "../chart-legend";
@@ -10,8 +19,17 @@ import {
   seriesFill,
   type ChartRow,
   type ChartSeries,
+  type TooltipContentOptions,
   type TooltipIndicator,
 } from "../lib/chart-series";
+
+export type ChartDotProps = {
+  cx?: number;
+  cy?: number;
+  index?: number;
+  payload?: ChartRow;
+  value?: unknown;
+};
 
 export type LineChartProps = {
   data: ChartRow[];
@@ -19,14 +37,21 @@ export type LineChartProps = {
   series: ChartSeries[];
   curve?: "natural" | "linear" | "step" | "monotone";
   showDots?: boolean;
+  dotColorKey?: string;
+  renderDot?: (props: ChartDotProps) => ReactElement;
   showLabels?: boolean;
+  labelKey?: string;
+  labelFormatter?: NonNullable<LabelProps["formatter"]>;
   strokeWidth?: number;
   showGrid?: boolean;
   showXAxis?: boolean;
   xTickFormatter?: (value: string) => string;
+  xMinTickGap?: number;
   showLegend?: boolean;
   showTooltip?: boolean;
   tooltipIndicator?: TooltipIndicator;
+  tooltipProps?: TooltipContentOptions;
+  animate?: boolean;
   className?: string;
 };
 
@@ -36,22 +61,42 @@ export function LineChart({
   series,
   curve = "natural",
   showDots = false,
+  dotColorKey,
+  renderDot,
   showLabels = false,
+  labelKey,
+  labelFormatter,
   strokeWidth = 2,
   showGrid = true,
   showXAxis = true,
   xTickFormatter,
+  xMinTickGap,
   showLegend = false,
   showTooltip = true,
   tooltipIndicator = "line",
+  tooltipProps,
+  animate = true,
   className,
 }: LineChartProps) {
+  const dotFor = (key: string) => {
+    if (renderDot) {
+      return (props: ChartDotProps) => renderDot(props);
+    }
+    if (dotColorKey) {
+      return ({ cx, cy, index, payload }: ChartDotProps) => {
+        const color = payload ? String(payload[dotColorKey]) : seriesFill(key);
+        return <Dot key={index} r={5} cx={cx} cy={cy} fill={color} stroke={color} />;
+      };
+    }
+    return showDots ? { fill: seriesFill(key) } : false;
+  };
+
   return (
     <ChartContainer config={buildSeriesConfig(series)} className={className}>
       <RechartsLineChart
         accessibilityLayer
         data={data}
-        margin={{ left: 12, right: 12, top: showLabels ? 20 : 5 }}
+        margin={{ left: 12, right: 12, top: showLabels || labelKey ? 24 : 5 }}
       >
         {showGrid && <CartesianGrid vertical={false} />}
         {showXAxis && (
@@ -61,12 +106,13 @@ export function LineChart({
             axisLine={false}
             tickMargin={8}
             tickFormatter={xTickFormatter}
+            minTickGap={xMinTickGap}
           />
         )}
         {showTooltip && (
           <ChartTooltip
             cursor={false}
-            content={<ChartTooltipContent indicator={tooltipIndicator} />}
+            content={<ChartTooltipContent indicator={tooltipIndicator} {...tooltipProps} />}
           />
         )}
         {series.map((item) => (
@@ -76,15 +122,23 @@ export function LineChart({
             type={curve}
             stroke={seriesFill(item.key)}
             strokeWidth={strokeWidth}
-            dot={showDots ? { fill: seriesFill(item.key) } : false}
+            dot={dotFor(item.key)}
             activeDot={{ r: 6 }}
+            isAnimationActive={animate}
           >
-            {showLabels && (
-              <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+            {(showLabels || labelKey) && (
+              <LabelList
+                dataKey={labelKey}
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+                formatter={labelFormatter}
+              />
             )}
           </Line>
         ))}
-        {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+        {showLegend && <ChartLegend itemSorter={null} content={<ChartLegendContent />} />}
       </RechartsLineChart>
     </ChartContainer>
   );

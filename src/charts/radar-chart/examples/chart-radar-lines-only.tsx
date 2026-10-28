@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A radar chart with lines only";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { RadarChart } from "../radar-chart";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 160 },
@@ -33,6 +32,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = seriesFromConfig(chartConfig);
+
 export function ChartRadarLinesOnly() {
   return (
     <Card>
@@ -41,27 +42,14 @@ export function ChartRadarLinesOnly() {
         <CardDescription>Showing total visitors for the last 6 months</CardDescription>
       </CardHeader>
       <CardContent className="pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
-          <RadarChart data={chartData}>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-            <PolarAngleAxis dataKey="month" />
-            <PolarGrid radialLines={false} />
-            <Radar
-              dataKey="desktop"
-              fill="var(--color-desktop)"
-              fillOpacity={0}
-              stroke="var(--color-desktop)"
-              strokeWidth={2}
-            />
-            <Radar
-              dataKey="mobile"
-              fill="var(--color-mobile)"
-              fillOpacity={0}
-              stroke="var(--color-mobile)"
-              strokeWidth={2}
-            />
-          </RadarChart>
-        </ChartContainer>
+        <RadarChart
+          data={chartData}
+          angleKey="month"
+          series={series}
+          filled={false}
+          radialLines={false}
+          tooltipIndicator="line"
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

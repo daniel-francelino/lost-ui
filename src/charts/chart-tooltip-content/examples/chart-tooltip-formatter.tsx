@@ -1,9 +1,7 @@
-import { Bar, BarChart, XAxis } from "recharts";
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A stacked bar chart with a legend";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { BarChart } from "../../bar-chart";
 
 const chartData = [
   { date: "2024-07-15", running: 450, swimming: 300 },
@@ -25,6 +23,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = seriesFromConfig(chartConfig);
+
 export function ChartTooltipFormatter() {
   return (
     <Card>
@@ -33,46 +33,30 @@ export function ChartTooltipFormatter() {
         <CardDescription>Tooltip with custom formatter .</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => {
-                return new Date(value as string).toLocaleDateString("en-US", {
-                  weekday: "short",
-                });
-              }}
-            />
-            <Bar dataKey="running" stackId="a" fill="var(--color-running)" radius={[0, 0, 4, 4]} />
-            <Bar
-              dataKey="swimming"
-              stackId="a"
-              fill="var(--color-swimming)"
-              radius={[4, 4, 0, 0]}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  hideLabel
-                  formatter={(value, name) => (
-                    <div className="flex min-w-[130px] items-center text-xs text-muted-foreground">
-                      {chartConfig[name as keyof typeof chartConfig]?.label || name}
-                      <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium text-foreground tabular-nums">
-                        {value}
-                        <span className="font-normal text-muted-foreground">kcal</span>
-                      </div>
-                    </div>
-                  )}
-                />
-              }
-              cursor={false}
-              defaultIndex={1}
-            />
-          </BarChart>
-        </ChartContainer>
+        <BarChart
+          data={chartData}
+          xKey="date"
+          series={series}
+          xTickFormatter={(value) => {
+            return new Date(value).toLocaleDateString("en-US", {
+              weekday: "short",
+            });
+          }}
+          stacked
+          tooltipIndicator="dot"
+          tooltipProps={{
+            hideLabel: true,
+            formatter: (value, name) => (
+              <div className="flex min-w-[130px] items-center text-xs text-muted-foreground">
+                {chartConfig[name as keyof typeof chartConfig]?.label || name}
+                <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium text-foreground tabular-nums">
+                  {value}
+                  <span className="font-normal text-muted-foreground">kcal</span>
+                </div>
+              </div>
+            ),
+          }}
+        />
       </CardContent>
     </Card>
   );

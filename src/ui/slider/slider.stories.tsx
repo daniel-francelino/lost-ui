@@ -15,3 +15,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: { defaultValue: [50], max: 100, step: 1, className: "w-64" },
 };
+
+export const Range: Story = {
+  args: { defaultValue: [20, 80], max: 100, step: 1, className: "w-64" },
+};

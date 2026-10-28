@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
@@ -9,16 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import {
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "../../index";
-
-export const description = "An area chart with a legend";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { AreaChart } from "../area-chart";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -40,6 +32,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = [...seriesFromConfig(chartConfig)].reverse();
+
 export function ChartAreaLegend() {
   return (
     <Card>
@@ -48,43 +42,15 @@ export function ChartAreaLegend() {
         <CardDescription>Showing total visitors for the last 6 months</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="var(--color-mobile)"
-              fillOpacity={0.4}
-              stroke="var(--color-mobile)"
-              stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="var(--color-desktop)"
-              fillOpacity={0.4}
-              stroke="var(--color-desktop)"
-              stackId="a"
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-          </AreaChart>
-        </ChartContainer>
+        <AreaChart
+          data={chartData}
+          xKey="month"
+          series={series}
+          xTickFormatter={(value) => value.slice(0, 3)}
+          stacked
+          showLegend
+          tooltipIndicator="line"
+        />
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">

@@ -12,6 +12,7 @@ const standalone = {
     "icon-cloud",
   ]),
   charts: new Set(),
+  forms: new Set(["form-input-date", "form-pin-input", "form-builder"]),
   ui: new Set([
     "calendar",
     "carousel",
@@ -42,6 +43,7 @@ function writeBarrel(layer) {
 const effects = writeBarrel("effects");
 const ui = writeBarrel("ui");
 const charts = writeBarrel("charts");
+const forms = writeBarrel("forms");
 
 writeFileSync(
   "src/index.ts",
@@ -54,5 +56,5 @@ writeFileSync(
   ].join("\n"),
 );
 console.log(
-  `charts: ${charts}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
+  `charts: ${charts}; forms: ${forms}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
 );

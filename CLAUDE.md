@@ -11,7 +11,7 @@ Shared component library for aura-creative and memoria-print. Read `docs/README.
 
 ## Component layout
 
-Each component has its own folder under `src/effects/` (landing-page effects), `src/ui/` (shadcn primitives) or `src/charts/` (Recharts wrapper and the official chart examples, see `docs/charts.md`):
+Each component has its own folder under `src/effects/` (landing-page effects), `src/ui/` (shadcn primitives) or `src/charts/` (Recharts wrapper, data-driven charts and the official examples, see `docs/charts.md`) or `src/forms/` (fields validated like Quasar's QForm and the `FormBuilder`, see `docs/forms.md`):
 
 ```
 src/effects/marquee/
@@ -23,6 +23,10 @@ src/effects/marquee/
 ```
 
 The first story of an effect is `Playground` (interactive, drives the controls). Each file in `examples/` is also a story, named from the file (`marquee-demo-vertical` becomes `Vertical`), with its source shown in the docs through `?raw`. Examples keep their original code, so they may use literal colours and remote images; the colour rule below applies to the component, not to stories. `src/stories/` holds shims (`use-theme`, `link`) so examples written for Next.js run unchanged.
+
+**One component per file.** A file exports one component (plus its props type); related components get their own folder, as the shadcn `chart.tsx` was split into six. Compound primitives copied from shadcn in `src/ui/` (dialog, select, sidebar…) are the known exception and keep their upstream shape.
+
+**Charts and forms are used through props.** A chart family has a data-driven component (`AreaChart`, `PieChart`…) and its examples must call it with props; if an example needs something the component lacks, add the prop (with a story and a test) instead of dropping to raw Recharts. A form field takes `rules`, `lazyRules` and the shared `FieldProps`, uses `useField`, and registers with `Form` automatically.
 
 Anything that belongs only to that component (constants, types, helpers, CSS variables) lives in its folder, not in `src/lib`.
 
@@ -44,5 +48,6 @@ Anything that belongs only to that component (constants, types, helpers, CSS var
 ## Do not
 
 - Do not commit or push unless asked.
-- Do not edit `src/index.ts`, `src/effects/index.ts`, `src/ui/index.ts` or `src/charts/index.ts` by hand; they are generated. `src/charts` is not exported from the root entry because Recharts is an optional peer.
+- Do not edit `src/index.ts` or the `index.ts` of `src/effects`, `src/ui`, `src/charts` and `src/forms` by hand; they are generated. `src/charts` and `src/forms` are not exported from the root entry because they need optional peers.
+- Do not write a shell one-liner with backslashes or regexes (`node -e`, `sed`): the shell strips them. Use the Write or Edit tools for files with escapes.
 - Do not copy app-specific code into `src/ui/` (brand tokens, locale, Portuguese strings). Primitives use semantic tokens and English text; the apps pass their own copy.

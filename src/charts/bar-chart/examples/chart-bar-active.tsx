@@ -1,6 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from "recharts";
-import type { BarShapeProps } from "recharts/types/cartesian/Bar";
 
 import {
   Card,
@@ -10,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A bar chart with an active bar";
+import type { ChartConfig } from "../../chart-container";
+import { BarChart } from "../bar-chart";
 
 const chartData = [
   { browser: "chrome", visitors: 187, fill: "var(--color-chrome)" },
@@ -58,37 +55,17 @@ export function ChartBarActive() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="browser"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label}
-            />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar
-              dataKey="visitors"
-              strokeWidth={2}
-              radius={8}
-              shape={({ index, ...props }: BarShapeProps) =>
-                index === ACTIVE_INDEX ? (
-                  <Rectangle
-                    {...props}
-                    fillOpacity={0.8}
-                    stroke={props.payload.fill}
-                    strokeDasharray={4}
-                    strokeDashoffset={4}
-                  />
-                ) : (
-                  <Rectangle {...props} />
-                )
-              }
-            />
-          </BarChart>
-        </ChartContainer>
+        <BarChart
+          data={chartData}
+          xKey="browser"
+          series={[{ key: "visitors", label: chartConfig.visitors.label }]}
+          xTickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label}
+          colorKey="fill"
+          activeIndex={ACTIVE_INDEX}
+          radius={8}
+          tooltipIndicator="dot"
+          tooltipProps={{ hideLabel: true }}
+        />
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">

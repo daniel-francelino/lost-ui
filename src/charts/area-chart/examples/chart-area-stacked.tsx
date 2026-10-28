@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A stacked area chart";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { AreaChart } from "../area-chart";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -33,6 +32,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = [...seriesFromConfig(chartConfig)].reverse();
+
 export function ChartAreaStacked() {
   return (
     <Card>
@@ -41,42 +42,14 @@ export function ChartAreaStacked() {
         <CardDescription>Showing total visitors for the last 6 months</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="var(--color-mobile)"
-              fillOpacity={0.4}
-              stroke="var(--color-mobile)"
-              stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="var(--color-desktop)"
-              fillOpacity={0.4}
-              stroke="var(--color-desktop)"
-              stackId="a"
-            />
-          </AreaChart>
-        </ChartContainer>
+        <AreaChart
+          data={chartData}
+          xKey="month"
+          series={series}
+          xTickFormatter={(value) => value.slice(0, 3)}
+          stacked
+          tooltipIndicator="dot"
+        />
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">

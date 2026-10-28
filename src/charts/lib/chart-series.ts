@@ -1,5 +1,6 @@
-import type { ComponentType, ReactNode } from "react";
+import type { ComponentProps, ComponentType, ReactNode } from "react";
 
+import type { ChartTooltipContent } from "../chart-tooltip-content";
 import type { ChartConfig } from "./chart-context";
 
 export type ChartRow = Record<string, unknown>;
@@ -12,6 +13,22 @@ export type ChartSeries = {
 };
 
 export type TooltipIndicator = "dot" | "line" | "dashed";
+
+export type TooltipContentOptions = Partial<
+  Pick<
+    ComponentProps<typeof ChartTooltipContent>,
+    | "indicator"
+    | "hideLabel"
+    | "hideIndicator"
+    | "labelFormatter"
+    | "formatter"
+    | "labelKey"
+    | "nameKey"
+    | "labelClassName"
+    | "className"
+    | "color"
+  >
+>;
 
 export type CenterLabel = {
   value: string | number;
@@ -47,6 +64,15 @@ export function buildSeriesConfig(series: ChartSeries[]): ChartConfig {
   );
 }
 
+export function seriesFromConfig(config: ChartConfig): ChartSeries[] {
+  return Object.entries(config).map(([key, item]) => ({
+    key,
+    label: item.label,
+    ...(item.color ? { color: item.color } : {}),
+    ...(item.icon ? { icon: item.icon } : {}),
+  }));
+}
+
 export function buildSliceConfig(
   rows: ChartRow[],
   nameKey: string,
@@ -67,4 +93,9 @@ export function buildSliceConfig(
 export function sliceColor(row: ChartRow, index: number, colorKey?: string): string {
   const color = colorKey ? row[colorKey] : undefined;
   return typeof color === "string" ? color : paletteColor(index);
+}
+
+export function configLabel(config: ChartConfig, key: unknown): string {
+  const label = config[String(key)]?.label;
+  return typeof label === "string" ? label : String(key);
 }

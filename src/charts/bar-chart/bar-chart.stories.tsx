@@ -45,3 +45,37 @@ export const ColoredBars: Story = {
     colorKey: "fill",
   },
 };
+
+export const Highlighted: Story = {
+  args: { series: [{ key: "desktop", label: "Desktop" }], activeIndex: 1, radius: 8 },
+};
+
+export const NegativeValues: Story = {
+  args: {
+    data: [
+      { month: "January", desktop: 186 },
+      { month: "February", desktop: -205 },
+      { month: "March", desktop: 237 },
+    ],
+    series: [{ key: "desktop", label: "Desktop", color: "var(--chart-1)" }],
+    negativeColor: "var(--chart-2)",
+    labelKey: "month",
+    showXAxis: false,
+  },
+};
+
+export const CategoryInside: Story = {
+  args: {
+    orientation: "horizontal",
+    categoryInside: true,
+    labelKey: "desktop",
+    series: [{ key: "desktop", label: "Desktop" }],
+  },
+};
+
+export const WithTooltipOptions: Story = {
+  args: {
+    series: [{ key: "desktop", label: "Desktop" }],
+    tooltipProps: { hideLabel: true, hideIndicator: true },
+  },
+};

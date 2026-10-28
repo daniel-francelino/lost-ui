@@ -1,6 +1,6 @@
 # Charts
 
-> **Status: imported and building (2026-10-28).** shadcn upstream commit `96da9cc7f1aa10580a3741664e2a77c721206c00`. Related: [stack.md](stack.md) (S15), [pending.md](pending.md).
+> **Status: data-driven components and examples done (2026-10-28).** shadcn upstream commit `96da9cc7f1aa10580a3741664e2a77c721206c00`. Related: [stack.md](stack.md) (S15), [pending.md](pending.md).
 
 ## 1. Decision
 
@@ -47,16 +47,66 @@ Sources: [shadcn/ui chart documentation](https://ui.shadcn.com/docs/components/c
 
 ## 3. Layout
 
+One component per folder, like the rest of the library. The shadcn `chart.tsx` (six components in one file) was split, and each chart family has a data-driven component on top of it.
+
 ```
 src/charts/
-  chart/             the wrapper: ChartContainer, ChartTooltip(Content), ChartLegend(Content), ChartStyle
-  area-chart/        examples/ (10 files), area-chart.stories.tsx, area-chart.test.tsx
-  bar-chart/ line-chart/ pie-chart/ radar-chart/ radial-chart/ chart-tooltip/   (same shape)
+  chart-container/        ChartContainer: sizing, scoped colour variables, context
+  chart-style/            ChartStyle: emits the --color-<series> variables
+  chart-tooltip/          ChartTooltip (the Recharts tooltip)
+  chart-tooltip-content/  ChartTooltipContent + the 9 tooltip examples
+  chart-legend/           ChartLegend (the Recharts legend)
+  chart-legend-content/   ChartLegendContent
+  chart-center-label/     ChartCenterLabel: the text in the middle of donut and radial charts
+  chart-series/           buildSeriesConfig, seriesFromConfig, configLabel, palette helpers
+  area-chart/ bar-chart/ line-chart/ pie-chart/ radar-chart/ radial-chart/
+                          AreaChart ... RadialChart + examples/ (the official shadcn charts)
+  lib/                    shared context, types and the payload helper (not exported)
 ```
 
-Only `chart/` is code the library exports. The family folders hold the official examples as stories and tests. They are not exported, because each example is a finished card with hard-coded data, meant to be copied and adapted. A data-driven API (`<AreaChart data series />`) would be a separate design decision; see [pending.md](pending.md).
+## 4. The data-driven components
 
-Usage:
+You pass data and props; the component builds the Recharts tree, the config, the tooltip and the legend.
+
+```tsx
+import { AreaChart } from "lost-ui/charts";
+
+<AreaChart
+  data={visitors}
+  xKey="month"
+  series={[
+    { key: "desktop", label: "Desktop" },
+    { key: "mobile", label: "Mobile" },
+  ]}
+  stacked
+  gradient
+  showLegend
+  xTickFormatter={(value) => value.slice(0, 3)}
+/>;
+```
+
+Series colours default to `--chart-1..5` by position; a series can set its own `color` and `icon`. A shadcn `ChartConfig` converts with `seriesFromConfig(config)`.
+
+| Component     | Data props                                | Main options                                                                                                                                         |
+| ------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AreaChart`   | `data`, `xKey`, `series`                  | `curve`, `stacked`, `expand`, `gradient`, `showYAxis`                                                                                                |
+| `BarChart`    | `data`, `xKey`, `series`                  | `orientation`, `stacked`, `radius`, `showLabels`, `labelKey`, `categoryInside`, `colorKey`, `negativeColor`, `activeIndex`                           |
+| `LineChart`   | `data`, `xKey`, `series`                  | `curve`, `showDots`, `dotColorKey`, `renderDot`, `showLabels`, `labelKey`, `labelFormatter`, `strokeWidth`                                           |
+| `PieChart`    | `data`, `nameKey`, `valueKey`             | `donut`, `centerLabel`, `inner` (second ring), `activeIndex`, `showLabels`, `labelPosition`, `labelFormatter`, `showSeparator`, `colorKey`, `config` |
+| `RadarChart`  | `data`, `angleKey`, `series`              | `gridShape`, `showGrid`, `gridFilled`, `gridRadius`, `radialLines`, `filled`, `showDots`, `showRadiusAxis`, `angleTick`                              |
+| `RadialChart` | `data`, `nameKey`, `valueKey` or `series` | `startAngle`, `endAngle`, `innerRadius`, `outerRadius`, `showGrid`, `gridRadius`, `showLabels`, `centerLabel`, `colorKey`, `config`                  |
+
+Shared by all of them: `showGrid`, `showXAxis`, `xTickFormatter`, `xMinTickGap`, `showLegend`, `showTooltip`, `tooltipIndicator`, `tooltipProps` (any option of `ChartTooltipContent`, including `formatter` and `labelFormatter`), `animate` and `className`.
+
+- `animate={false}` turns the entry animation off (reduced motion, printing, tests).
+- The legend keeps the order of the series; the Recharts default sorts it alphabetically.
+- When a chart cannot be described with props, compose the pieces yourself: `ChartContainer`, `ChartTooltip`, `ChartLegend` and the Recharts primitives stay available, as in shadcn.
+
+### The examples
+
+The 70 official shadcn examples are kept as recipes, under `Charts/Examples` in Storybook. They are **written with these components**: each one keeps the original data, card and copy, and the chart is a call with props. Where an example needed something the components did not offer, the prop was added (the right-hand columns above show what came from that). The 4 with state (area, bar, line, pie interactive) wrap the component in `useState`.
+
+Usage with the low-level pieces, when needed:
 
 ```tsx
 import { Bar, BarChart, XAxis } from "recharts";
@@ -78,11 +128,11 @@ const config = { desktop: { label: "Desktop", color: "var(--chart-1)" } } satisf
 </ChartContainer>;
 ```
 
-## 4. Theme tokens
+## 5. Theme tokens
 
 `--chart-1` to `--chart-5` were added to `styles/theme-neutral.css` (light and dark) and mapped as `--color-chart-1..5` in `styles/styles.css`. An app that skips `theme-neutral.css` defines its own five values, the way it defines `--primary`.
 
-## 5. Changes from upstream
+## 6. Changes from upstream
 
 - `"use client"` removed; `cn` comes from `../../lib/cn`; `card` and `select` from the library's own primitives.
 - Recharts 3.10.1 types reject a `className` on `ChartLegend`. In 3 examples (pie legend, radar icons, radar legend) it moved to `ChartLegendContent`, which is where the classes apply.
@@ -90,9 +140,10 @@ const config = { desktop: { label: "Desktop", color: "var(--chart-1)" } } satisf
 - Label render functions that returned nothing on one branch now return `null` (5 examples), and 6 unused imports were removed.
 - Line endings normalised from CRLF to LF.
 
-## 6. Verification
+## 7. Verification
 
 - `tsc --noEmit`, `vite build` and Prettier pass.
-- 8 test files, 74 tests, all passing. Each example is rendered and must produce a `[data-slot="chart"]` element. `chart.test.tsx` also checks that series colours become CSS variables, that light and dark theme colours are scoped separately, and that each chart has its own scoped id. jsdom does not lay out SVG, so the tests prove structure, not geometry.
-- A packed tarball installs in an empty project: `lost-ui/charts` exports the 6 wrapper symbols, the root entry exports none of them, and the chart tokens reach the compiled CSS.
-- Storybook: 72 chart stories open in headless Chromium with no console or page errors. Area, bar, radar and radial families were checked by eye in a light theme. Dark mode was not checked.
+- Every component has stories and tests. The abstract components are tested against the real Recharts DOM (areas, bars, lines, slices, rings, dots, labels, grid, axes, legend order, centre label, config labels). The tests replace `ResponsiveContainer` with a fixed size and pass `animate={false}`, because jsdom does not measure layout and Recharts only draws after measuring; they prove structure and behaviour, not geometry.
+- All 70 examples render through the components and are checked for a `[data-slot="chart"]` and an SVG surface.
+- A packed tarball installs in an empty project: `lost-ui/charts` exports the components and helpers, and the root entry exports none of them.
+- Storybook: chart stories open in headless Chromium with no console or page errors. Dark mode was not checked.

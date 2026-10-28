@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A pie chart with a custom label";
+import type { ChartConfig } from "../../chart-container";
+import { PieChart } from "../pie-chart";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -55,32 +53,17 @@ export function ChartPieLabelCustom() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px] px-0">
-          <PieChart>
-            <ChartTooltip content={<ChartTooltipContent nameKey="visitors" hideLabel />} />
-            <Pie
-              data={chartData}
-              dataKey="visitors"
-              labelLine={false}
-              label={({ payload, ...props }) => {
-                return (
-                  <text
-                    cx={props.cx}
-                    cy={props.cy}
-                    x={props.x}
-                    y={props.y}
-                    textAnchor={props.textAnchor}
-                    dominantBaseline={props.dominantBaseline}
-                    fill="var(--foreground)"
-                  >
-                    {payload.visitors}
-                  </text>
-                );
-              }}
-              nameKey="browser"
-            />
-          </PieChart>
-        </ChartContainer>
+        <PieChart
+          data={chartData}
+          nameKey="browser"
+          valueKey="visitors"
+          config={chartConfig}
+          colorKey="fill"
+          showLabels
+          labelPosition="outside"
+          labelFormatter={(value) => String(value)}
+          tooltipProps={{ nameKey: "visitors", hideLabel: true }}
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

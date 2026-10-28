@@ -1,9 +1,7 @@
-import { Bar, BarChart, XAxis } from "recharts";
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A stacked bar chart with a legend";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { BarChart } from "../../bar-chart";
 
 const chartData = [
   { date: "2024-07-15", running: 450, swimming: 300 },
@@ -28,6 +26,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = seriesFromConfig(chartConfig);
+
 export function ChartTooltipLabelCustom() {
   return (
     <Card>
@@ -36,33 +36,19 @@ export function ChartTooltipLabelCustom() {
         <CardDescription>Tooltip with custom label from chartConfig.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => {
-                return new Date(value as string).toLocaleDateString("en-US", {
-                  weekday: "short",
-                });
-              }}
-            />
-            <Bar dataKey="running" stackId="a" fill="var(--color-running)" radius={[0, 0, 4, 4]} />
-            <Bar
-              dataKey="swimming"
-              stackId="a"
-              fill="var(--color-swimming)"
-              radius={[4, 4, 0, 0]}
-            />
-            <ChartTooltip
-              content={<ChartTooltipContent labelKey="activities" indicator="line" />}
-              cursor={false}
-              defaultIndex={1}
-            />
-          </BarChart>
-        </ChartContainer>
+        <BarChart
+          data={chartData}
+          xKey="date"
+          series={series}
+          xTickFormatter={(value) => {
+            return new Date(value).toLocaleDateString("en-US", {
+              weekday: "short",
+            });
+          }}
+          stacked
+          tooltipIndicator="line"
+          tooltipProps={{ labelKey: "activities" }}
+        />
       </CardContent>
     </Card>
   );

@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
   Card,
@@ -9,16 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import {
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "../../index";
-
-export const description = "A radar chart with a legend";
+import type { ChartConfig } from "../../chart-container";
+import { seriesFromConfig } from "../../chart-series";
+import { RadarChart } from "../radar-chart";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -40,6 +32,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const series = seriesFromConfig(chartConfig);
+
 export function ChartRadarLegend() {
   return (
     <Card>
@@ -48,24 +42,13 @@ export function ChartRadarLegend() {
         <CardDescription>Showing total visitors for the last 6 months</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
-          <RadarChart
-            data={chartData}
-            margin={{
-              top: -40,
-              bottom: -10,
-              left: 0,
-              right: 0,
-            }}
-          >
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-            <PolarAngleAxis dataKey="month" />
-            <PolarGrid />
-            <Radar dataKey="desktop" fill="var(--color-desktop)" fillOpacity={0.6} />
-            <Radar dataKey="mobile" fill="var(--color-mobile)" />
-            <ChartLegend content={<ChartLegendContent className="mt-8" />} />
-          </RadarChart>
-        </ChartContainer>
+        <RadarChart
+          data={chartData}
+          angleKey="month"
+          series={series}
+          showLegend
+          tooltipIndicator="line"
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2 pt-4 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

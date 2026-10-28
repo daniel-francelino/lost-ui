@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A mixed bar chart";
+import type { ChartConfig } from "../../chart-container";
+import { BarChart } from "../bar-chart";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -55,28 +53,17 @@ export function ChartBarMixed() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              left: 0,
-            }}
-          >
-            <YAxis
-              dataKey="browser"
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label}
-            />
-            <XAxis dataKey="visitors" type="number" hide />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="visitors" radius={5} />
-          </BarChart>
-        </ChartContainer>
+        <BarChart
+          data={chartData}
+          xKey="browser"
+          series={[{ key: "visitors", label: chartConfig.visitors.label }]}
+          xTickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label}
+          orientation="horizontal"
+          colorKey="fill"
+          radius={5}
+          tooltipIndicator="dot"
+          tooltipProps={{ hideLabel: true }}
+        />
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">

@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { LabelList, Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A pie chart with a label list";
+import type { ChartConfig } from "../../chart-container";
+import { PieChart } from "../pie-chart";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -55,23 +53,15 @@ export function ChartPieLabelList() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
+        <PieChart
+          data={chartData}
+          nameKey="browser"
+          valueKey="visitors"
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px] [&_.recharts-text]:fill-background"
-        >
-          <PieChart>
-            <ChartTooltip content={<ChartTooltipContent nameKey="visitors" hideLabel />} />
-            <Pie data={chartData} dataKey="visitors">
-              <LabelList
-                dataKey="browser"
-                className="fill-background"
-                stroke="none"
-                fontSize={12}
-                formatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label}
-              />
-            </Pie>
-          </PieChart>
-        </ChartContainer>
+          colorKey="fill"
+          showLabels
+          tooltipProps={{ nameKey: "visitors", hideLabel: true }}
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A simple pie chart";
+import type { ChartConfig } from "../../chart-container";
+import { PieChart } from "../pie-chart";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -55,12 +53,14 @@ export function ChartPieSimple() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
-          <PieChart>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Pie data={chartData} dataKey="visitors" nameKey="browser" />
-          </PieChart>
-        </ChartContainer>
+        <PieChart
+          data={chartData}
+          nameKey="browser"
+          valueKey="visitors"
+          config={chartConfig}
+          colorKey="fill"
+          tooltipProps={{ hideLabel: true }}
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

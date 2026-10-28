@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, Cell, LabelList } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A bar chart with negative values";
+import type { ChartConfig } from "../../chart-container";
+import { BarChart } from "../bar-chart";
 
 const chartData = [
   { month: "January", visitors: 186 },
@@ -36,24 +34,16 @@ export function ChartBarNegative() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel hideIndicator />}
-            />
-            <Bar dataKey="visitors">
-              <LabelList position="top" dataKey="month" fillOpacity={1} />
-              {chartData.map((item) => (
-                <Cell
-                  key={item.month}
-                  fill={item.visitors > 0 ? "var(--chart-1)" : "var(--chart-2)"}
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <BarChart
+          data={chartData}
+          xKey="month"
+          series={[{ key: "visitors", label: chartConfig.visitors.label, color: "var(--chart-1)" }]}
+          negativeColor="var(--chart-2)"
+          labelKey="month"
+          showXAxis={false}
+          tooltipIndicator="dot"
+          tooltipProps={{ hideLabel: true, hideIndicator: true }}
+        />
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">

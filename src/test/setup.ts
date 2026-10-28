@@ -59,3 +59,17 @@ afterEach(() => {
 Element.prototype.hasPointerCapture = () => false;
 Element.prototype.setPointerCapture = () => {};
 Element.prototype.releasePointerCapture = () => {};
+
+vi.mock("recharts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("recharts")>();
+  const { cloneElement } = await import("react");
+
+  return {
+    ...actual,
+    ResponsiveContainer: ({ children }: { children: React.ReactElement }) =>
+      cloneElement(children as React.ReactElement<{ width: number; height: number }>, {
+        width: 400,
+        height: 300,
+      }),
+  };
+});

@@ -1,5 +1,4 @@
 import { TrendingUp } from "lucide-react";
-import { Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -9,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "../../index";
-
-export const description = "A pie chart with a label";
+import type { ChartConfig } from "../../chart-container";
+import { PieChart } from "../pie-chart";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -55,15 +53,17 @@ export function ChartPieLabel() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
+        <PieChart
+          data={chartData}
+          nameKey="browser"
+          valueKey="visitors"
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
-        >
-          <PieChart>
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <Pie data={chartData} dataKey="visitors" label nameKey="browser" />
-          </PieChart>
-        </ChartContainer>
+          colorKey="fill"
+          showLabels
+          labelPosition="outside"
+          tooltipProps={{ hideLabel: true }}
+          className="[&_.recharts-pie-label-text]:fill-foreground"
+        />
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

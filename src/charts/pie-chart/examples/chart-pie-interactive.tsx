@@ -1,18 +1,9 @@
-import * as React from "react";
-import { Label, Pie, PieChart, Sector } from "recharts";
-import type { PieSectorShapeProps } from "recharts/types/polar/Pie";
+import { useMemo, useState } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../ui/card";
-import {
-  ChartContainer,
-  ChartStyle,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "../../index";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../ui/select";
-
-export const description = "An interactive pie chart";
+import type { ChartConfig } from "../../chart-container";
+import { PieChart } from "../pie-chart";
 
 const desktopData = [
   { month: "january", desktop: 186, fill: "var(--color-january)" },
@@ -54,35 +45,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartPieInteractive() {
-  const id = "pie-interactive";
-  const [activeMonth, setActiveMonth] = React.useState(desktopData[0].month);
+const months = desktopData.map((item) => item.month);
 
-  const activeIndex = React.useMemo(
+export function ChartPieInteractive() {
+  const [activeMonth, setActiveMonth] = useState(months[0] ?? "");
+
+  const activeIndex = useMemo(
     () => desktopData.findIndex((item) => item.month === activeMonth),
     [activeMonth],
   );
-  const months = React.useMemo(() => desktopData.map((item) => item.month), []);
-
-  const renderPieShape = React.useCallback(
-    ({ index, outerRadius = 0, ...props }: PieSectorShapeProps) => {
-      if (index === activeIndex) {
-        return (
-          <g>
-            <Sector {...props} outerRadius={outerRadius + 10} />
-            <Sector {...props} outerRadius={outerRadius + 25} innerRadius={outerRadius + 12} />
-          </g>
-        );
-      }
-
-      return <Sector {...props} outerRadius={outerRadius} />;
-    },
-    [activeIndex],
-  );
 
   return (
-    <Card data-chart={id} className="flex flex-col">
-      <ChartStyle id={id} config={chartConfig} />
+    <Card className="flex flex-col">
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
           <CardTitle>Pie Chart - Interactive</CardTitle>
@@ -91,84 +65,33 @@ export function ChartPieInteractive() {
         <Select value={activeMonth} onValueChange={setActiveMonth}>
           <SelectTrigger
             className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
-            aria-label="Select a value"
+            aria-label="Select a month"
           >
             <SelectValue placeholder="Select month" />
           </SelectTrigger>
           <SelectContent align="end" className="rounded-xl">
-            {months.map((key) => {
-              const config = chartConfig[key as keyof typeof chartConfig];
-
-              if (!config) {
-                return null;
-              }
-
-              return (
-                <SelectItem key={key} value={key} className="rounded-lg [&_span]:flex">
-                  <div className="flex items-center gap-2 text-xs">
-                    <span
-                      className="flex h-3 w-3 shrink-0 rounded-xs"
-                      style={{
-                        backgroundColor: `var(--color-${key})`,
-                      }}
-                    />
-                    {config?.label}
-                  </div>
-                </SelectItem>
-              );
-            })}
+            {months.map((month) => (
+              <SelectItem key={month} value={month} className="rounded-lg">
+                {chartConfig[month.toLowerCase() as keyof typeof chartConfig]?.label ?? month}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </CardHeader>
       <CardContent className="flex flex-1 justify-center pb-0">
-        <ChartContainer
-          id={id}
+        <PieChart
+          className="aspect-square w-full max-w-[300px]"
+          data={desktopData}
+          nameKey="month"
+          valueKey="desktop"
           config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[300px]"
-        >
-          <PieChart>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Pie
-              data={desktopData}
-              dataKey="desktop"
-              nameKey="month"
-              innerRadius={60}
-              strokeWidth={5}
-              shape={renderPieShape}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
-                        >
-                          {desktopData[activeIndex].desktop.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Visitors
-                        </tspan>
-                      </text>
-                    );
-                  }
-                  return null;
-                }}
-              />
-            </Pie>
-          </PieChart>
-        </ChartContainer>
+          colorKey="fill"
+          donut
+          innerRadius={60}
+          activeIndex={activeIndex}
+          centerLabel={{ value: desktopData[activeIndex]?.desktop ?? 0, caption: "Visitors" }}
+          tooltipProps={{ hideLabel: true }}
+        />
       </CardContent>
     </Card>
   );

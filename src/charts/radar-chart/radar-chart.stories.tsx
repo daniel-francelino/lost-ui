@@ -23,3 +23,21 @@ export const CircleGrid: Story = { args: { gridShape: "circle", showDots: true }
 export const LinesOnly: Story = { args: { filled: false, showLegend: true } };
 
 export const WithRadiusAxis: Story = { args: { showRadiusAxis: true } };
+
+export const WithoutGrid: Story = { args: { showGrid: false, showDots: true } };
+
+export const FilledGrid: Story = { args: { gridFilled: true } };
+
+export const NoRadialLines: Story = { args: { radialLines: false } };
+
+export const SingleRing: Story = { args: { radialLines: false, gridRadius: [90] } };
+
+export const CustomAngleLabels: Story = {
+  args: {
+    angleTick: ({ x, y, index, payload }) => (
+      <text key={index} data-testid="angle-tick" x={x} y={y}>
+        {payload.value.slice(0, 3)}
+      </text>
+    ),
+  },
+};

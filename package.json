@@ -46,6 +46,14 @@
     "./charts/*": {
       "types": "./dist/charts/*/index.d.ts",
       "import": "./dist/charts/*/index.js"
+    },
+    "./forms": {
+      "types": "./dist/forms/index.d.ts",
+      "import": "./dist/forms/index.js"
+    },
+    "./forms/*": {
+      "types": "./dist/forms/*/index.d.ts",
+      "import": "./dist/forms/*/index.js"
     }
   },
   "scripts": {

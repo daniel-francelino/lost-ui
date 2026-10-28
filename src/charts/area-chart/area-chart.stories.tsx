@@ -33,3 +33,7 @@ export const Gradient: Story = { args: { gradient: true, showLegend: true } };
 export const Step: Story = { args: { curve: "step" } };
 
 export const WithYAxis: Story = { args: { showYAxis: true, curve: "linear" } };
+
+export const WithTooltipOptions: Story = {
+  args: { tooltipProps: { hideLabel: true }, tooltipIndicator: "line", xMinTickGap: 32 },
+};
