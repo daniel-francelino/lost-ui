@@ -1,5 +1,5 @@
 import { composeStories } from "@storybook/react-vite";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -132,10 +132,10 @@ describe("Stepper", () => {
     expect(ref.current?.hasPrev()).toBe(false);
     expect(ref.current?.hasNext()).toBe(true);
 
-    ref.current?.next();
+    act(() => ref.current?.next());
     expect(onNext.mock.calls[0]?.[0]).toMatchObject({ title: "Payment" });
 
-    ref.current?.prev();
+    act(() => ref.current?.prev());
     expect(onPrev.mock.calls[0]?.[0]).toMatchObject({ title: "Address" });
   });
 

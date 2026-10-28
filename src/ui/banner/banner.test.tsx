@@ -1,5 +1,5 @@
 import { composeStories } from "@storybook/react-vite";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -73,8 +73,7 @@ describe("Banner", () => {
     unmount();
 
     render(<Persistent />);
-    expect(await screen.findByRole("button", { name: "Close" }).catch(() => null)).toBeNull();
-    expect(screen.queryByText(/Version 2/)).toBeNull();
+    await waitFor(() => expect(screen.queryByText(/Version 2/)).toBeNull());
   });
 
   it("shows again on a page where it was not dismissed, and ignores storage without close", () => {

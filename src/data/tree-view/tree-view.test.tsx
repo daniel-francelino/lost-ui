@@ -133,7 +133,7 @@ describe("TreeView", () => {
       const user = userEvent.setup();
       render(<WithCheckboxes onValueChange={onValueChange} />);
 
-      await user.click(item("components"));
+      await user.click(row("components"));
 
       expect(new Set(onValueChange.mock.calls.at(-1)?.[0])).toEqual(
         new Set(["app/components", "app/components/button", "app/components/card"]),
@@ -144,20 +144,20 @@ describe("TreeView", () => {
       const user = userEvent.setup();
       render(<WithCheckboxes />);
 
-      await user.click(item("Button.tsx"));
-      expect(item("components")).toHaveAttribute("aria-selected", "false");
+      await user.click(row("Button.tsx"));
+      expect(row("components")).toHaveAttribute("aria-selected", "false");
 
-      await user.click(item("Card.tsx"));
-      expect(item("components")).toHaveAttribute("aria-selected", "true");
+      await user.click(row("Card.tsx"));
+      expect(row("components")).toHaveAttribute("aria-selected", "true");
     });
 
     it("shows a partial state on a parent with only some children selected", async () => {
       const user = userEvent.setup();
       render(<WithCheckboxes />);
 
-      await user.click(item("Button.tsx"));
+      await user.click(row("Button.tsx"));
 
-      const box = item("components").querySelector("[role='checkbox']");
+      const box = row("components").querySelector("[role='checkbox']");
       expect(box).toHaveAttribute("data-state", "indeterminate");
     });
 
@@ -165,11 +165,12 @@ describe("TreeView", () => {
       const user = userEvent.setup();
       render(<WithCheckboxes />);
 
-      await user.click(item("components"));
-      await user.click(item("Button.tsx"));
+      // the checkbox selects without opening or closing the parent
+      await user.click(row("components").querySelector("[role='checkbox']") as HTMLElement);
+      await user.click(row("Button.tsx"));
 
-      expect(item("components")).toHaveAttribute("aria-selected", "false");
-      expect(item("Card.tsx")).toHaveAttribute("aria-selected", "true");
+      expect(row("components")).toHaveAttribute("aria-selected", "false");
+      expect(row("Card.tsx")).toHaveAttribute("aria-selected", "true");
     });
 
     it("selects an item from the control the app draws inside it", async () => {
@@ -177,7 +178,7 @@ describe("TreeView", () => {
       const user = userEvent.setup();
       render(<WithCheckboxes onValueChange={onValueChange} />);
 
-      await user.click(item("Button.tsx").querySelector("[role='checkbox']") as HTMLElement);
+      await user.click(row("Button.tsx").querySelector("[role='checkbox']") as HTMLElement);
 
       expect(onValueChange).toHaveBeenCalledOnce();
     });
@@ -389,7 +390,7 @@ describe("TreeView", () => {
     it("lets the app draw the label and the end of an item", () => {
       render(<CustomRender />);
       expect(screen.getByText("app").tagName).toBe("EM");
-      expect(item("docs")).toHaveTextContent("1");
+      expect(row("docs")).toHaveTextContent("1");
     });
 
     it("uses the text of the label for the key when no id is given", async () => {

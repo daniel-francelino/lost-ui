@@ -124,6 +124,10 @@ export function Timeline({
         const last = index === items.length - 1;
         const lineActive = index < activeIndex;
 
+        const date = renderDate ? renderDate(item, state) : item.date;
+        const title = renderTitle ? renderTitle(item, state) : item.title;
+        const description = renderDescription ? renderDescription(item, state) : item.description;
+
         const body = (
           <>
             <div
@@ -166,21 +170,9 @@ export function Timeline({
               data-slot="timeline-content"
               className={cn("grid gap-0.5", vertical ? "pb-6 pt-1" : "mt-2 pr-4", last && "pb-0")}
             >
-              {(renderDate ? renderDate(item, state) : item.date) && (
-                <div className="text-xs text-muted-foreground">
-                  {renderDate ? renderDate(item, state) : item.date}
-                </div>
-              )}
-              {(renderTitle ? renderTitle(item, state) : item.title) && (
-                <div className="font-medium text-foreground">
-                  {renderTitle ? renderTitle(item, state) : item.title}
-                </div>
-              )}
-              {(renderDescription ? renderDescription(item, state) : item.description) && (
-                <div className="text-muted-foreground">
-                  {renderDescription ? renderDescription(item, state) : item.description}
-                </div>
-              )}
+              {date && <div className="text-xs text-muted-foreground">{date}</div>}
+              {title && <div className="font-medium text-foreground">{title}</div>}
+              {description && <div className="text-muted-foreground">{description}</div>}
             </div>
           </>
         );

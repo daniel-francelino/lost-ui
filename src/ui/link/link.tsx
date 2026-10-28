@@ -100,8 +100,8 @@ export function Link({
         !raw &&
           (isActive ? "font-medium text-primary" : "text-muted-foreground hover:text-foreground"),
         disabled && "pointer-events-none opacity-50",
-        isActive ? activeClassName : inactiveClassName,
         className,
+        isActive ? activeClassName : inactiveClassName,
       )}
       onClick={handleClick}
       {...(anchor

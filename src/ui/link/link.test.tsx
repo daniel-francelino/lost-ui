@@ -119,7 +119,9 @@ describe("Link", () => {
     render(<Raw />);
     const link = screen.getByRole("link");
     expect(link).not.toHaveClass("inline-flex");
-    expect(link).toHaveClass("text-muted-foreground", "font-bold", "text-foreground");
+    // the class of the active state wins over the base class of the app
+    expect(link).toHaveClass("font-bold", "text-foreground");
+    expect(link).not.toHaveClass("text-muted-foreground");
   });
 
   it("applies the inactive class off the page", () => {

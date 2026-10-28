@@ -11,7 +11,7 @@ Shared component library for aura-creative and memoria-print. Read `docs/README.
 
 ## Component layout
 
-Each component has its own folder under `src/effects/` (landing-page effects), `src/ui/` (shadcn primitives) or `src/charts/` (Recharts wrapper, data-driven charts and the official examples, see `docs/charts.md`) or `src/forms/` (fields validated like Quasar's QForm and the `FormBuilder`, see `docs/forms.md`):
+Each component has its own folder under `src/effects/` (landing-page effects), `src/ui/` (shadcn primitives) or `src/charts/` (Recharts wrapper, data-driven charts and the official examples, see `docs/charts.md`) or `src/forms/` (fields validated like Quasar's QForm and the `FormBuilder`, see `docs/forms.md`) or `src/data/` (data display: `DataTable`, `Empty`, `Timeline`, `TreeView`, `UserInfo`, see `docs/nuxt-components.md`). `src/ui/` also holds the Nuxt UI style element and navigation components (`Kbd`, `Chip`, `AvatarGroup`, `ButtonGroup`, `ProgressGroup`, `Banner`, `Link`, `Stepper`, `FooterColumns`). Texts the components bring come from `src/i18n/` (en, es, pt, see `docs/i18n.md`): never hard-code a visible or screen-reader string, add the key to the three locales and read it with `useLostTranslation`:
 
 ```
 src/effects/marquee/

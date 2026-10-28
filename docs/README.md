@@ -9,6 +9,7 @@ Shared component library for **aura-creative** and **memoria-print**.
 | [effects-inventory.md](effects-inventory.md)       | All 79 effect components, import path and optional peer               | Generated                       |
 | [charts.md](charts.md)                             | Chart types research, library decision, layout of `src/charts`        | Imported                        |
 | [forms.md](forms.md)                               | QForm-style validation, the 26 form components and FormBuilder        | Implemented                     |
+| [nuxt-components.md](nuxt-components.md)           | Data, Element and Navigation components of Nuxt UI, and the DataTable | Implemented                     |
 | [i18n.md](i18n.md)                                 | Languages (en, es, pt), the provider, adding texts and languages      | Implemented                     |
 | [notifications.md](notifications.md)               | Toasts: kinds, colours, icons and the theme tokens behind them        | Implemented                     |
 | [pending.md](pending.md)                           | Work agreed for later (ESLint, Husky, Changesets, open visual issues) | Living list                     |
