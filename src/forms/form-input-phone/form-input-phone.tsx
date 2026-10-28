@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { ChevronsUpDownIcon } from "lucide-react";
+import { isValidPhoneNumber } from "libphonenumber-js/min";
 
 import { cn } from "../../lib/cn";
 import { Button } from "../../ui/button";
@@ -8,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { FormField } from "../form-field";
 import { FormOptionList, optionId } from "../form-option-list";
 import { countryFromPhone, getCountries, type Country } from "../lib/countries";
+import { CountryFlag } from "../lib/country-flag";
 import { fieldControlSize, type FieldProps } from "../lib/field-props";
 import { itemText, type FieldItem } from "../lib/items";
 import { composeHandlers, splitFieldProps } from "../lib/split-field-props";
@@ -20,7 +22,7 @@ export type FormInputPhoneProps = FieldProps<string> &
     ComponentProps<"input">,
     keyof FieldProps<string> | "size" | "ref" | "type" | "defaultChecked"
   > & {
-    /** Defaults to the built-in list, named in `locale`. */
+    /** Defaults to every country of libphonenumber-js, named in `locale`. */
     countries?: Country[];
     locale?: string;
     /** ISO code of the country shown when the value is empty. Defaults to the first country. */
@@ -33,8 +35,17 @@ export type FormInputPhoneProps = FieldProps<string> &
   };
 
 /**
+ * True when `value` is a complete, valid international number for its country.
+ * For a rule: `(value) => !value || isValidPhone(value) || "Enter a valid number"`.
+ */
+export function isValidPhone(value: string): boolean {
+  return value !== "" && isValidPhoneNumber(value);
+}
+
+/**
  * A phone number in international format, `+` and the calling code followed by
  * the national digits, e.g. `+351912345678`. An empty number is `""`.
+ * Needs the optional peers `libphonenumber-js` and `country-flag-icons`.
  */
 export function FormInputPhone(props: FormInputPhoneProps) {
   const [
@@ -85,7 +96,10 @@ export function FormInputPhone(props: FormInputPhoneProps) {
   const [query, setQuery] = useState("");
   const items: FieldItem[] = list.map((item) => ({
     value: item.code,
-    label: `${item.flag} ${item.name} ${item.dial}`,
+    label: item.name,
+    description: item.dial,
+    icon: <CountryFlag code={item.code} />,
+    text: `${item.name} ${item.dial}`,
   }));
   const filtered = items.filter((item) =>
     itemText(item).toLowerCase().includes(query.toLowerCase()),
@@ -133,7 +147,7 @@ export function FormInputPhone(props: FormInputPhoneProps) {
                 "w-28",
               )}
             >
-              <span aria-hidden="true">{selected?.flag}</span>
+              {selected && <CountryFlag code={selected.code} />}
               <span>{dial}</span>
               <ChevronsUpDownIcon className="size-4 shrink-0 opacity-50" />
             </Button>

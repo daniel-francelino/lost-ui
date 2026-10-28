@@ -1,5 +1,5 @@
 import { composeStories } from "@storybook/react-vite";
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -109,8 +109,7 @@ describe("FormInputDate", () => {
 
       await user.click(screen.getByRole("button", { name: /Jan 15, 2026/ }));
       const time = await screen.findByLabelText("Time");
-      await user.clear(time);
-      await user.type(time, "0915");
+      fireEvent.change(time, { target: { value: "09:15" } });
 
       const picked = onValueChange.mock.calls.at(-1)?.[0] as Date;
       expect([picked.getDate(), picked.getHours(), picked.getMinutes()]).toEqual([15, 9, 15]);

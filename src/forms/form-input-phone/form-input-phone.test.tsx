@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { Form } from "../form";
+import { isValidPhone } from "./form-input-phone";
 import * as stories from "./form-input-phone.stories";
 
 const { Playground, Preselected, CustomCountries, Required, Disabled } = composeStories(stories);
@@ -102,12 +103,44 @@ describe("FormInputPhone", () => {
 
     await user.type(screen.getByRole("textbox"), "91");
     await user.click(screen.getByRole("button", { name: "Go" }));
-    expect(await screen.findByText("Number is too short")).toBeInTheDocument();
+    expect(await screen.findByText("Enter a valid number")).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
 
     await user.type(screen.getByRole("textbox"), "2345678");
     await user.click(screen.getByRole("button", { name: "Go" }));
     expect(onSubmit).toHaveBeenCalled();
+  });
+
+  it("shows a flag for the selected country and in the list", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<Playground />);
+    expect(
+      screen.getByRole("combobox", { name: "Country calling code" }).querySelector("svg"),
+    ).not.toBeNull();
+
+    await user.click(screen.getByRole("combobox", { name: "Country calling code" }));
+    expect(container.ownerDocument.querySelector('[role="option"] svg')).not.toBeNull();
+  });
+
+  it("lists every country of libphonenumber-js by default", async () => {
+    const user = userEvent.setup();
+    render(<Playground />);
+
+    await user.click(screen.getByRole("combobox", { name: "Country calling code" }));
+
+    expect(screen.getAllByRole("option").length).toBeGreaterThan(200);
+  });
+
+  describe("isValidPhone", () => {
+    it("accepts a complete number of its country", () => {
+      expect(isValidPhone("+351912345678")).toBe(true);
+      expect(isValidPhone("+5511987654321")).toBe(true);
+    });
+
+    it("rejects an incomplete or empty number", () => {
+      expect(isValidPhone("+35191")).toBe(false);
+      expect(isValidPhone("")).toBe(false);
+    });
   });
 
   it("is disabled when locked", () => {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 
 import { rules } from "../rules";
-import { FormInputPhone } from "./form-input-phone";
+import { FormInputPhone, isValidPhone } from "./form-input-phone";
 
 const meta = {
   title: "Forms/FormInputPhone",
@@ -25,8 +25,8 @@ export const CustomCountries: Story = {
   args: {
     label: "Phone",
     countries: [
-      { code: "PT", dial: "+351", name: "Portugal", flag: "🇵🇹" },
-      { code: "BR", dial: "+55", name: "Brazil", flag: "🇧🇷" },
+      { code: "PT", dial: "+351", name: "Portugal" },
+      { code: "BR", dial: "+55", name: "Brazil" },
     ],
   },
 };
@@ -38,7 +38,7 @@ export const Required: Story = {
     required: true,
     rules: [
       rules.required("Enter a phone number"),
-      (value) => value.length >= 11 || "Number is too short",
+      (value) => isValidPhone(value) || "Enter a valid number",
     ],
   },
 };

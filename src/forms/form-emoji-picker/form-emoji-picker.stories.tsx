@@ -19,8 +19,8 @@ export const Playground: Story = { args: { label: "Icon" } };
 
 export const Preselected: Story = { args: { label: "Icon", defaultValue: "🔥", clearable: true } };
 
-export const CustomSet: Story = {
-  args: { label: "Mood", emojis: ["😀", "😐", "😢"], columns: 3 },
+export const WithoutSkinTones: Story = {
+  args: { label: "Icon", pickerProps: { skinTonesDisabled: true } },
 };
 
 export const Required: Story = {

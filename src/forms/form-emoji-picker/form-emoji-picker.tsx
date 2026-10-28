@@ -1,4 +1,5 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState, type ComponentProps, type ReactNode } from "react";
+import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 import { SmileIcon, XIcon } from "lucide-react";
 
 import { cn } from "../../lib/cn";
@@ -9,29 +10,27 @@ import { fieldControlSize, type FieldProps } from "../lib/field-props";
 import { splitFieldProps } from "../lib/split-field-props";
 import { useField } from "../lib/use-field";
 
-// Split by grapheme: emojis such as ❤️ are a symbol plus a variation selector.
-export const defaultEmojis = Array.from(
-  new Intl.Segmenter().segment(
-    "😀😃😄😁😆😅😂🙂😉😊😍🥰😎🤩🤔😴😢😭😡🥳" +
-      "👍👎👏🙌🙏💪👀🧠❤️🧡💛💚💙💜🖤💯✨🔥⭐🌟🎉🎁🏆🎯" +
-      "☀️🌙⛅🌧️❄️🌈🌱🌳🌸🍀🍎🍕🍔🍰☕🍺🎵🎮📚✏️" +
-      "💡📌📎📅🔔🔒🔑🛒💼🏠🚗✈️🚀⚙️🔧💰📈✅❌⚠️",
-  ),
-  (part) => part.segment,
-);
-
 export type FormEmojiPickerProps = FieldProps<string> & {
-  /** The emojis offered. Defaults to a short general-purpose set. */
-  emojis?: string[];
   placeholder?: ReactNode;
+  searchPlaceholder?: string;
   clearable?: boolean;
-  columns?: number;
+  /** Passed to `emoji-picker-react`, e.g. `theme`, `width`, `skinTonesDisabled`. */
+  pickerProps?: Omit<ComponentProps<typeof EmojiPicker>, "onEmojiClick" | "searchPlaceholder">;
 };
 
+/**
+ * An emoji field with the full `emoji-picker-react` picker (search, categories, skin tones).
+ * Needs the optional peer `emoji-picker-react`.
+ */
 export function FormEmojiPicker(props: FormEmojiPickerProps) {
   const [
     fieldProps,
-    { emojis = defaultEmojis, placeholder = "Pick an emoji", clearable = false, columns = 8 },
+    {
+      placeholder = "Pick an emoji",
+      searchPlaceholder = "Search emoji",
+      clearable = false,
+      pickerProps,
+    },
   ] = splitFieldProps<string, FormEmojiPickerProps>(props);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const field = useField<string>(fieldProps, {
@@ -75,34 +74,22 @@ export function FormEmojiPicker(props: FormEmojiPickerProps) {
               <span id={`${ids.id}-value`}>{field.value || placeholder}</span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent align="start" className="w-auto p-2">
-            <div
-              role="group"
-              aria-label="Emojis"
-              className="grid gap-1"
-              style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
-            >
-              {emojis.map((emoji) => (
-                <button
-                  key={emoji}
-                  type="button"
-                  aria-label={emoji}
-                  aria-pressed={emoji === field.value}
-                  onClick={() => {
-                    field.setValue(emoji);
-                    setOpen(false);
-                    controlProps.onBlur();
-                  }}
-                  className={cn(
-                    "flex size-8 items-center justify-center rounded-md text-lg hover:bg-accent",
-                    "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-                    emoji === field.value && "bg-accent",
-                  )}
-                >
-                  {emoji}
-                </button>
-              ))}
-            </div>
+          <PopoverContent align="start" className="w-auto border-0 p-0">
+            <EmojiPicker
+              theme={Theme.AUTO}
+              emojiStyle={EmojiStyle.NATIVE}
+              lazyLoadEmojis
+              previewConfig={{ showPreview: false }}
+              width={320}
+              height={380}
+              {...pickerProps}
+              searchPlaceholder={searchPlaceholder}
+              onEmojiClick={(emoji) => {
+                field.setValue(emoji.emoji);
+                setOpen(false);
+                controlProps.onBlur();
+              }}
+            />
           </PopoverContent>
         </Popover>
         {clearable && field.value && !locked && (

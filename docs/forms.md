@@ -1,6 +1,6 @@
 # Forms
 
-> **Status: implemented and tested (2026-10-28).** 21 components in `src/forms/`, exposed as `lost-ui/forms`. Related: [stack.md](stack.md), [pending.md](pending.md).
+> **Status: implemented and tested (2026-10-28).** 26 components in `src/forms/`, exposed as `lost-ui/forms`. Related: [stack.md](stack.md), [pending.md](pending.md).
 
 ## 1. Goal
 
@@ -72,12 +72,17 @@ Names carry a `Form` prefix so they cannot be confused with the `ui` primitives 
 | InputDate     | `FormInputDate`     | `Date \| null` or `{ from, to }` | `mode`, `min`, `max`, `locale`, `clearable`, `numberOfMonths`                                                                   |
 | ColorPicker   | `FormColorPicker`   | `string` (hex)                   | `swatches`, `placeholder`                                                                                                       |
 | FileUpload    | `FormFileUpload`    | `File[]`                         | `accept`, `multiple`, `maxSize`, `dropzoneText`, `onReject`                                                                     |
+| InputMoney    | `FormInputMoney`    | `number \| null`                 | `currency`, `locale`, `fractionDigits`, `min`, `max` (typing fills the cents first)                                             |
+| InputPhone    | `FormInputPhone`    | `string` (`+351912345678`)       | `countries`, `locale`, `defaultCountry`, `country`, `onCountryChange`; `isValidPhone(value)` for a rule                         |
+| CountrySelect | `FormCountrySelect` | `string` (ISO code)              | `countries`, `locale`, plus the `FormInputMenu` props                                                                           |
+| EmojiPicker   | `FormEmojiPicker`   | `string`                         | `placeholder`, `searchPlaceholder`, `clearable`, `pickerProps` (passed to `emoji-picker-react`)                                 |
+| Fieldset      | `FormFieldset`      |                                  | `legend`, `description`, `icon`, `hideLegend`, `variant` (`plain`, `section`, `boxed`), `gap`, `disabled`                       |
 |               | `FormOptionList`    |                                  | internal list used by the menus and the listbox                                                                                 |
 |               | `FormBuilder`       | `Record<string, unknown>`        | see section 6                                                                                                                   |
 
 Every field shares the same props (`FieldProps<T>`): `id`, `name`, `label`, `description`, `hint`, `help`, `value`, `defaultValue`, `onValueChange`, `rules`, `lazyRules`, `reactiveRules`, `error`, `errorMessage`, `disabled`, `readOnly`, `required`, `size` (`xs` to `xl`), `className`.
 
-Where Nuxt UI is richer, this implementation is smaller: `FormInputTime` uses the native time input (no segments), `FormInputDate` has no time part, `FormInputMenu` is single-select, `FormInputNumber` has no `formatOptions`, `FormInputRating` has no half stars, `FormFileUpload` has no thumbnails or layout variants, and there is no schema validation (zod or yup): validation is per field through `rules`.
+Where Nuxt UI is richer, this implementation is smaller: `FormInputTime` uses the native time input (no segments), `FormInputDate` has a single time field (`time`, no seconds), `FormInputMenu` is single-select, `FormInputNumber` has no `formatOptions`, `FormInputRating` has no half stars, `FormFileUpload` has no thumbnails or layout variants, and there is no schema validation (zod or yup): validation is per field through `rules`.
 
 ## 5. Rules
 
@@ -132,7 +137,7 @@ form.current?.resetValidation();
 />
 ```
 
-- `control` picks the component (one of the 19 field kinds) and the rest of the object is that component's props, typed per `control`. It is named `control` because `type` collides with native props (`<input type>`).
+- `control` picks the component (one of the 23 field kinds) and the rest of the object is that component's props, typed per `control`. It is named `control` because `type` collides with native props (`<input type>`).
 - `visible` accepts a boolean or a function of the current values. `colSpan` is `1` to `4` or `"full"`; `columns` is `1` to `4` and collapses to one column on small screens.
 - Values are held by the builder, or controlled with `values` and `onValuesChange`. `onSubmit` receives them only after every rule passed. `reset` restores `defaultValues`.
 - `formRef` exposes the `FormHandle`; `greedy`, `autofocus`, `noErrorFocus` pass through to `Form`.
@@ -148,11 +153,16 @@ form.current?.resetValidation();
 
 `lost-ui/forms` exports everything except three components that need an optional peer, imported by path:
 
-| Path                            | Needs                                             |
-| ------------------------------- | ------------------------------------------------- |
-| `lost-ui/forms/form-input-date` | `react-day-picker`                                |
-| `lost-ui/forms/form-pin-input`  | `input-otp`                                       |
-| `lost-ui/forms/form-builder`    | all of the above (it can render every field kind) |
+| Path                                | Needs                                             |
+| ----------------------------------- | ------------------------------------------------- |
+| `lost-ui/forms/form-input-date`     | `react-day-picker`                                |
+| `lost-ui/forms/form-pin-input`      | `input-otp`                                       |
+| `lost-ui/forms/form-input-phone`    | `libphonenumber-js`, `country-flag-icons`         |
+| `lost-ui/forms/form-country-select` | `libphonenumber-js`, `country-flag-icons`         |
+| `lost-ui/forms/form-emoji-picker`   | `emoji-picker-react`                              |
+| `lost-ui/forms/form-builder`        | all of the above (it can render every field kind) |
+
+All of these peers are optional: an app installs one only when it imports the component that needs it. The country list and calling codes come from `libphonenumber-js` (names from `Intl.DisplayNames`), the flags are SVG from `country-flag-icons` (flag emoji do not render on Windows), and the emoji grid is `emoji-picker-react`.
 
 The menus and the listbox are implemented here, without `cmdk`.
 
@@ -164,5 +174,14 @@ The menus and the listbox are implemented here, without `cmdk`.
 ## 10. Verification
 
 - `tsc --noEmit` and Prettier pass; the package builds and the new entries import from an installed tarball.
-- 21 components, each with stories and a test file. Behaviour tests use `userEvent` and cover typing, selection, keyboard, `lazyRules` in all three modes, `reactiveRules`, asynchronous rules, external `error`, integration with `Form` (submit blocked until valid, focus on the first error, greedy, reset) and `FormBuilder` end to end.
+- 26 components, each with stories and a test file. Behaviour tests use `userEvent` and cover typing, selection, keyboard, `lazyRules` in all three modes, `reactiveRules`, asynchronous rules, external `error`, integration with `Form` (submit blocked until valid, focus on the first error, greedy, reset) and `FormBuilder` end to end.
 - The tests run in jsdom: they prove structure, state and behaviour, not layout or pixels. Radix focus movement on arrow keys is asserted as focus, not as the selection change.
+
+## 11. Added from aura-creative and memoria-print
+
+`FormInputMoney`, `FormInputPhone`, `FormCountrySelect`, `FormEmojiPicker` and `FormFieldset`, plus the `time` prop of `FormInputDate`, are the generic form of fields the two apps had written by hand (`MoneyField`, `PhoneField`, `CountryField`, `EmojiPickerField`, `FieldGroup`, `DateTimeField`). The app-specific parts stayed out: time-zone and daylight-saving resolution of `DateTimeField`, the Portuguese texts, and the app's own phone and country helpers.
+
+- `FormFieldset` is a native `fieldset`: `disabled` switches off every control inside, and it is not a field (no `rules`, no registration with `Form`).
+- `FormInputPhone` keeps `+<code><digits>` as the value and chooses the country from the value's calling code when it differs from the selected one. Validate with `isValidPhone`.
+- `FormBuilder` renders the four new fields as `input-money`, `input-phone`, `country-select` and `emoji-picker`; the date with time is `input-date` with `time: true`. It has no `fieldset` entry yet.
+- The emoji grid of `emoji-picker-react` cannot render in jsdom (it measures elements), so its test uses a stub picker and checks the integration: props, choice, closing, form value. The real grid was not checked in a browser.

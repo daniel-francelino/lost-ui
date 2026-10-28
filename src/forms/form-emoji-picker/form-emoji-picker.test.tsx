@@ -4,10 +4,28 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { Form } from "../form";
-import { defaultEmojis } from "./form-emoji-picker";
 import * as stories from "./form-emoji-picker.stories";
 
-const { Playground, Preselected, CustomSet, Required, Disabled } = composeStories(stories);
+// emoji-picker-react draws its list from element sizes, which jsdom does not have, so the
+// picker is replaced by a stub that has the same props and click callback.
+vi.mock("emoji-picker-react", () => ({
+  default: (props: {
+    searchPlaceholder?: string;
+    skinTonesDisabled?: boolean;
+    onEmojiClick: (emoji: { emoji: string }) => void;
+  }) => (
+    <div data-testid="picker" data-skin-tones-disabled={props.skinTonesDisabled ? "" : undefined}>
+      <input placeholder={props.searchPlaceholder} />
+      <button type="button" onClick={() => props.onEmojiClick({ emoji: "🔥" })}>
+        fire
+      </button>
+    </div>
+  ),
+  EmojiStyle: { NATIVE: "native" },
+  Theme: { AUTO: "auto" },
+}));
+
+const { Playground, Preselected, WithoutSkinTones, Required, Disabled } = composeStories(stories);
 
 describe("FormEmojiPicker", () => {
   it("shows the placeholder until an emoji is chosen", () => {
@@ -20,46 +38,45 @@ describe("FormEmojiPicker", () => {
     expect(screen.getByRole("button", { name: /Icon.*🔥/ })).toBeInTheDocument();
   });
 
-  it("opens a grid of emojis", async () => {
+  it("keeps the picker closed until the button is clicked", async () => {
+    const user = userEvent.setup();
+    render(<Playground />);
+    expect(screen.queryByTestId("picker")).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: /Pick an emoji/ }));
+
+    expect(await screen.findByTestId("picker")).toBeInTheDocument();
+  });
+
+  it("gives the picker its search placeholder", async () => {
     const user = userEvent.setup();
     render(<Playground />);
 
     await user.click(screen.getByRole("button", { name: /Pick an emoji/ }));
 
-    const group = await screen.findByRole("group", { name: "Emojis" });
-    expect(group.querySelectorAll("button")).toHaveLength(defaultEmojis.length);
+    expect(await screen.findByPlaceholderText("Search emoji")).toBeInTheDocument();
   });
 
-  it("picks an emoji and closes the grid", async () => {
+  it("passes options through to the picker", async () => {
+    const user = userEvent.setup();
+    render(<WithoutSkinTones />);
+
+    await user.click(screen.getByRole("button", { name: /Pick an emoji/ }));
+
+    expect(await screen.findByTestId("picker")).toHaveAttribute("data-skin-tones-disabled");
+  });
+
+  it("picks an emoji, reports it and closes the picker", async () => {
     const onValueChange = vi.fn();
     const user = userEvent.setup();
     render(<Playground onValueChange={onValueChange} />);
 
     await user.click(screen.getByRole("button", { name: /Pick an emoji/ }));
-    await user.click(await screen.findByRole("button", { name: "🎉" }));
+    await user.click(await screen.findByRole("button", { name: "fire" }));
 
-    expect(onValueChange).toHaveBeenLastCalledWith("🎉");
-    expect(screen.queryByRole("group", { name: "Emojis" })).toBeNull();
-    expect(screen.getByRole("button", { name: /Icon.*🎉/ })).toBeInTheDocument();
-  });
-
-  it("marks the current emoji as pressed", async () => {
-    const user = userEvent.setup();
-    render(<Preselected />);
-
-    await user.click(screen.getByRole("button", { name: /Icon.*🔥/ }));
-
-    expect(await screen.findByRole("button", { name: "🔥", pressed: true })).toBeInTheDocument();
-  });
-
-  it("only offers the emojis it was given", async () => {
-    const user = userEvent.setup();
-    render(<CustomSet />);
-
-    await user.click(screen.getByRole("button", { name: /Pick an emoji/ }));
-
-    const group = await screen.findByRole("group", { name: "Emojis" });
-    expect(group.querySelectorAll("button")).toHaveLength(3);
+    expect(onValueChange).toHaveBeenLastCalledWith("🔥");
+    expect(screen.queryByTestId("picker")).toBeNull();
+    expect(screen.getByRole("button", { name: /Icon.*🔥/ })).toBeInTheDocument();
   });
 
   it("clears the emoji with the clear button", async () => {

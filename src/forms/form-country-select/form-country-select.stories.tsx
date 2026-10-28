@@ -25,8 +25,8 @@ export const CustomList: Story = {
   args: {
     label: "Country",
     countries: [
-      { code: "PT", dial: "+351", name: "Portugal", flag: "🇵🇹" },
-      { code: "BR", dial: "+55", name: "Brazil", flag: "🇧🇷" },
+      { code: "PT", dial: "+351", name: "Portugal" },
+      { code: "BR", dial: "+55", name: "Brazil" },
     ],
   },
 };

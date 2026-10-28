@@ -2,14 +2,18 @@ import { useMemo } from "react";
 
 import { FormInputMenu, type FormInputMenuProps } from "../form-input-menu";
 import { getCountries, type Country } from "../lib/countries";
+import { CountryFlag } from "../lib/country-flag";
 
 export type FormCountrySelectProps = Omit<FormInputMenuProps, "items" | "creatable"> & {
-  /** Defaults to the built-in list, named in `locale`. */
+  /** Defaults to every country of libphonenumber-js, named in `locale`. */
   countries?: Country[];
   locale?: string;
 };
 
-/** A searchable country picker. The value is the ISO 3166-1 alpha-2 code. */
+/**
+ * A searchable country picker. The value is the ISO 3166-1 alpha-2 code.
+ * Needs the optional peers `libphonenumber-js` and `country-flag-icons`.
+ */
 export function FormCountrySelect({
   countries,
   locale,
@@ -20,7 +24,8 @@ export function FormCountrySelect({
     () =>
       (countries ?? getCountries(locale)).map((country) => ({
         value: country.code,
-        label: `${country.flag} ${country.name}`,
+        label: country.name,
+        icon: <CountryFlag code={country.code} />,
       })),
     [countries, locale],
   );

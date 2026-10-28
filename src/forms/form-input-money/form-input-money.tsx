@@ -51,6 +51,8 @@ export function FormInputMoney(props: FormInputMoneyProps) {
     maximumFractionDigits: digits,
   });
 
+  const text = field.value === null ? "" : formatter.format(field.value);
+
   const clamp = (value: number) => {
     let next = value;
     if (min !== undefined) next = Math.max(min, next);
@@ -67,14 +69,17 @@ export function FormInputMoney(props: FormInputMoneyProps) {
         type="text"
         inputMode={inputMode ?? "numeric"}
         autoComplete="off"
-        value={field.value === null ? "" : formatter.format(field.value)}
+        value={text}
         disabled={fieldProps.disabled}
         readOnly={fieldProps.readOnly}
         required={fieldProps.required}
         onChange={(event) => {
           // Typing fills the cents first, the way a calculator or a card terminal does.
           const typed = event.target.value.replace(/\D/g, "").slice(0, maxDigits);
-          field.setValue(typed === "" ? null : Number(typed) / 10 ** digits);
+          // Deleting down to nothing but zeros empties the field, so it can be cleared by hand.
+          const deleted = event.target.value.length < text.length;
+          const empty = typed === "" || (deleted && /^0*$/.test(typed));
+          field.setValue(empty ? null : Number(typed) / 10 ** digits);
         }}
         onFocus={composeHandlers(controlProps.onFocus, onFocus)}
         onBlur={composeHandlers(controlProps.onBlur, (event) => {

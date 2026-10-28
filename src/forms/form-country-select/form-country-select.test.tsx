@@ -18,14 +18,14 @@ describe("FormCountrySelect", () => {
     );
   });
 
-  it("shows the flag and name of the chosen country", () => {
+  it("shows the name of the chosen country", () => {
     render(<Preselected />);
-    expect(screen.getByRole("combobox")).toHaveValue("🇵🇹 Portugal");
+    expect(screen.getByRole("combobox")).toHaveValue("Portugal");
   });
 
   it("names the countries in the given locale", () => {
     render(<Portuguese />);
-    expect(screen.getByRole("combobox")).toHaveValue("🇧🇷 Brasil");
+    expect(screen.getByRole("combobox")).toHaveValue("Brasil");
   });
 
   it("filters while typing and reports the ISO code", async () => {
@@ -37,7 +37,26 @@ describe("FormCountrySelect", () => {
     await user.click(screen.getByRole("option", { name: /Portugal/ }));
 
     expect(onValueChange).toHaveBeenLastCalledWith("PT");
-    expect(screen.getByRole("combobox")).toHaveValue("🇵🇹 Portugal");
+    expect(screen.getByRole("combobox")).toHaveValue("Portugal");
+  });
+
+  it("shows a flag beside each country in the list", async () => {
+    const user = userEvent.setup();
+    render(<Playground />);
+
+    await user.type(screen.getByRole("combobox"), "portu");
+
+    expect(screen.getByRole("option", { name: /Portugal/ }).querySelector("svg")).not.toBeNull();
+  });
+
+  it("offers every country of libphonenumber-js by default", async () => {
+    const user = userEvent.setup();
+    render(<Playground />);
+
+    await user.click(screen.getByRole("combobox"));
+    await user.keyboard("{ArrowDown}");
+
+    expect(screen.getAllByRole("option").length).toBeGreaterThan(200);
   });
 
   it("only offers the countries it was given", async () => {
@@ -45,6 +64,7 @@ describe("FormCountrySelect", () => {
     render(<CustomList />);
 
     await user.click(screen.getByRole("combobox"));
+    await user.keyboard("{ArrowDown}");
 
     expect(screen.getAllByRole("option")).toHaveLength(2);
   });

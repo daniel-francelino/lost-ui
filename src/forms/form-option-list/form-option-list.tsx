@@ -73,6 +73,7 @@ export function FormOptionList({
             onMouseDown={(event) => event.preventDefault()}
             onClick={() => !item.disabled && onSelect(item)}
           >
+            {item.icon}
             <span className="grid flex-1 gap-0.5">
               <span>{item.label}</span>
               {item.description && (

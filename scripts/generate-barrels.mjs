@@ -12,7 +12,14 @@ const standalone = {
     "icon-cloud",
   ]),
   charts: new Set(),
-  forms: new Set(["form-input-date", "form-pin-input", "form-builder"]),
+  forms: new Set([
+    "form-input-date",
+    "form-pin-input",
+    "form-input-phone",
+    "form-country-select",
+    "form-emoji-picker",
+    "form-builder",
+  ]),
   ui: new Set([
     "calendar",
     "carousel",
