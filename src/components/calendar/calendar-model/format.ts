@@ -18,14 +18,14 @@ export const formatMonthTitle = (date: Date, locale: string) =>
 export const formatDayTitle = (date: Date, locale: string) =>
   text(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" }, date);
 
-/** "25 – 31 Oct 2026", or "26 Oct – 1 Nov 2026" when the week crosses a month. */
+/** The week as the locale writes a range: "Oct 25 – 31, 2026", "Oct 26 – Nov 1, 2026". */
 export function formatWeekTitle(date: Date, locale: string, weekStartsOn: WeekStart = 0): string {
   const first = startOfWeek(date, weekStartsOn);
-  const last = addDays(first, 6);
-  if (first.getMonth() === last.getMonth() && first.getFullYear() === last.getFullYear()) {
-    return `${text(locale, { day: "numeric" }, first)} – ${text(locale, { day: "numeric", month: "short", year: "numeric" }, last)}`;
-  }
-  return `${text(locale, { day: "numeric", month: "short" }, first)} – ${text(locale, { day: "numeric", month: "short", year: "numeric" }, last)}`;
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).formatRange(first, addDays(first, 6));
 }
 
 /** "Wed" */
