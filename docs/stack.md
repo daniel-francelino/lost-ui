@@ -113,12 +113,12 @@ The apps are separate repositories (no workspace), so the library cannot be cons
 
 Verified on 2026-10-28: `tsc --noEmit`, `vite build` and Prettier pass; **980 tests in 170 files, all passing** (ui 116, effects 433, charts 178, forms 253); a packed tarball installs in an empty project and its entries import (`lost-ui`, `/ui`, `/effects`, `/charts`, `/forms` and the by-path entries); 585 Storybook stories open in headless Chromium, 4 with console errors that come from third-party images and a video used by Magic UI examples.
 
-| Layer         | Content                                                                   | Entry                          | Doc                                                |
-| ------------- | ------------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------- |
-| `src/ui`      | 45 shadcn primitives (one folder each)                                    | `lost-ui`, `lost-ui/ui/<name>` |                                                    |
-| `src/effects` | 79 Magic UI components with 170 examples                                  | `lost-ui/effects`              | [magic-ui-integration.md](magic-ui-integration.md) |
-| `src/charts`  | Recharts wrapper split into components, 6 data-driven charts, 70 examples | `lost-ui/charts`               | [charts.md](charts.md)                             |
-| `src/forms`   | QForm-style `Form`, 19 field components, `FormBuilder`, `rules`           | `lost-ui/forms`                | [forms.md](forms.md)                               |
+| Layer                    | Content                                                                   | Entry                          | Doc                                                |
+| ------------------------ | ------------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------- |
+| `src/components/ui`      | 45 shadcn primitives (one folder each)                                    | `lost-ui`, `lost-ui/ui/<name>` |                                                    |
+| `src/components/effects` | 79 Magic UI components with 170 examples                                  | `lost-ui/effects`              | [magic-ui-integration.md](magic-ui-integration.md) |
+| `src/components/charts`  | Recharts wrapper split into components, 6 data-driven charts, 70 examples | `lost-ui/charts`               | [charts.md](charts.md)                             |
+| `src/components/forms`   | QForm-style `Form`, 19 field components, `FormBuilder`, `rules`           | `lost-ui/forms`                | [forms.md](forms.md)                               |
 
 Tests run in jsdom: they prove structure, state and behaviour, not layout or pixels. Charts and the first set of effects were also looked at in headless Chromium in a light theme.
 

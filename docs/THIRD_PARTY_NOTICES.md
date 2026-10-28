@@ -4,7 +4,7 @@
 
 - Source: https://github.com/magicuidesign/magicui
 - Imported commit: `efe76fc5755eca1142dd4f74c1d6f0ace2887e3c`
-- Files: all components of `apps/www/registry/magicui` (`src/effects`), plus `ui/button` and `ui/scroll-area` (`src/ui`)
+- Files: all components of `apps/www/registry/magicui` (`src/components/effects`), plus `ui/button` and `ui/scroll-area` (`src/components/ui`)
 - Licence: MIT
 
 Local changes to the imported files:

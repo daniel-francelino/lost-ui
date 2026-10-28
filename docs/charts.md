@@ -4,7 +4,7 @@
 
 ## 1. Decision
 
-Charts use **Recharts v3** through the **shadcn chart wrapper**, and live in `src/charts/`. They are a separate entry point, `lost-ui/charts`, and Recharts is an **optional peer** (`^3.0.0`), so an app that does not draw charts installs and bundles nothing extra. The root `lost-ui` entry does not export them.
+Charts use **Recharts v3** through the **shadcn chart wrapper**, and live in `src/components/charts/`. They are a separate entry point, `lost-ui/charts`, and Recharts is an **optional peer** (`^3.0.0`), so an app that does not draw charts installs and bundles nothing extra. The root `lost-ui` entry does not export them.
 
 ## 2. Research
 
@@ -50,7 +50,7 @@ Sources: [shadcn/ui chart documentation](https://ui.shadcn.com/docs/components/c
 One component per folder, like the rest of the library. The shadcn `chart.tsx` (six components in one file) was split, and each chart family has a data-driven component on top of it.
 
 ```
-src/charts/
+src/components/charts/
   chart-container/        ChartContainer: sizing, scoped colour variables, context
   chart-style/            ChartStyle: emits the --color-<series> variables
   chart-tooltip/          ChartTooltip (the Recharts tooltip)

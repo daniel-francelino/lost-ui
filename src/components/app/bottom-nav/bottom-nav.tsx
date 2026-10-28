@@ -60,7 +60,9 @@ export function BottomNav({
       "--bottom-nav-height",
       `calc(${BAR_HEIGHT} + env(safe-area-inset-bottom, 0px))`,
     );
-    return () => root.style.removeProperty("--bottom-nav-height");
+    return () => {
+      root.style.removeProperty("--bottom-nav-height");
+    };
   }, []);
 
   // moving to another page closes the menu

@@ -23,25 +23,25 @@ Nuxt UI is Vue. The behaviour and the props were followed from its documentation
 
 ## Element
 
-| Nuxt UI       | lost-ui                        | Import                      |
-| ------------- | ------------------------------ | --------------------------- |
-| Alert         | `Alert` (shadcn)               | `lost-ui/ui/alert`          |
-| Avatar        | `Avatar` (shadcn)              | `lost-ui/ui/avatar`         |
-| AvatarGroup   | `AvatarGroup` (new)            | `lost-ui/ui/avatar-group`   |
-| Badge         | `Badge` (shadcn)               | `lost-ui/ui/badge`          |
-| Banner        | `Banner` (new)                 | `lost-ui/ui/banner`         |
-| Button        | `Button` (shadcn)              | `lost-ui/ui/button`         |
-| Calendar      | `Calendar` (shadcn)            | `lost-ui/ui/calendar`       |
-| Card          | `Card` (shadcn)                | `lost-ui/ui/card`           |
-| Chip          | `Chip` (new)                   | `lost-ui/ui/chip`           |
-| Collapsible   | `Collapsible` (shadcn)         | `lost-ui/ui/collapsible`    |
-| FieldGroup    | `ButtonGroup` (new)            | `lost-ui/ui/button-group`   |
-| Icon          | not needed: use `lucide-react` |                             |
-| Kbd           | `Kbd` and `useKbd` (new)       | `lost-ui/ui/kbd`            |
-| Progress      | `Progress` (shadcn)            | `lost-ui/ui/progress`       |
-| ProgressGroup | `ProgressGroup` (new)          | `lost-ui/ui/progress-group` |
-| Separator     | `Separator` (shadcn)           | `lost-ui/ui/separator`      |
-| Skeleton      | `Skeleton` (shadcn)            | `lost-ui/ui/skeleton`       |
+| Nuxt UI       | lost-ui                        | Import                            |
+| ------------- | ------------------------------ | --------------------------------- |
+| Alert         | `Alert` (shadcn)               | `lost-ui/ui/alert`                |
+| Avatar        | `Avatar` (shadcn)              | `lost-ui/ui/avatar`               |
+| AvatarGroup   | `AvatarGroup` (new)            | `lost-ui/elements/avatar-group`   |
+| Badge         | `Badge` (shadcn)               | `lost-ui/ui/badge`                |
+| Banner        | `Banner` (new)                 | `lost-ui/app/banner`              |
+| Button        | `Button` (shadcn)              | `lost-ui/ui/button`               |
+| Calendar      | `Calendar` (shadcn)            | `lost-ui/ui/calendar`             |
+| Card          | `Card` (shadcn)                | `lost-ui/ui/card`                 |
+| Chip          | `Chip` (new)                   | `lost-ui/elements/chip`           |
+| Collapsible   | `Collapsible` (shadcn)         | `lost-ui/ui/collapsible`          |
+| FieldGroup    | `ButtonGroup` (new)            | `lost-ui/elements/button-group`   |
+| Icon          | not needed: use `lucide-react` |                                   |
+| Kbd           | `Kbd` and `useKbd` (new)       | `lost-ui/elements/kbd`            |
+| Progress      | `Progress` (shadcn)            | `lost-ui/ui/progress`             |
+| ProgressGroup | `ProgressGroup` (new)          | `lost-ui/elements/progress-group` |
+| Separator     | `Separator` (shadcn)           | `lost-ui/ui/separator`            |
+| Skeleton      | `Skeleton` (shadcn)            | `lost-ui/ui/skeleton`             |
 
 ## Navigation
 
@@ -49,14 +49,51 @@ Nuxt UI is Vue. The behaviour and the props were followed from its documentation
 | -------------- | ----------------------------------------------------- | ------------------------------------------------------------- |
 | Breadcrumb     | `Breadcrumb` (shadcn)                                 | `lost-ui/ui/breadcrumb`                                       |
 | CommandPalette | `Command` (shadcn, needs `cmdk`)                      | `lost-ui/ui/command`                                          |
-| FooterColumns  | `FooterColumns` (new)                                 | `lost-ui/ui/footer-columns`                                   |
-| Link           | `Link` (new)                                          | `lost-ui/ui/link`                                             |
+| FooterColumns  | `FooterColumns` (new)                                 | `lost-ui/app/footer-columns`                                  |
+| Link           | `Link` (new)                                          | `lost-ui/elements/link`                                       |
 | NavigationMenu | `NavigationMenu` (shadcn)                             | `lost-ui/ui/navigation-menu`                                  |
 | Pagination     | `Pagination` (shadcn parts) and `DataTablePagination` | `lost-ui/ui/pagination`, `lost-ui/data/data-table-pagination` |
-| Stepper        | `Stepper` (new)                                       | `lost-ui/ui/stepper`                                          |
+| Stepper        | `Stepper` (new)                                       | `lost-ui/elements/stepper`                                    |
 | Tabs           | `Tabs` (shadcn)                                       | `lost-ui/ui/tabs`                                             |
 
 `Pagination` and `Tabs` are the shadcn compound parts, not Nuxt's data-driven versions with `items` or `total`; `DataTablePagination` is the data-driven bar for a total, a page and a page size.
+
+## Layout
+
+| Nuxt UI   | lost-ui                                | Import                    |
+| --------- | -------------------------------------- | ------------------------- |
+| App       | `App` (new, needs `sonner`)            | `lost-ui/app/app`         |
+| Container | `Container` (new)                      | `lost-ui/app/container`   |
+| Error     | `ErrorPage` (new)                      | `lost-ui/app/error-page`  |
+| Footer    | `Footer` (new), `FooterColumns`        | `lost-ui/app/footer`      |
+| Header    | `Header` (new)                         | `lost-ui/app/header`      |
+| Main      | `Main` (new)                           | `lost-ui/app/main`        |
+| Sidebar   | `Sidebar` (shadcn), `AppSidebar` (new) | `lost-ui/app/app-sidebar` |
+| Splitter  | `Resizable` (shadcn)                   | `lost-ui/ui/resizable`    |
+| Theme     | `Theme` (new)                          | `lost-ui/app/theme`       |
+
+Differences from Nuxt UI:
+
+- `Theme` scopes CSS variables (colours, `--radius`) and the dark mode of its children. It does not change the props of the components, as Nuxt's `UTheme` does.
+- `App` joins the language (`LostI18nProvider`), the tooltip provider and the `Toaster`. `dir` only sets the attribute.
+- `Header` opens its menu on small screens in a `Modal` or a `Slideover`; the drawer mode is not supported.
+- `Footer` and `Main` use `--header-height` and `--container-width` (defaults in `theme-neutral.css`).
+- The internal screens of an app (sidebar, top bar, bottom bar) are in [structure.md](structure.md).
+
+## Overlay
+
+| Nuxt UI      | lost-ui                           | Import                       |
+| ------------ | --------------------------------- | ---------------------------- |
+| ContextMenu  | `ContextMenu` (shadcn)            | `lost-ui/ui/context-menu`    |
+| Drawer       | `Drawer` (shadcn, vaul)           | `lost-ui/ui/drawer`          |
+| DropdownMenu | `DropdownMenu` (shadcn)           | `lost-ui/ui/dropdown-menu`   |
+| Modal        | `Modal` (new, props over Dialog)  | `lost-ui/elements/modal`     |
+| Popover      | `Popover` (shadcn)                | `lost-ui/ui/popover`         |
+| Slideover    | `Slideover` (`Modal` with `side`) | `lost-ui/elements/slideover` |
+| Toast        | `Toaster` and `toast` (sonner)    | `lost-ui/ui/sonner`          |
+| Tooltip      | `Tooltip` (shadcn)                | `lost-ui/ui/tooltip`         |
+
+`Modal` takes `title`, `description`, `actions`, `footer`, `dismissible`, `overlay`, `modal`, `fullscreen`, `scrollable`, `unmountOnHide` and `side` as props; `Slideover` is the same with `side` on the right by default.
 
 ## DataTable
 

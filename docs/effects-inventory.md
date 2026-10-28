@@ -1,6 +1,6 @@
 # Effects inventory
 
-Generated from `src/effects`. Components marked with a peer are not in the `lost-ui/effects` barrel: import them by path so the optional peer is only required when used.
+Generated from `src/components/effects`. Components marked with a peer are not in the `lost-ui/effects` barrel: import them by path so the optional peer is only required when used.
 
 | File                           | Exports                                                                                 | Import from                         | Optional peer                | Notes                                |
 | ------------------------------ | --------------------------------------------------------------------------------------- | ----------------------------------- | ---------------------------- | ------------------------------------ |

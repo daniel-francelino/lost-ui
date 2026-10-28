@@ -1,6 +1,6 @@
 # Forms
 
-> **Status: implemented and tested (2026-10-28).** 26 components in `src/forms/`, exposed as `lost-ui/forms`. Related: [stack.md](stack.md), [pending.md](pending.md).
+> **Status: implemented and tested (2026-10-28).** 26 components in `src/components/forms/`, exposed as `lost-ui/forms`. Related: [stack.md](stack.md), [pending.md](pending.md).
 
 ## 1. Goal
 

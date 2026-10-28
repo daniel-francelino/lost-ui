@@ -298,13 +298,14 @@ const SidebarRail = React.forwardRef<HTMLButtonElement, React.ComponentProps<"bu
 );
 SidebarRail.displayName = "SidebarRail";
 
-const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<"main">>(
+/** A `div`, not a `main`: the page puts its own `main` inside, and a page has only one. */
+const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
   ({ className, ...props }, ref) => {
     return (
-      <main
+      <div
         ref={ref}
         className={cn(
-          "relative flex w-full flex-1 flex-col bg-background",
+          "relative flex w-full min-w-0 flex-1 flex-col bg-background",
           "md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
           className,
         )}

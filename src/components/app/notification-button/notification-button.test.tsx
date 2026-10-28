@@ -1,7 +1,7 @@
 import { composeStories } from "@storybook/react-vite";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import * as stories from "./notification-button.stories";
 
@@ -27,8 +27,8 @@ describe("NotificationButton", () => {
 
   it("calls onClick", async () => {
     const user = userEvent.setup();
-    const onClick = Playground.args.onClick as ReturnType<typeof import("vitest").vi.fn>;
-    render(<Playground />);
+    const onClick = vi.fn();
+    render(<Playground onClick={onClick} />);
     await user.click(screen.getByRole("button", { name: "Notifications" }));
     expect(onClick).toHaveBeenCalledOnce();
   });
