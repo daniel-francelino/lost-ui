@@ -94,6 +94,10 @@ Every component has a folder with the component, its stories and its tests (`<na
 - [docs/forms.md](docs/forms.md), [docs/charts.md](docs/charts.md), [docs/i18n.md](docs/i18n.md), [docs/notifications.md](docs/notifications.md)
 - [skills/lost-ui](skills/lost-ui/SKILL.md): Claude Code skill to build screens with the library in an app
 
+## License
+
+[MIT](LICENSE). The code imported from other projects keeps its own licence, see [docs/THIRD_PARTY_NOTICES.md](docs/THIRD_PARTY_NOTICES.md).
+
 ## Credits
 
 Built on [shadcn/ui](https://ui.shadcn.com), [Radix UI](https://www.radix-ui.com), [Magic UI](https://magicui.design), [Recharts](https://recharts.org) and [Motion](https://motion.dev); the element and data components follow [Nuxt UI](https://ui.nuxt.com). Details in [docs/THIRD_PARTY_NOTICES.md](docs/THIRD_PARTY_NOTICES.md).
