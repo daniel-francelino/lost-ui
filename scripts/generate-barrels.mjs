@@ -36,12 +36,12 @@ const standalone = {
   ]),
 };
 
+// the layers of `src/components`; `templates` (pages and layouts) lives beside it in `src/templates`
+const dir = (layer) => (layer === "templates" ? "src/templates" : `src/components/${layer}`);
+
 function folders(layer) {
-  return readdirSync(`src/components/${layer}`, { withFileTypes: true })
-    .filter(
-      (entry) =>
-        entry.isDirectory() && existsSync(`src/components/${layer}/${entry.name}/index.ts`),
-    )
+  return readdirSync(dir(layer), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && existsSync(`${dir(layer)}/${entry.name}/index.ts`))
     .map((entry) => entry.name)
     .sort();
 }
@@ -50,7 +50,7 @@ function writeBarrel(layer) {
   const lines = folders(layer)
     .filter((name) => !standalone[layer].has(name))
     .map((name) => `export * from "./${name}";`);
-  writeFileSync(`src/components/${layer}/index.ts`, `${lines.join("\n")}\n`);
+  writeFileSync(`${dir(layer)}/index.ts`, `${lines.join("\n")}\n`);
   return lines.length;
 }
 

@@ -7,14 +7,14 @@ const root = import.meta.dirname;
 const sourceFile = /\.tsx?$/;
 
 function componentEntries(layer: string): Record<string, string> {
-  const layerDir = resolve(root, "src/components", layer);
+  const layerDir = resolve(root, layer === "templates" ? "src" : "src/components", layer);
   return Object.fromEntries(
     readdirSync(layerDir, { withFileTypes: true })
       .filter(
         (entry) => entry.isDirectory() && existsSync(resolve(layerDir, entry.name, "index.ts")),
       )
       .map((entry) => [
-        `components/${layer}/${entry.name}/index`,
+        `${layer === "templates" ? "" : "components/"}${layer}/${entry.name}/index`,
         resolve(layerDir, entry.name, "index.ts"),
       ]),
   );
@@ -46,7 +46,7 @@ export default defineConfig({
         "components/app/index": resolve(root, "src/components/app/index.ts"),
         "components/charts/index": resolve(root, "src/components/charts/index.ts"),
         "components/forms/index": resolve(root, "src/components/forms/index.ts"),
-        "components/templates/index": resolve(root, "src/components/templates/index.ts"),
+        "templates/index": resolve(root, "src/templates/index.ts"),
         "components/data/index": resolve(root, "src/components/data/index.ts"),
         ...componentEntries("effects"),
         ...componentEntries("ui"),

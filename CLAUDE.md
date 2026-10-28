@@ -17,6 +17,7 @@ Components live in `src/components/`, split by theme (see `docs/structure.md`). 
 - `elements/`: small Nuxt UI style pieces built on the primitives (`Kbd`, `Chip`, `AvatarGroup`, `ButtonGroup`, `ProgressGroup`, `Link`, `Stepper`, `Modal`, `Slideover`).
 - `app/`: the frame of an app (`AppShell`, `AppSidebar`, `AppTopbar`, `BottomNav`, `UserMenu`, `SpaceSwitcher`, `NotificationButton`, `Header`, `Footer`, `Main`, `Container`, `ErrorPage`, `Banner`, `Theme`, `App`, and the `Sidebar` primitive).
 - `forms/` (fields validated like Quasar's QForm and the `FormBuilder`, see `docs/forms.md`), `data/` (`DataTable`, `Empty`, `Timeline`, `TreeView`, `UserInfo`, see `docs/nuxt-components.md`), `charts/` (see `docs/charts.md`) and `effects/` (landing-page effects).
+- `src/templates/` (outside `components`): pages and layouts reused between projects (`LoginPage`, `BackofficeLayout`, `NotificationsPage`, `SettingsLayout`…). A template is a screen or the frame of one; anything smaller is a component. See `docs/structure.md`.
 - `ai-chat/`, `editor/`, `calendar/`: reserved for the AI chat screen, the Notion-like editor and the Google Calendar-like screen. Empty until they are built.
 
 A folder is a layer only when it has component folders with an `index.ts`; the layers are listed in `scripts/generate-barrels.mjs` and `vite.config.ts`. Texts the components bring come from `src/i18n/` (en, es, pt, see `docs/i18n.md`): never hard-code a visible or screen-reader string, add the key to the three locales and read it with `useLostTranslation`:

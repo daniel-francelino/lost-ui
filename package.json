@@ -49,12 +49,12 @@
       "import": "./dist/components/app/*/index.js"
     },
     "./templates": {
-      "types": "./dist/components/templates/index.d.ts",
-      "import": "./dist/components/templates/index.js"
+      "types": "./dist/templates/index.d.ts",
+      "import": "./dist/templates/index.js"
     },
     "./templates/*": {
-      "types": "./dist/components/templates/*/index.d.ts",
-      "import": "./dist/components/templates/*/index.js"
+      "types": "./dist/templates/*/index.d.ts",
+      "import": "./dist/templates/*/index.js"
     },
     "./lib/cn": {
       "types": "./dist/lib/cn.d.ts",
