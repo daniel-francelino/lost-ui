@@ -9,7 +9,8 @@
   "files": [
     "dist",
     "styles",
-    "docs/THIRD_PARTY_NOTICES.md"
+    "docs/THIRD_PARTY_NOTICES.md",
+    "skills"
   ],
   "exports": {
     ".": {

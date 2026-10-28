@@ -9,6 +9,7 @@ Shared component library for **aura-creative** and **memoria-print**.
 | [effects-inventory.md](effects-inventory.md)       | All 79 effect components, import path and optional peer                        | Generated                       |
 | [charts.md](charts.md)                             | Chart types research, library decision, layout of `src/components/charts`      | Imported                        |
 | [structure.md](structure.md)                       | Folders of `src/components`, where a component goes, the app layout components | Implemented                     |
+| [skills/lost-ui](../skills/lost-ui/SKILL.md)       | Claude Code skill to build screens with the library in an app                  | Implemented                     |
 | [forms.md](forms.md)                               | QForm-style validation, the 26 form components and FormBuilder                 | Implemented                     |
 | [nuxt-components.md](nuxt-components.md)           | Data, Element and Navigation components of Nuxt UI, and the DataTable          | Implemented                     |
 | [i18n.md](i18n.md)                                 | Languages (en, es, pt), the provider, adding texts and languages               | Implemented                     |
