@@ -1,0 +1,50 @@
+/** A date as a `Date` or as an ISO string (`"2026-10-28T14:00:00"`). */
+export type CalendarDate = Date | string;
+
+export type CalendarEvent = {
+  id: string;
+  title: string;
+  start: CalendarDate;
+  /** Where it ends. A day-long event ends the same day or on its last day. */
+  end: CalendarDate;
+  /** Day-long: drawn in the all-day row and as a chip in the month, with no time. */
+  allDay?: boolean;
+  /** The calendar the event belongs to; it gives the colour when the event has none. */
+  calendarId?: string;
+  /** Any CSS colour or token, e.g. `"var(--info)"`. */
+  color?: string;
+  location?: string;
+  description?: string;
+};
+
+/** A calendar the user can show or hide: "Work", "Personal". */
+export type CalendarSource = {
+  id: string;
+  name: string;
+  color?: string;
+  /** Defaults to true. */
+  visible?: boolean;
+};
+
+export type CalendarViewName = "month" | "week" | "day";
+
+/** What the user picked to create: a time range, or whole days. */
+export type CalendarRange = { start: Date; end: Date; allDay: boolean };
+
+/** An event with its dates as `Date`s, as the views use it. */
+export type NormalizedEvent = Omit<CalendarEvent, "start" | "end"> & { start: Date; end: Date };
+
+/** An event of a time grid, with where it sits in the day and in its column. */
+export type PositionedEvent = {
+  event: NormalizedEvent;
+  /** Minutes from the start of the day. */
+  top: number;
+  /** Minutes it lasts, at least 15. */
+  height: number;
+  /** 0 to 1: how far from the left of the day column it starts. */
+  left: number;
+  /** 0 to 1: how much of the width of the day column it takes. */
+  width: number;
+};
+
+export type WeekStart = 0 | 1 | 2 | 3 | 4 | 5 | 6;
