@@ -65,25 +65,27 @@ export function RichTextEditor({
   className,
   ref,
 }: RichTextEditorProps) {
-  const { t } = useLostTranslation();
+  const { t, language } = useLostTranslation();
   const picker = useRef<HTMLInputElement>(null);
   const last = useRef(value ?? defaultValue);
   const onChange = useRef(onValueChange);
   onChange.current = onValueChange;
   const textPlaceholder = placeholder ?? t("editor.placeholder");
 
+  const blocksKey = blocks?.join(",") ?? "";
+  const canUpload = Boolean(onUploadImage);
   const extensions = useMemo(
     () =>
       createEditorExtensions({
         placeholder: textPlaceholder,
         slashItems: createSlashItems(t, {
-          blocks,
-          onImage: onUploadImage ? () => picker.current?.click() : undefined,
+          blocks: blocksKey ? (blocksKey.split(",") as EditorBlock[]) : undefined,
+          onImage: canUpload ? () => picker.current?.click() : undefined,
         }),
       }),
-    // the slash items follow the language and the options; `t` changes with the language
+    // the slash items follow the language and the options, not the identity of `t` or of the array
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [textPlaceholder, t, blocks, Boolean(onUploadImage)],
+    [textPlaceholder, language, blocksKey, canUpload],
   );
 
   const editor = useEditor(
@@ -117,7 +119,7 @@ export function RichTextEditor({
   }, [editor, value]);
 
   useEffect(() => {
-    editor?.setEditable(editable);
+    editor?.setEditable(editable, false);
   }, [editor, editable]);
 
   useImperativeHandle(

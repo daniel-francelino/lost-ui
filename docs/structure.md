@@ -11,7 +11,7 @@ src/
     charts/      Recharts wrapper and data-driven charts
     effects/     landing-page effects (Magic UI)
     ai-chat/     the pieces of an AI chat: messages, prompt, reasoning, tool calls (see ai-chat.md)
-    editor/      reserved: Notion-like editor
+    editor/      the Notion-style block editor on Tiptap (see editor.md)
     calendar/    reserved: Google Calendar-like screen
   templates/     pages and layouts the apps reuse, by category: auth, errors, backoffice, ai-chat (see below)
   i18n/          languages (en, es, pt), provider, hooks

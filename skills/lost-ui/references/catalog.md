@@ -26,6 +26,12 @@ the pieces of an AI chat screen. No SDK needed: messages have the shape of the V
 
 `chat-attachment`, `chat-message`, `chat-messages`, `chat-palette`, `chat-parts`, `chat-prompt`, `chat-prompt-submit`, `chat-reasoning`, `chat-shimmer`, `chat-suggestions`, `chat-tool`
 
+## editor (`@danielsoaresf/lost-ui/editor`)
+
+a Notion-style block editor on Tiptap (`/` menu, selection toolbar, block handle, tables, tasks, callouts, toggles). Needs the Tiptap peers; see `references/editor.md`.
+
+`editor-block-handle`, `editor-bubble-menu`, `editor-slash-menu`, `editor-table-bar`, `rich-text-editor`
+
 ## forms (`@danielsoaresf/lost-ui/forms`)
 
 `form-input-date`, `form-pin-input`, `form-input-phone`, `form-country-select`, `form-emoji-picker` and `form-builder` need optional peers and are imported by path.

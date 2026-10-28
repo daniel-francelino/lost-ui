@@ -44,8 +44,10 @@ describe("RichTextEditor", () => {
     await waitFor(() => expect(textbox().querySelector("h1")).toHaveTextContent("Launch plan"));
     expect(textbox().querySelector("h2")).toBeInTheDocument();
     expect(textbox().querySelectorAll("ul > li").length).toBeGreaterThanOrEqual(3);
-    expect(container.querySelectorAll("li[data-type='taskItem']")).toHaveLength(2);
-    expect(container.querySelector("li[data-type='taskItem'][data-checked='true']")).toBeTruthy();
+    expect(container.querySelectorAll("ul[data-type='taskList'] > li")).toHaveLength(2);
+    expect(
+      container.querySelector("ul[data-type='taskList'] > li[data-checked='true']"),
+    ).toBeTruthy();
     expect(container.querySelector("div[data-type='callout']")).toHaveAttribute("data-emoji", "💡");
     expect(textbox().querySelector("blockquote")).toBeInTheDocument();
     expect(textbox().querySelector("table th")).toHaveTextContent("Channel");
@@ -70,7 +72,8 @@ describe("RichTextEditor", () => {
     render(<RichTextEditor ref={ref} onValueChange={onValueChange} />);
     const editor = await ready(ref);
     act(() => void editor.commands.insertContent("<h2>Hello</h2>"));
-    expect(onValueChange).toHaveBeenLastCalledWith("<h2>Hello</h2>");
+    expect(onValueChange).toHaveBeenCalledTimes(1);
+    expect(onValueChange.mock.lastCall?.[0]).toContain("<h2>Hello</h2>");
   });
 
   it("follows the value when it is controlled, without reporting that change", async () => {

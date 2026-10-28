@@ -19,7 +19,8 @@ Components live in `src/components/`, split by theme (see `docs/structure.md`). 
 - `forms/` (fields validated like Quasar's QForm and the `FormBuilder`, see `docs/forms.md`), `data/` (`DataTable`, `Empty`, `Timeline`, `TreeView`, `UserInfo`, see `docs/nuxt-components.md`), `charts/` (see `docs/charts.md`) and `effects/` (landing-page effects).
 - `src/templates/` (outside `components`): pages and layouts reused between projects, in a folder per category (`auth/`, `errors/`, `backoffice/`, `ai-chat/`; later `marketing/`, `ecommerce/`, `landing-page/`…): `src/templates/<category>/<page>/` (`LoginPage`, `BackofficeLayout`, `NotificationsPage`, `SettingsLayout`…). A template is a screen or the frame of one; anything smaller is a component. See `docs/structure.md`.
 - `ai-chat/` (`ChatMessages`, `ChatMessage`, `ChatPrompt`, `ChatPromptSubmit`, `ChatReasoning`, `ChatTool`, `ChatShimmer`, `ChatPalette`, `ChatSuggestions`, `ChatAttachment`, and `chat-parts` with the message types; see `docs/ai-chat.md`): the pieces of an AI chat screen, no SDK needed.
-- `editor/`, `calendar/`: reserved for the Notion-like editor (next, see `docs/pending.md`) and the Google Calendar-like screen. Empty until they are built.
+- `editor/` (`RichTextEditor`, `EditorSlashMenu`, `EditorBubbleMenu`, `EditorBlockHandle`, `EditorTableBar`; see `docs/editor.md`): the Notion-style block editor on Tiptap. Its peers are optional.
+- `calendar/`: reserved for the Google Calendar-like screen. Empty until it is built.
 
 A folder is a layer only when it has component folders with an `index.ts`; the layers are listed in `scripts/generate-barrels.mjs` and `vite.config.ts`. Texts the components bring come from `src/i18n/` (en, es, pt, see `docs/i18n.md`): never hard-code a visible or screen-reader string, add the key to the three locales and read it with `useLostTranslation`:
 
