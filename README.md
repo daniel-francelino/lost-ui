@@ -6,32 +6,36 @@ It has the primitives, Nuxt UI style pieces, the frame of an internal app (sideb
 
 ## What is inside
 
-| Layer       | Import                                | What it is                                                                                    |
-| ----------- | ------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `ui`        | `lost-ui/ui`                          | shadcn primitives (button, dialog, select…)                                                   |
-| `elements`  | `lost-ui/elements`                    | small pieces: `Kbd`, `Chip`, `AvatarGroup`, `Stepper`, `Modal`, `Slideover`, `PageTransition` |
-| `app`       | `lost-ui/app`                         | frame of an app: `AppShell`, `AppSidebar`, `AppTopbar`, `BottomNav`, `UserMenu`, `ErrorPage`  |
-| `forms`     | `lost-ui/forms`                       | fields validated by `rules` (like Quasar's QForm) and `FormBuilder`                           |
-| `data`      | `lost-ui/data`                        | `DataTable`, `Empty`, `Timeline`, `TreeView`, `UserInfo`                                      |
-| `charts`    | `lost-ui/charts`                      | data-driven charts on Recharts                                                                |
-| `effects`   | `lost-ui/effects`                     | landing-page effects (Magic UI)                                                               |
-| `templates` | `lost-ui/templates/<category>/<page>` | whole pages and layouts, by category: `auth`, `errors`, `backoffice`                          |
-| `i18n`      | `lost-ui/i18n`                        | provider and hooks for en, es and pt                                                          |
+| Layer       | Import                                               | What it is                                                                                    |
+| ----------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `ui`        | `@danielsoaresf/lost-ui/ui`                          | shadcn primitives (button, dialog, select…)                                                   |
+| `elements`  | `@danielsoaresf/lost-ui/elements`                    | small pieces: `Kbd`, `Chip`, `AvatarGroup`, `Stepper`, `Modal`, `Slideover`, `PageTransition` |
+| `app`       | `@danielsoaresf/lost-ui/app`                         | frame of an app: `AppShell`, `AppSidebar`, `AppTopbar`, `BottomNav`, `UserMenu`, `ErrorPage`  |
+| `forms`     | `@danielsoaresf/lost-ui/forms`                       | fields validated by `rules` (like Quasar's QForm) and `FormBuilder`                           |
+| `data`      | `@danielsoaresf/lost-ui/data`                        | `DataTable`, `Empty`, `Timeline`, `TreeView`, `UserInfo`                                      |
+| `charts`    | `@danielsoaresf/lost-ui/charts`                      | data-driven charts on Recharts                                                                |
+| `effects`   | `@danielsoaresf/lost-ui/effects`                     | landing-page effects (Magic UI)                                                               |
+| `templates` | `@danielsoaresf/lost-ui/templates/<category>/<page>` | whole pages and layouts, by category: `auth`, `errors`, `backoffice`                          |
+| `i18n`      | `@danielsoaresf/lost-ui/i18n`                        | provider and hooks for en, es and pt                                                          |
 
 A **component** is a piece you place in a screen. A **template** is the screen, or the frame of one, and the app only gives it props and handlers. See [docs/structure.md](docs/structure.md).
 
 ## Install
 
-The package is not on npm yet. To try it in an app, build it and install the tarball:
+```bash
+npm i @danielsoaresf/lost-ui
+```
+
+To try a local build before publishing, install the tarball instead:
 
 ```bash
 # in lost-ui
 npm install
 npm run build
-npm pack                               # lost-ui-0.1.0.tgz
+npm pack                               # danielsoaresf-lost-ui-0.1.0.tgz
 
 # in the app
-npm i ../lost-ui/lost-ui-0.1.0.tgz
+npm i ../lost-ui/danielsoaresf-lost-ui-0.1.0.tgz
 ```
 
 Required peers: `react`, `react-dom`, `tailwindcss`, `tw-animate-css` and `motion`. The others (`recharts`, `sonner`, `cmdk`, `react-hook-form`…) are optional and only needed by the components that use them; the list is in [skills/lost-ui/references/setup.md](skills/lost-ui/references/setup.md).
@@ -42,8 +46,8 @@ Styles, in the CSS of the app:
 
 ```css
 @import "tailwindcss";
-@import "lost-ui/styles.css"; /* token mapping, no brand values */
-@import "lost-ui/theme-neutral.css"; /* optional default values */
+@import "@danielsoaresf/lost-ui/styles.css"; /* token mapping, no brand values */
+@import "@danielsoaresf/lost-ui/theme-neutral.css"; /* optional default values */
 ```
 
 The app defines the values of the theme tokens (`--background`, `--primary`, `--radius`…). Dark mode is the `.dark` class on an ancestor.
@@ -51,8 +55,8 @@ The app defines the values of the theme tokens (`--background`, `--primary`, `--
 Wrap the app once and use the components:
 
 ```tsx
-import { App } from "lost-ui/app/app"; // needs sonner
-import { LoginPage } from "lost-ui/templates";
+import { App } from "@danielsoaresf/lost-ui/app/app"; // needs sonner
+import { LoginPage } from "@danielsoaresf/lost-ui/templates";
 
 export function Login() {
   return (

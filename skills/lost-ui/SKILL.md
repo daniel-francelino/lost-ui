@@ -12,7 +12,7 @@ description: Build UIs with lost-ui, the shared React 19 + Tailwind v4 component
 Before the first change in an app, check (do not assume):
 
 1. `lost-ui` is in the app's `package.json`, and which of its optional peers are installed (`react-day-picker`, `input-otp`, `libphonenumber-js`, `country-flag-icons`, `emoji-picker-react`, `sonner`, `cmdk`, `vaul`, `recharts`, `react-hook-form`, `react-resizable-panels`, `embla-carousel-react`). A component that needs a peer the app lacks needs that peer installed, not a replacement.
-2. The app's stylesheet imports `lost-ui/styles.css` and defines the tokens (see [setup](references/setup.md)).
+2. The app's stylesheet imports `@danielsoaresf/lost-ui/styles.css` and defines the tokens (see [setup](references/setup.md)).
 3. Which router the app uses, so you can write `renderLink`, and where its auth/permission helpers are.
 
 ## Principles
@@ -27,12 +27,12 @@ Before the first change in an app, check (do not assume):
 
 Short form; the full list with wrong/right pairs is in [guidelines](references/guidelines.md).
 
-- Wrap the app once in `App` (`lost-ui/app/app`) or `LostI18nProvider` + `Toaster`.
+- Wrap the app once in `App` (`@danielsoaresf/lost-ui/app/app`) or `LostI18nProvider` + `Toaster`.
 - Forms: `Form` + fields with `rules`; never validate by hand what `rules` covers. Many fields from data: `FormBuilder`.
 - Links: pass `renderLink` and the router `pathname` to navigation components.
 - Permissions: mark items `hidden` or pass `allow`; do not fork the sidebar.
 - Texts: the library brings en/es/pt; the app's own texts go in `registerMessages`. A prop always beats the translation.
-- Components with an optional peer are imported **by path** (`lost-ui/forms/form-input-date`, `lost-ui/ui/sonner`, `lost-ui/app/app`…), not from the layer entry.
+- Components with an optional peer are imported **by path** (`@danielsoaresf/lost-ui/forms/form-input-date`, `@danielsoaresf/lost-ui/ui/sonner`, `@danielsoaresf/lost-ui/app/app`…), not from the layer entry.
 - Tables: `DataTable` with `getRowId`, server mode via `total`, `manualSort`, `manualSearch`. Do not hand-roll pagination.
 - Do not add `motion` code for a page or panel swap: `PageTransition` and `AppShell`'s `transitionKey` exist, and animated parts already respect "reduce motion".
 
@@ -69,5 +69,5 @@ Only when the user asks, or when a missing prop would otherwise force a fork. Wo
 ## Limits
 
 - Tested in jsdom: structure and behaviour are proven, layout and pixels are not. Check new screens in the browser or in Storybook.
-- `lost-ui/charts` and `lost-ui/forms` are not re-exported from the root entry (they need optional peers).
+- `@danielsoaresf/lost-ui/charts` and `@danielsoaresf/lost-ui/forms` are not re-exported from the root entry (they need optional peers).
 - Not yet verified inside memoria-print (it uses `@import "tailwindcss" source(none)`): test the Tailwind `@source` there first.

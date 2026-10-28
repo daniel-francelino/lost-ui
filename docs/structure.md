@@ -20,7 +20,7 @@ src/
   test/          Vitest setup
 ```
 
-The public paths do not carry `components`: `lost-ui/ui`, `lost-ui/elements`, `lost-ui/app`, `lost-ui/forms`, `lost-ui/data`, `lost-ui/charts`, `lost-ui/effects`, `lost-ui/i18n`, plus `lost-ui/<layer>/<component>` for one component. The root `lost-ui` exports `ui`, `elements`, `app`, `effects`, `data` and `i18n` (components that need an optional peer are imported by their path).
+The public paths do not carry `components`: `@danielsoaresf/lost-ui/ui`, `@danielsoaresf/lost-ui/elements`, `@danielsoaresf/lost-ui/app`, `@danielsoaresf/lost-ui/forms`, `@danielsoaresf/lost-ui/data`, `@danielsoaresf/lost-ui/charts`, `@danielsoaresf/lost-ui/effects`, `@danielsoaresf/lost-ui/i18n`, plus `@danielsoaresf/lost-ui/<layer>/<component>` for one component. The root `lost-ui` exports `ui`, `elements`, `app`, `effects`, `data` and `i18n` (components that need an optional peer are imported by their path).
 
 ## Templates
 
@@ -36,7 +36,7 @@ The public paths do not carry `components`: `lost-ui/ui`, `lost-ui/elements`, `l
 
 The small pieces they use are components, in `components/app`: `NotificationItem`, `NotificationPreferences`, `SettingsSection`, `PageHeader`. Helpers shared by the templates (`useSubmit`, `SubmitButton`, `FormError`…) are in `templates/lib`.
 
-Rules for a template: router-agnostic (`renderLink`), no data fetching (it receives items and calls handlers; a handler returns a text to show it as the error), texts from `i18n`, and it imports components, never the other way round. The public path is `lost-ui/templates` (everything) or `lost-ui/templates/<category>/<page>` (one page).
+Rules for a template: router-agnostic (`renderLink`), no data fetching (it receives items and calls handlers; a handler returns a text to show it as the error), texts from `i18n`, and it imports components, never the other way round. The public path is `@danielsoaresf/lost-ui/templates` (everything) or `@danielsoaresf/lost-ui/templates/<category>/<page>` (one page).
 
 A template lives in a **category folder** (`src/templates/<category>/<page>/`), so the folder can grow with `marketing`, `ecommerce`, `landing-page`… Each category has a generated `index.ts`; a new category is just a new folder, then `npm run barrels`. `templates/lib` is not a category (shared helpers).
 

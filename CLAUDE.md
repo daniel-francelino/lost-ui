@@ -40,7 +40,7 @@ The first story of an effect is `Playground` (interactive, drives the controls).
 Anything that belongs only to that component (constants, types, helpers, CSS variables) lives in its folder, not in `src/lib`.
 
 - Import shared code with relative paths: `../../../lib/cn` (from `src/lib`), `../../ui/button` (another layer, which sits next to yours under `src/components`).
-- A component that needs a heavy optional peer (cobe, shiki, react-tweet, cmdk, vaul, react-hook-form…) is added to the `standalone` set of its layer in `scripts/generate-barrels.mjs`, then run `npm run barrels`. Otherwise run `npm run barrels` after adding a folder so `lost-ui/effects`, `lost-ui/ui`, `lost-ui/elements` or `lost-ui/app` exports it.
+- A component that needs a heavy optional peer (cobe, shiki, react-tweet, cmdk, vaul, react-hook-form…) is added to the `standalone` set of its layer in `scripts/generate-barrels.mjs`, then run `npm run barrels`. Otherwise run `npm run barrels` after adding a folder so `@danielsoaresf/lost-ui/effects`, `@danielsoaresf/lost-ui/ui`, `@danielsoaresf/lost-ui/elements` or `@danielsoaresf/lost-ui/app` exports it.
 - Animations and keyframes are prefixed `lost-` (`animate-lost-*`) so they cannot override Tailwind's own.
 - Colours come from theme tokens (`bg-primary`, `var(--effect-from)`), not hex or the raw Tailwind palette. Exceptions are listed in `docs/magic-ui-integration.md`.
 
@@ -58,6 +58,6 @@ Anything that belongs only to that component (constants, types, helpers, CSS var
 ## Do not
 
 - Do not commit or push unless asked.
-- Do not edit `src/index.ts` or the `index.ts` of a layer in `src/components` by hand; they are generated. `charts` and `forms` are not exported from the root entry because they need optional peers; the public paths stay `lost-ui/ui`, `lost-ui/elements`, `lost-ui/app`, `lost-ui/forms`, `lost-ui/data`, `lost-ui/charts` and `lost-ui/effects`.
+- Do not edit `src/index.ts` or the `index.ts` of a layer in `src/components` by hand; they are generated. `charts` and `forms` are not exported from the root entry because they need optional peers; the public paths stay `@danielsoaresf/lost-ui/ui`, `@danielsoaresf/lost-ui/elements`, `@danielsoaresf/lost-ui/app`, `@danielsoaresf/lost-ui/forms`, `@danielsoaresf/lost-ui/data`, `@danielsoaresf/lost-ui/charts` and `@danielsoaresf/lost-ui/effects`.
 - Do not write a shell one-liner with backslashes or regexes (`node -e`, `sed`): the shell strips them. Use the Write or Edit tools for files with escapes.
 - Do not copy app-specific code into `src/components/ui/` (brand tokens, locale, Portuguese strings). Primitives use semantic tokens and English text; the apps pass their own copy.

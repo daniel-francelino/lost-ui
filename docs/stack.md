@@ -38,45 +38,45 @@ Domain-coupled folders (`media`, `notifications`, `calendar`, `metrics`, `previe
 
 ## 3. Decisions
 
-| #   | Decision                   | Choice                                                                                        | Why                                                                                                                                   |
-| --- | -------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| S1  | Language                   | TypeScript 5.9, `strict`, no `any`                                                            | Both apps already forbid `any`/`!`/`as unknown as` in lint; the library must not be the place that breaks it                          |
-| S2  | UI runtime                 | React 19 as **peer** dependency (`^19`)                                                       | Two apps, one React; never bundle it                                                                                                  |
-| S3  | Primitives                 | Radix UI, individual packages, as **dependencies of the library**                             | Apps stop listing ~25 `@radix-ui/*` packages and stop drifting (aura `dialog ^1.3.1` vs memoria `^1.1.15` today)                      |
-| S4  | Variants and class merging | `cva` + `clsx` + `tailwind-merge`, exposed as a single `cn`                                   | Same API the apps already use, so migration is an import swap                                                                         |
-| S5  | Styling                    | Tailwind CSS 4 as **peer** (`^4.2`); the library ships CSS, apps own the Tailwind build       | See section 4                                                                                                                         |
-| S6  | Icons                      | `lucide-react` as peer                                                                        | Version already aligned (`^0.575.0`)                                                                                                  |
-| S7  | Build                      | Vite 8 library mode (JS, ESM only, `preserveModules`) + `tsc --emitDeclarationOnly` for types | Same toolchain as the apps; tree-shakeable output                                                                                     |
-| S8  | Module format              | ESM only, `sideEffects` listing only CSS files, subpath `exports`                             | Both consumers are Vite ESM                                                                                                           |
-| S9  | Docs and playground        | Storybook (`react-vite`) with a11y addon; one story file per component                        | Doubles as visual spec and component documentation                                                                                    |
-| S10 | Tests                      | Vitest + Testing Library; axe checks on interactive components                                | Both apps already use or can use Vitest; keeps one runner                                                                             |
-| S11 | Versioning and release     | Changesets, semver                                                                            | Two consumers need explicit breaking-change signals                                                                                   |
-| S12 | Quality gates              | ESLint 9 flat config, Prettier, Husky + lint-staged, `tsc --noEmit`, same rules as the apps   | A component that passes here must pass in both apps                                                                                   |
-| S13 | Package manager            | **OPEN**                                                                                      | Apps disagree (npm vs bun). Recommendation: **npm**, the lowest common denominator in CI; the published package does not depend on it |
-| S14 | Distribution               | **OPEN**                                                                                      | See section 5. Recommendation: private versioned package                                                                              |
-| S15 | Charts and DnD             | Out of the core entry; separate optional entries (`lost-ui/charts`, `lost-ui/dnd`)            | Versions diverge (recharts 3.10 vs 2.15, motion 14 vs 13, dnd-kit `react` vs `core`). Do not force a migration inside the library     |
+| #   | Decision                   | Choice                                                                                                           | Why                                                                                                                                   |
+| --- | -------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| S1  | Language                   | TypeScript 5.9, `strict`, no `any`                                                                               | Both apps already forbid `any`/`!`/`as unknown as` in lint; the library must not be the place that breaks it                          |
+| S2  | UI runtime                 | React 19 as **peer** dependency (`^19`)                                                                          | Two apps, one React; never bundle it                                                                                                  |
+| S3  | Primitives                 | Radix UI, individual packages, as **dependencies of the library**                                                | Apps stop listing ~25 `@radix-ui/*` packages and stop drifting (aura `dialog ^1.3.1` vs memoria `^1.1.15` today)                      |
+| S4  | Variants and class merging | `cva` + `clsx` + `tailwind-merge`, exposed as a single `cn`                                                      | Same API the apps already use, so migration is an import swap                                                                         |
+| S5  | Styling                    | Tailwind CSS 4 as **peer** (`^4.2`); the library ships CSS, apps own the Tailwind build                          | See section 4                                                                                                                         |
+| S6  | Icons                      | `lucide-react` as peer                                                                                           | Version already aligned (`^0.575.0`)                                                                                                  |
+| S7  | Build                      | Vite 8 library mode (JS, ESM only, `preserveModules`) + `tsc --emitDeclarationOnly` for types                    | Same toolchain as the apps; tree-shakeable output                                                                                     |
+| S8  | Module format              | ESM only, `sideEffects` listing only CSS files, subpath `exports`                                                | Both consumers are Vite ESM                                                                                                           |
+| S9  | Docs and playground        | Storybook (`react-vite`) with a11y addon; one story file per component                                           | Doubles as visual spec and component documentation                                                                                    |
+| S10 | Tests                      | Vitest + Testing Library; axe checks on interactive components                                                   | Both apps already use or can use Vitest; keeps one runner                                                                             |
+| S11 | Versioning and release     | Changesets, semver                                                                                               | Two consumers need explicit breaking-change signals                                                                                   |
+| S12 | Quality gates              | ESLint 9 flat config, Prettier, Husky + lint-staged, `tsc --noEmit`, same rules as the apps                      | A component that passes here must pass in both apps                                                                                   |
+| S13 | Package manager            | **OPEN**                                                                                                         | Apps disagree (npm vs bun). Recommendation: **npm**, the lowest common denominator in CI; the published package does not depend on it |
+| S14 | Distribution               | **OPEN**                                                                                                         | See section 5. Recommendation: private versioned package                                                                              |
+| S15 | Charts and DnD             | Out of the core entry; separate optional entries (`@danielsoaresf/lost-ui/charts`, `@danielsoaresf/lost-ui/dnd`) | Versions diverge (recharts 3.10 vs 2.15, motion 14 vs 13, dnd-kit `react` vs `core`). Do not force a migration inside the library     |
 
 ## 4. Theming contract
 
 This is the part that makes one library serve two brands.
 
-- The library ships `lost-ui/styles.css` containing only the **semantic token mapping** (`@theme inline` entries such as `--color-primary: var(--primary)`, radii derived from `--radius`, font families from `--font-sans` / `--font-display`). It contains **no brand values**.
+- The library ships `@danielsoaresf/lost-ui/styles.css` containing only the **semantic token mapping** (`@theme inline` entries such as `--color-primary: var(--primary)`, radii derived from `--radius`, font families from `--font-sans` / `--font-display`). It contains **no brand values**.
 - Each app defines the **values** (`--background`, `--primary`, `--radius`, fonts, brand palette like `--violet` / `--terracota-escura`) in its own `styles.css`, as it does today.
 - Token names follow the shadcn semantic set already used by both apps, so existing components keep working.
 - Components use semantic classes only (`bg-primary`, `text-muted-foreground`). No hex colors, no raw Tailwind palette (`bg-violet-500`). Both apps already enforce this by hook or lint.
-- An optional `lost-ui/theme-neutral.css` provides default values so Storybook and tests render without an app.
+- An optional `@danielsoaresf/lost-ui/theme-neutral.css` provides default values so Storybook and tests render without an app.
 - Brand-specific fonts (`--font-display`, `--font-hand`) are a token; the library never loads fonts.
 
-**Tailwind scanning.** Tailwind v4 only emits classes it can see. `lost-ui/styles.css` declares `@source "../dist"` itself, relative to the stylesheet, so an app needs only the imports:
+**Tailwind scanning.** Tailwind v4 only emits classes it can see. `@danielsoaresf/lost-ui/styles.css` declares `@source "../dist"` itself, relative to the stylesheet, so an app needs only the imports:
 
 ```css
 @import "tailwindcss";
-@import "lost-ui/styles.css";
-@import "lost-ui/effects.css";
-@import "lost-ui/theme-neutral.css";
+@import "@danielsoaresf/lost-ui/styles.css";
+@import "@danielsoaresf/lost-ui/effects.css";
+@import "@danielsoaresf/lost-ui/theme-neutral.css";
 ```
 
-`theme-neutral.css` is optional: an app that defines its own values for the tokens leaves it out. `effects.css` is needed only when using `lost-ui/effects`. This was verified by installing the packed tarball in an empty project and compiling with `@tailwindcss/cli` 4.3.3: the library's classes and `lost-*` keyframes were emitted. It was **not** yet verified inside memoria-print, which uses `@import "tailwindcss" source(none)`; test it there first.
+`theme-neutral.css` is optional: an app that defines its own values for the tokens leaves it out. `effects.css` is needed only when using `@danielsoaresf/lost-ui/effects`. This was verified by installing the packed tarball in an empty project and compiling with `@tailwindcss/cli` 4.3.3: the library's classes and `lost-*` keyframes were emitted. It was **not** yet verified inside memoria-print, which uses `@import "tailwindcss" source(none)`; test it there first.
 
 **Namespacing.** Animations are prefixed `lost-` (`animate-lost-marquee`, `@keyframes lost-marquee`). The upstream names `pulse` and `ping` would otherwise override Tailwind's built-in `animate-pulse` and `animate-ping`, which both apps use.
 
@@ -113,12 +113,12 @@ The apps are separate repositories (no workspace), so the library cannot be cons
 
 Verified on 2026-10-28: `tsc --noEmit`, `vite build` and Prettier pass; **980 tests in 170 files, all passing** (ui 116, effects 433, charts 178, forms 253); a packed tarball installs in an empty project and its entries import (`lost-ui`, `/ui`, `/effects`, `/charts`, `/forms` and the by-path entries); 585 Storybook stories open in headless Chromium, 4 with console errors that come from third-party images and a video used by Magic UI examples.
 
-| Layer                    | Content                                                                   | Entry                          | Doc                                                |
-| ------------------------ | ------------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------- |
-| `src/components/ui`      | 45 shadcn primitives (one folder each)                                    | `lost-ui`, `lost-ui/ui/<name>` |                                                    |
-| `src/components/effects` | 79 Magic UI components with 170 examples                                  | `lost-ui/effects`              | [magic-ui-integration.md](magic-ui-integration.md) |
-| `src/components/charts`  | Recharts wrapper split into components, 6 data-driven charts, 70 examples | `lost-ui/charts`               | [charts.md](charts.md)                             |
-| `src/components/forms`   | QForm-style `Form`, 19 field components, `FormBuilder`, `rules`           | `lost-ui/forms`                | [forms.md](forms.md)                               |
+| Layer                    | Content                                                                   | Entry                                                        | Doc                                                |
+| ------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| `src/components/ui`      | 45 shadcn primitives (one folder each)                                    | `@danielsoaresf/lost-ui`, `@danielsoaresf/lost-ui/ui/<name>` |                                                    |
+| `src/components/effects` | 79 Magic UI components with 170 examples                                  | `@danielsoaresf/lost-ui/effects`                             | [magic-ui-integration.md](magic-ui-integration.md) |
+| `src/components/charts`  | Recharts wrapper split into components, 6 data-driven charts, 70 examples | `@danielsoaresf/lost-ui/charts`                              | [charts.md](charts.md)                             |
+| `src/components/forms`   | QForm-style `Form`, 19 field components, `FormBuilder`, `rules`           | `@danielsoaresf/lost-ui/forms`                               | [forms.md](forms.md)                               |
 
 Tests run in jsdom: they prove structure, state and behaviour, not layout or pixels. Charts and the first set of effects were also looked at in headless Chromium in a light theme.
 

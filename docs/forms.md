@@ -1,6 +1,6 @@
 # Forms
 
-> **Status: implemented and tested (2026-10-28).** 26 components in `src/components/forms/`, exposed as `lost-ui/forms`. Related: [stack.md](stack.md), [pending.md](pending.md).
+> **Status: implemented and tested (2026-10-28).** 26 components in `src/components/forms/`, exposed as `@danielsoaresf/lost-ui/forms`. Related: [stack.md](stack.md), [pending.md](pending.md).
 
 ## 1. Goal
 
@@ -47,7 +47,7 @@ Differences on purpose: `Form` sets `noValidate` so the browser's own bubbles do
 
 ## 4. Components
 
-Names carry a `Form` prefix so they cannot be confused with the `ui` primitives of the same name (`FormInput` wraps `ui/Input`). Import from `lost-ui/forms`, or by path for the three that need an optional peer.
+Names carry a `Form` prefix so they cannot be confused with the `ui` primitives of the same name (`FormInput` wraps `ui/Input`). Import from `@danielsoaresf/lost-ui/forms`, or by path for the three that need an optional peer.
 
 | Nuxt UI       | Component           | Value                            | Main props                                                                                                                      |
 | ------------- | ------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -87,7 +87,7 @@ Where Nuxt UI is richer, this implementation is smaller: `FormInputTime` uses th
 ## 5. Rules
 
 ```tsx
-import { Form, FormInput, rules } from "lost-ui/forms";
+import { Form, FormInput, rules } from "@danielsoaresf/lost-ui/forms";
 
 <Form onSubmit={(event) => save(new FormData(event.currentTarget))}>
   <FormInput
@@ -116,7 +116,7 @@ Helpers in `rules` (a rule with no message argument writes its message in the cu
 | Files       | `fileSize(bytes)`, `fileType(accept)` for a `File[]`                                          |
 | Combinators | `when(condition, rule)`, `debounce(rule, delay)` for a request that must not fire on each key |
 
-Length, number, date, file and format helpers pass on an empty value, so they combine with `required` instead of repeating it. A phone number is checked with `isValidPhone` from `lost-ui/forms/form-input-phone`.
+Length, number, date, file and format helpers pass on an empty value, so they combine with `required` instead of repeating it. A phone number is checked with `isValidPhone` from `@danielsoaresf/lost-ui/forms/form-input-phone`.
 
 ```tsx
 rules={[
@@ -196,16 +196,16 @@ Any other character is a literal; `` before a slot character makes it a literal.
 
 ## 8. Entries and peers
 
-`lost-ui/forms` exports everything except three components that need an optional peer, imported by path:
+`@danielsoaresf/lost-ui/forms` exports everything except three components that need an optional peer, imported by path:
 
-| Path                                | Needs                                             |
-| ----------------------------------- | ------------------------------------------------- |
-| `lost-ui/forms/form-input-date`     | `react-day-picker`                                |
-| `lost-ui/forms/form-pin-input`      | `input-otp`                                       |
-| `lost-ui/forms/form-input-phone`    | `libphonenumber-js`, `country-flag-icons`         |
-| `lost-ui/forms/form-country-select` | `libphonenumber-js`, `country-flag-icons`         |
-| `lost-ui/forms/form-emoji-picker`   | `emoji-picker-react`                              |
-| `lost-ui/forms/form-builder`        | all of the above (it can render every field kind) |
+| Path                                               | Needs                                             |
+| -------------------------------------------------- | ------------------------------------------------- |
+| `@danielsoaresf/lost-ui/forms/form-input-date`     | `react-day-picker`                                |
+| `@danielsoaresf/lost-ui/forms/form-pin-input`      | `input-otp`                                       |
+| `@danielsoaresf/lost-ui/forms/form-input-phone`    | `libphonenumber-js`, `country-flag-icons`         |
+| `@danielsoaresf/lost-ui/forms/form-country-select` | `libphonenumber-js`, `country-flag-icons`         |
+| `@danielsoaresf/lost-ui/forms/form-emoji-picker`   | `emoji-picker-react`                              |
+| `@danielsoaresf/lost-ui/forms/form-builder`        | all of the above (it can render every field kind) |
 
 All of these peers are optional: an app installs one only when it imports the component that needs it. The country list and calling codes come from `libphonenumber-js` (names from `Intl.DisplayNames`), the flags are SVG from `country-flag-icons` (flag emoji do not render on Windows), and the emoji grid is `emoji-picker-react`.
 

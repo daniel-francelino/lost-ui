@@ -4,7 +4,7 @@
 
 ## 1. Decision
 
-Charts use **Recharts v3** through the **shadcn chart wrapper**, and live in `src/components/charts/`. They are a separate entry point, `lost-ui/charts`, and Recharts is an **optional peer** (`^3.0.0`), so an app that does not draw charts installs and bundles nothing extra. The root `lost-ui` entry does not export them.
+Charts use **Recharts v3** through the **shadcn chart wrapper**, and live in `src/components/charts/`. They are a separate entry point, `@danielsoaresf/lost-ui/charts`, and Recharts is an **optional peer** (`^3.0.0`), so an app that does not draw charts installs and bundles nothing extra. The root `lost-ui` entry does not export them.
 
 ## 2. Research
 
@@ -69,7 +69,7 @@ src/components/charts/
 You pass data and props; the component builds the Recharts tree, the config, the tooltip and the legend.
 
 ```tsx
-import { AreaChart } from "lost-ui/charts";
+import { AreaChart } from "@danielsoaresf/lost-ui/charts";
 
 <AreaChart
   data={visitors}
@@ -115,7 +115,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "lost-ui/charts";
+} from "@danielsoaresf/lost-ui/charts";
 
 const config = { desktop: { label: "Desktop", color: "var(--chart-1)" } } satisfies ChartConfig;
 
@@ -145,5 +145,5 @@ const config = { desktop: { label: "Desktop", color: "var(--chart-1)" } } satisf
 - `tsc --noEmit`, `vite build` and Prettier pass.
 - Every component has stories and tests. The abstract components are tested against the real Recharts DOM (areas, bars, lines, slices, rings, dots, labels, grid, axes, legend order, centre label, config labels). The tests replace `ResponsiveContainer` with a fixed size and pass `animate={false}`, because jsdom does not measure layout and Recharts only draws after measuring; they prove structure and behaviour, not geometry.
 - All 70 examples render through the components and are checked for a `[data-slot="chart"]` and an SVG surface.
-- A packed tarball installs in an empty project: `lost-ui/charts` exports the components and helpers, and the root entry exports none of them.
+- A packed tarball installs in an empty project: `@danielsoaresf/lost-ui/charts` exports the components and helpers, and the root entry exports none of them.
 - Storybook: chart stories open in headless Chromium with no console or page errors. Dark mode was not checked.

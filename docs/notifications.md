@@ -1,6 +1,6 @@
 # Notifications
 
-> **Status: implemented and tested (2026-10-28).** The `Toaster` in `lost-ui/ui/sonner`, on top of [sonner](https://sonner.emilkowal.ski). Related: [stack.md](stack.md), [i18n.md](i18n.md).
+> **Status: implemented and tested (2026-10-28).** The `Toaster` in `@danielsoaresf/lost-ui/ui/sonner`, on top of [sonner](https://sonner.emilkowal.ski). Related: [stack.md](stack.md), [i18n.md](i18n.md).
 
 ## 1. Pattern
 
@@ -19,7 +19,7 @@ Both apps use sonner with the same set-up: `richColors`, a fill colour per kind,
 ## 2. Using it
 
 ```tsx
-import { Toaster, toast } from "lost-ui/ui/sonner";
+import { Toaster, toast } from "@danielsoaresf/lost-ui/ui/sonner";
 
 <Toaster />; // once, near the root
 
