@@ -46,13 +46,14 @@ Anything that belongs only to that component (constants, types, helpers, CSS var
 
 ## Commands
 
-| Command             | Use                                                                             |
-| ------------------- | ------------------------------------------------------------------------------- |
-| `npm test`          | Vitest, all tests                                                               |
-| `npm run typecheck` | `tsc --noEmit`                                                                  |
-| `npm run build`     | library build and declarations                                                  |
-| `npm run storybook` | Storybook on port 6006                                                          |
-| `npm run barrels`   | regenerate `src/index.ts` and the `index.ts` of every layer in `src/components` |
+| Command             | Use                                                                                                      |
+| ------------------- | -------------------------------------------------------------------------------------------------------- |
+| `npm test`          | Vitest, all tests                                                                                        |
+| `npm run typecheck` | `tsc --noEmit`                                                                                           |
+| `npm run build`     | library build and declarations                                                                           |
+| `npm run storybook` | Storybook on port 6006                                                                                   |
+| `npm run skill`     | regenerate the API reference of `skills/lost-ui` (props of every component); run it after changing props |
+| `npm run barrels`   | regenerate `src/index.ts` and the `index.ts` of every layer in `src/components`                          |
 
 ## Do not
 
