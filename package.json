@@ -48,6 +48,14 @@
       "types": "./dist/components/app/*/index.d.ts",
       "import": "./dist/components/app/*/index.js"
     },
+    "./templates": {
+      "types": "./dist/components/templates/index.d.ts",
+      "import": "./dist/components/templates/index.js"
+    },
+    "./templates/*": {
+      "types": "./dist/components/templates/*/index.d.ts",
+      "import": "./dist/components/templates/*/index.js"
+    },
     "./lib/cn": {
       "types": "./dist/lib/cn.d.ts",
       "import": "./dist/lib/cn.js"

@@ -11,6 +11,7 @@ export * from "./footer-columns";
 export * from "./header";
 export * from "./main";
 export * from "./notification-button";
+export * from "./page-header";
 export * from "./sidebar";
 export * from "./space-switcher";
 export * from "./theme";

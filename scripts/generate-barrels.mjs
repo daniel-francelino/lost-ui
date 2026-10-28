@@ -22,6 +22,7 @@ const standalone = {
     "form-builder",
   ]),
   elements: new Set(),
+  templates: new Set(),
   app: new Set(["app"]),
   ui: new Set([
     "calendar",
@@ -57,6 +58,7 @@ const effects = writeBarrel("effects");
 const ui = writeBarrel("ui");
 const elements = writeBarrel("elements");
 const app = writeBarrel("app");
+const templates = writeBarrel("templates");
 const charts = writeBarrel("charts");
 const forms = writeBarrel("forms");
 const data = writeBarrel("data");
@@ -75,5 +77,5 @@ writeFileSync(
   ].join("\n"),
 );
 console.log(
-  `app: ${app}; elements: ${elements}; charts: ${charts}; forms: ${forms}; data: ${data}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
+  `templates: ${templates}; app: ${app}; elements: ${elements}; charts: ${charts}; forms: ${forms}; data: ${data}; effects: ${effects} in barrel, ${standalone.effects.size} standalone; ui: ${ui} in barrel, ${standalone.ui.size} standalone`,
 );

@@ -9,6 +9,7 @@ export * from "./form-input";
 export * from "./form-input-menu";
 export * from "./form-input-money";
 export * from "./form-input-number";
+export * from "./form-input-password";
 export * from "./form-input-rating";
 export * from "./form-input-tags";
 export * from "./form-input-time";
