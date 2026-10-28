@@ -4,6 +4,7 @@ export * from "./chip";
 export * from "./kbd";
 export * from "./link";
 export * from "./modal";
+export * from "./page-transition";
 export * from "./progress-group";
 export * from "./slideover";
 export * from "./stepper";

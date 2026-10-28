@@ -1,4 +1,5 @@
 import { BellOffIcon, LoaderCircleIcon, TriangleAlertIcon } from "lucide-react";
+import { AnimatePresence, MotionConfig } from "motion/react";
 import { useMemo, type ReactNode } from "react";
 
 import { useLostTranslation } from "../../i18n/use-lost-translation";
@@ -125,104 +126,111 @@ export function NotificationsPage({
         : t("notificationsPage.emptyAll");
 
   return (
-    <div data-slot="notifications-page" className={cn("space-y-6", className)}>
-      <PageHeader
-        title={title ?? t("notificationsPage.title")}
-        description={
-          unreadCount === undefined
-            ? undefined
-            : unread === 0
-              ? t("notificationsPage.caughtUp")
-              : t("notificationsPage.unreadCount", { count: unread })
-        }
-        actions={
-          unread > 0 && onReadAll ? (
-            <Button variant="outline" onClick={onReadAll}>
-              {t("notificationsPage.markAllRead")}
-            </Button>
-          ) : undefined
-        }
-      />
+    <MotionConfig reducedMotion="user">
+      <div data-slot="notifications-page" className={cn("space-y-6", className)}>
+        <PageHeader
+          title={title ?? t("notificationsPage.title")}
+          description={
+            unreadCount === undefined
+              ? undefined
+              : unread === 0
+                ? t("notificationsPage.caughtUp")
+                : t("notificationsPage.unreadCount", { count: unread })
+          }
+          actions={
+            unread > 0 && onReadAll ? (
+              <Button variant="outline" onClick={onReadAll}>
+                {t("notificationsPage.markAllRead")}
+              </Button>
+            ) : undefined
+          }
+        />
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as NotificationFilter)}>
-          <TabsList>
-            <TabsTrigger value="all">{t("notificationsPage.tabAll")}</TabsTrigger>
-            <TabsTrigger value="unread">{t("notificationsPage.tabUnread")}</TabsTrigger>
-            {snoozeFilter && (
-              <TabsTrigger value="snoozed">{t("notificationsPage.tabSnoozed")}</TabsTrigger>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Tabs value={filter} onValueChange={(value) => setFilter(value as NotificationFilter)}>
+            <TabsList>
+              <TabsTrigger value="all">{t("notificationsPage.tabAll")}</TabsTrigger>
+              <TabsTrigger value="unread">{t("notificationsPage.tabUnread")}</TabsTrigger>
+              {snoozeFilter && (
+                <TabsTrigger value="snoozed">{t("notificationsPage.tabSnoozed")}</TabsTrigger>
+              )}
+            </TabsList>
+          </Tabs>
+          {kinds.length > 1 && (
+            <Select value={kind} onValueChange={setKind}>
+              <SelectTrigger
+                className="w-full sm:w-56"
+                aria-label={t("notificationsPage.kindLabel")}
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={ALL_KINDS}>{t("notificationsPage.allKinds")}</SelectItem>
+                {kinds.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+
+        {loading ? (
+          <div role="status" aria-busy="true" className="space-y-2">
+            <span className="sr-only">{t("common.loading")}</span>
+            {[0, 1, 2, 3].map((row) => (
+              <div key={row} className="h-20 animate-pulse rounded-lg bg-muted" />
+            ))}
+          </div>
+        ) : error ? (
+          <Empty
+            icon={<TriangleAlertIcon />}
+            title={t("notificationsPage.loadError")}
+            description={
+              typeof error === "string" ? error : t("notificationsPage.loadErrorDescription")
+            }
+            actions={onRetry ? [{ label: t("errorPage.tryAgain"), onClick: onRetry }] : undefined}
+          />
+        ) : notifications.length === 0 ? (
+          <Empty
+            icon={<BellOffIcon />}
+            title={emptyTitle}
+            description={emptyDescription ?? t("notificationsPage.emptyDescription")}
+          />
+        ) : (
+          <>
+            {groups.map((group) => (
+              <section key={group.key} aria-label={group.text}>
+                <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  {group.text}
+                </h2>
+                <ul className="space-y-2">
+                  <AnimatePresence initial={false}>
+                    {group.items.map((item) => (
+                      <NotificationItem
+                        key={item.id}
+                        notification={item}
+                        onOpen={onOpen}
+                        onRead={onRead}
+                        onSnooze={onSnooze}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </ul>
+              </section>
+            ))}
+            {hasMore && onLoadMore && (
+              <div className="text-center">
+                <Button variant="outline" disabled={loadingMore} onClick={onLoadMore}>
+                  {loadingMore && <LoaderCircleIcon aria-hidden="true" className="animate-spin" />}
+                  {t("notificationsPage.loadMore")}
+                </Button>
+              </div>
             )}
-          </TabsList>
-        </Tabs>
-        {kinds.length > 1 && (
-          <Select value={kind} onValueChange={setKind}>
-            <SelectTrigger className="w-full sm:w-56" aria-label={t("notificationsPage.kindLabel")}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={ALL_KINDS}>{t("notificationsPage.allKinds")}</SelectItem>
-              {kinds.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          </>
         )}
       </div>
-
-      {loading ? (
-        <div role="status" aria-busy="true" className="space-y-2">
-          <span className="sr-only">{t("common.loading")}</span>
-          {[0, 1, 2, 3].map((row) => (
-            <div key={row} className="h-20 animate-pulse rounded-lg bg-muted" />
-          ))}
-        </div>
-      ) : error ? (
-        <Empty
-          icon={<TriangleAlertIcon />}
-          title={t("notificationsPage.loadError")}
-          description={
-            typeof error === "string" ? error : t("notificationsPage.loadErrorDescription")
-          }
-          actions={onRetry ? [{ label: t("errorPage.tryAgain"), onClick: onRetry }] : undefined}
-        />
-      ) : notifications.length === 0 ? (
-        <Empty
-          icon={<BellOffIcon />}
-          title={emptyTitle}
-          description={emptyDescription ?? t("notificationsPage.emptyDescription")}
-        />
-      ) : (
-        <>
-          {groups.map((group) => (
-            <section key={group.key} aria-label={group.text}>
-              <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                {group.text}
-              </h2>
-              <ul className="space-y-2">
-                {group.items.map((item) => (
-                  <NotificationItem
-                    key={item.id}
-                    notification={item}
-                    onOpen={onOpen}
-                    onRead={onRead}
-                    onSnooze={onSnooze}
-                  />
-                ))}
-              </ul>
-            </section>
-          ))}
-          {hasMore && onLoadMore && (
-            <div className="text-center">
-              <Button variant="outline" disabled={loadingMore} onClick={onLoadMore}>
-                {loadingMore && <LoaderCircleIcon aria-hidden="true" className="animate-spin" />}
-                {t("notificationsPage.loadMore")}
-              </Button>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+    </MotionConfig>
   );
 }

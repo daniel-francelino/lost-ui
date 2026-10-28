@@ -75,6 +75,23 @@ describe("BottomNav", () => {
     expect(screen.getByRole("button", { name: "Inbox" })).toHaveAttribute("aria-pressed", "false");
   });
 
+  it("draws one indicator, on the active destination", () => {
+    const { container } = render(<Playground />);
+    const indicators = container.querySelectorAll("[data-slot='bottom-nav-indicator']");
+    expect(indicators).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "Home" })).toContainElement(
+      indicators[0] as HTMLElement,
+    );
+  });
+
+  it("moves the indicator with the tabs of the page", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<ContextTabs />);
+    await user.click(screen.getByRole("button", { name: "Sent" }));
+    const indicator = container.querySelector("[data-slot='bottom-nav-indicator']");
+    expect(screen.getByRole("button", { name: "Sent" })).toContainElement(indicator as HTMLElement);
+  });
+
   it("sets the height the page leaves free, and removes it", () => {
     const { unmount } = render(<Playground />);
     expect(document.documentElement.style.getPropertyValue("--bottom-nav-height")).toContain(

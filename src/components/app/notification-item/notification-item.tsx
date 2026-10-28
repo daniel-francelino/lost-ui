@@ -1,8 +1,10 @@
 import { BellRingIcon, CheckIcon, ClockIcon } from "lucide-react";
+import { motion } from "motion/react";
 import type { ReactNode } from "react";
 
 import { useLostTranslation } from "../../../i18n/use-lost-translation";
 import { cn } from "../../../lib/cn";
+import { listItem } from "../../../lib/motion";
 import { Button } from "../../ui/button";
 
 export type NotificationSeverity = "info" | "warning" | "urgent";
@@ -72,7 +74,9 @@ export function NotificationItem({
   );
 
   return (
-    <li
+    <motion.li
+      layout
+      {...listItem}
       data-slot="notification-item"
       data-unread={unread || undefined}
       className={cn("flex gap-3 rounded-lg border bg-card p-3", className)}
@@ -112,6 +116,6 @@ export function NotificationItem({
           )}
         </div>
       </div>
-    </li>
+    </motion.li>
   );
 }

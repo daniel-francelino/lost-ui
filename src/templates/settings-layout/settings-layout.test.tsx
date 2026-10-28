@@ -51,4 +51,20 @@ describe("SettingsLayout", () => {
     expect(screen.getByText("Settings of the whole team.")).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "Organisation" })).toBeInTheDocument();
   });
+
+  it("draws one indicator, on the active tab, that follows the page", () => {
+    const { container, rerender } = render(<Playground />);
+    const indicators = () => container.querySelectorAll("[data-slot='settings-tab-indicator']");
+    expect(indicators()).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "General" })).toContainElement(
+      indicators()[0] as HTMLElement,
+    );
+
+    rerender(<Playground pathname="/settings/billing" />);
+
+    expect(indicators()).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "Billing" })).toContainElement(
+      indicators()[0] as HTMLElement,
+    );
+  });
 });

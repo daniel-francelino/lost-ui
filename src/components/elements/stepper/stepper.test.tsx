@@ -187,4 +187,15 @@ describe("Stepper", () => {
     const { container } = render(<Stepper items={[{ title: "A" }]} />);
     expect(container.querySelector('[data-slot="stepper-content"]')).toBeNull();
   });
+
+  it("fills the separators of the steps already done", async () => {
+    const { container } = render(<Playground />);
+    const separators = () =>
+      Array.from(container.querySelectorAll("[data-slot='stepper-separator']"));
+    expect(separators().some((s) => s.hasAttribute("data-completed"))).toBe(false);
+
+    await userEvent.setup().click(screen.getAllByRole("button")[1]!);
+
+    expect(separators().filter((s) => s.hasAttribute("data-completed")).length).toBeGreaterThan(0);
+  });
 });

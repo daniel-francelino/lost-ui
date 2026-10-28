@@ -1,7 +1,9 @@
-import type { ReactNode } from "react";
+import { MotionConfig, motion } from "motion/react";
+import { useId, type ReactNode } from "react";
 
 import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { cn } from "../../lib/cn";
+import { indicatorSpring } from "../../lib/motion";
 import {
   defaultRenderLink,
   isNavItemActive,
@@ -40,51 +42,62 @@ export function SettingsLayout({
   const { t } = useLostTranslation();
   const current = pathname ?? (typeof window === "undefined" ? "" : window.location.pathname);
   const side = navigation === "side";
+  const indicatorId = useId();
 
   return (
-    <div data-slot="settings-layout" className={cn("space-y-6", className)}>
-      <PageHeader title={title ?? t("settingsPage.title")} description={description} />
-      <div className={cn(side ? "grid gap-6 md:grid-cols-[14rem_1fr]" : "space-y-6")}>
-        <nav
-          aria-label={typeof title === "string" ? title : t("settingsPage.title")}
-          className={cn(
-            "flex gap-1 overflow-x-auto [scrollbar-width:none]",
-            side ? "md:flex-col md:overflow-visible" : "border-b",
-          )}
-        >
-          {items
-            .filter((item) => !item.hidden)
-            .map((item) => {
-              const active = isNavItemActive(item, current);
-              return (
-                <div key={navItemKey(item)} className="contents">
-                  {renderLink({
-                    item,
-                    href: item.to ?? "#",
-                    "aria-current": active ? "page" : undefined,
-                    className: cn(
-                      "flex shrink-0 items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors [&_svg]:size-4",
-                      side ? "" : "rounded-b-none border-b-2",
-                      active
-                        ? cn("text-foreground", side ? "bg-accent" : "border-primary")
-                        : cn(
-                            "text-muted-foreground hover:text-foreground",
-                            !side && "border-transparent",
-                          ),
-                    ),
-                    children: (
-                      <>
-                        {item.icon}
-                        {item.title}
-                      </>
-                    ),
-                  })}
-                </div>
-              );
-            })}
-        </nav>
-        <div className={cn("w-full space-y-6", !side && "max-w-2xl")}>{children}</div>
+    <MotionConfig reducedMotion="user">
+      <div data-slot="settings-layout" className={cn("space-y-6", className)}>
+        <PageHeader title={title ?? t("settingsPage.title")} description={description} />
+        <div className={cn(side ? "grid gap-6 md:grid-cols-[14rem_1fr]" : "space-y-6")}>
+          <nav
+            aria-label={typeof title === "string" ? title : t("settingsPage.title")}
+            className={cn(
+              "flex gap-1 overflow-x-auto [scrollbar-width:none]",
+              side ? "md:flex-col md:overflow-visible" : "border-b",
+            )}
+          >
+            {items
+              .filter((item) => !item.hidden)
+              .map((item) => {
+                const active = isNavItemActive(item, current);
+                return (
+                  <div key={navItemKey(item)} className="contents">
+                    {renderLink({
+                      item,
+                      href: item.to ?? "#",
+                      "aria-current": active ? "page" : undefined,
+                      className: cn(
+                        "relative isolate flex shrink-0 items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors [&_svg]:size-4",
+                        active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+                      ),
+                      children: (
+                        <>
+                          {active && (
+                            <motion.span
+                              layoutId={`${indicatorId}-tab`}
+                              aria-hidden="true"
+                              data-slot="settings-tab-indicator"
+                              className={cn(
+                                "absolute -z-10",
+                                side
+                                  ? "inset-0 rounded-md bg-accent"
+                                  : "inset-x-0 -bottom-px h-0.5 bg-primary",
+                              )}
+                              transition={indicatorSpring}
+                            />
+                          )}
+                          {item.icon}
+                          {item.title}
+                        </>
+                      ),
+                    })}
+                  </div>
+                );
+              })}
+          </nav>
+          <div className={cn("w-full space-y-6", !side && "max-w-2xl")}>{children}</div>
+        </div>
       </div>
-    </div>
+    </MotionConfig>
   );
 }

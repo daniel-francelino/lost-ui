@@ -1,6 +1,8 @@
+import { MotionConfig, motion } from "motion/react";
 import type { ReactNode } from "react";
 
 import { cn } from "../../lib/cn";
+import { duration, easeOut } from "../../lib/motion";
 import { Card, CardContent } from "../../components/ui/card";
 
 export type AuthLayoutProps = {
@@ -33,17 +35,24 @@ export function AuthLayout({
   className,
 }: AuthLayoutProps) {
   const card = (
-    <div className="flex w-full flex-col items-center">
-      {logo && <div className="mb-6">{logo}</div>}
-      <Card className="w-full max-w-md">
-        <CardContent className="p-6 sm:p-8">
-          <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-          {description && <p className="mt-2 text-sm text-muted-foreground">{description}</p>}
-          {children && <div className="mt-6">{children}</div>}
-        </CardContent>
-      </Card>
-      {footer && <div className="mt-5 text-center text-sm text-muted-foreground">{footer}</div>}
-    </div>
+    <MotionConfig reducedMotion="user">
+      <motion.div
+        className="flex w-full flex-col items-center"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: duration.slow, ease: easeOut }}
+      >
+        {logo && <div className="mb-6">{logo}</div>}
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6 sm:p-8">
+            <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+            {description && <p className="mt-2 text-sm text-muted-foreground">{description}</p>}
+            {children && <div className="mt-6">{children}</div>}
+          </CardContent>
+        </Card>
+        {footer && <div className="mt-5 text-center text-sm text-muted-foreground">{footer}</div>}
+      </motion.div>
+    </MotionConfig>
   );
 
   if (variant === "split") {

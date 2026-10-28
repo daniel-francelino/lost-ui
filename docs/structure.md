@@ -118,3 +118,19 @@ Decisions:
 ## Reserved modules
 
 `ai-chat`, `editor` and `calendar` have a README each and no code. Kortex already has a Notion-like editor (`NotionEditor`, Tiptap) and a calendar (`appointments/*View`); memoria-print has a calendar (`erp/calendar`). They are the starting point when those modules are built.
+
+## Motion
+
+`motion` is a required peer of the library and the animated components share the timings in `src/lib/motion.ts` (`easeOut`, `indicatorSpring`, `panelSpring`, `stagger`, `listItem`, `swap`), taken from what aura-creative, memoria-print and kortex already do.
+
+| Pattern                                                    | Where                                                                                   |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Marker that slides between items (`layoutId` and a spring) | `BottomNav`, `SettingsLayout` tabs                                                      |
+| Content that swaps (`AnimatePresence mode="wait"`)         | `PageTransition`, `Stepper` content, `ForgotPasswordPage`, `AppShell` (`transitionKey`) |
+| Items that come in one after the other                     | `AppSidebar` sub-menus                                                                  |
+| Rows that enter and leave a list                           | `NotificationItem` in `NotificationsPage`                                               |
+| Menu that rises over the page, with a fading backdrop      | `BottomNav` "More"                                                                      |
+| Fill of a line as steps are done                           | `Stepper` separators                                                                    |
+| Entrance of a card, fade of an error                       | `AuthLayout`, `FormError`                                                               |
+
+Every animated component sits in a `MotionConfig reducedMotion="user"`, so a user who asked the system for less motion gets none. Tests set `MotionGlobalConfig.skipAnimations` in `src/test/setup.ts`, so they do not wait for an animation.

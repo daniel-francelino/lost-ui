@@ -1,9 +1,12 @@
-import { forwardRef, useImperativeHandle, type ReactNode } from "react";
+import { motion } from "motion/react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, type ReactNode } from "react";
 import { CheckIcon } from "lucide-react";
 
 import { cn } from "../../../lib/cn";
+import { duration } from "../../../lib/motion";
 import { solidColor, fillColor, type ThemeColor } from "../../../lib/theme-colors";
 import { useControlled } from "../../../lib/use-controlled";
+import { PageTransition } from "../page-transition";
 
 export type StepperItem = {
   /** Identifies the step for `value`. Defaults to its position. */
@@ -123,6 +126,12 @@ export const Stepper = forwardRef<StepperHandle, StepperProps>(function Stepper(
   }));
 
   const active = items[activeIndex];
+  // the content slides in from the side the user is moving towards
+  const previous = useRef(activeIndex);
+  const direction = activeIndex >= previous.current ? 1 : -1;
+  useEffect(() => {
+    previous.current = activeIndex;
+  }, [activeIndex]);
   const activeState: StepperState = { index: activeIndex, active: true, completed: false };
 
   return (
@@ -179,12 +188,28 @@ export const Stepper = forwardRef<StepperHandle, StepperProps>(function Stepper(
                   {!last && (
                     <span
                       data-slot="stepper-separator"
+                      data-completed={state.completed || undefined}
                       aria-hidden="true"
                       className={cn(
+                        "relative overflow-hidden bg-border",
                         vertical ? "my-1 w-0.5 min-h-6 flex-1" : "mx-2 h-0.5 flex-1",
-                        state.completed ? fillColor[color] : "bg-border",
                       )}
-                    />
+                    >
+                      <motion.span
+                        className={cn(
+                          "absolute inset-0",
+                          vertical ? "origin-top" : "origin-left",
+                          fillColor[color],
+                        )}
+                        initial={false}
+                        animate={
+                          vertical
+                            ? { scaleY: state.completed ? 1 : 0 }
+                            : { scaleX: state.completed ? 1 : 0 }
+                        }
+                        transition={{ duration: duration.slow }}
+                      />
+                    </span>
                   )}
                 </span>
                 <span className={cn("grid gap-0.5", vertical ? "pb-4 pt-1" : "mt-2 pr-4")}>
@@ -208,9 +233,11 @@ export const Stepper = forwardRef<StepperHandle, StepperProps>(function Stepper(
         })}
       </ol>
       {active && (renderContent ? renderContent(active, activeState) : active.content) && (
-        <div data-slot="stepper-content" role="region" aria-live="polite">
-          {renderContent ? renderContent(active, activeState) : active.content}
-        </div>
+        <PageTransition transitionKey={activeIndex} variant="slide" direction={direction}>
+          <div data-slot="stepper-content" role="region" aria-live="polite">
+            {renderContent ? renderContent(active, activeState) : active.content}
+          </div>
+        </PageTransition>
       )}
     </div>
   );

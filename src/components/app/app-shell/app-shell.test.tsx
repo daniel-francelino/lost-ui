@@ -57,4 +57,20 @@ describe("AppShell", () => {
     render(<Playground />);
     expect(screen.getByRole("main").className).toContain("var(--bottom-nav-height,0px)");
   });
+
+  it("swaps the page with a transition when the key changes", async () => {
+    const { rerender } = render(<Playground transitionKey="/a" children={<p>Page A</p>} />);
+    expect(screen.getByText("Page A")).toBeInTheDocument();
+
+    rerender(<Playground transitionKey="/b" children={<p>Page B</p>} />);
+
+    expect(await screen.findByText("Page B")).toBeInTheDocument();
+    await vi.waitFor(() => expect(screen.queryByText("Page A")).toBeNull());
+    expect(screen.getByRole("main").querySelector("[data-slot='page-transition']")).not.toBeNull();
+  });
+
+  it("has no transition wrapper without a key", () => {
+    render(<Playground />);
+    expect(screen.getByRole("main").querySelector("[data-slot='page-transition']")).toBeNull();
+  });
 });

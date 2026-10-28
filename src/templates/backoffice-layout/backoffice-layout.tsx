@@ -24,7 +24,7 @@ export type BackofficeUser = {
 
 export type BackofficeLayoutProps = Pick<
   AppShellProps,
-  "fullScreen" | "fullWidth" | "overlay" | "defaultSidebarOpen" | "className"
+  "fullScreen" | "fullWidth" | "overlay" | "defaultSidebarOpen" | "transitionKey" | "className"
 > & {
   /** The navigation. `hidden` items and empty groups are left out; use `allow` for permissions. */
   sections: NavSection[];

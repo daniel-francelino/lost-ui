@@ -2,6 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { useLostTranslation } from "../../../i18n/use-lost-translation";
 import { cn } from "../../../lib/cn";
+import { PageTransition } from "../../elements/page-transition";
 import { SidebarInset, SidebarProvider } from "../sidebar";
 
 export type AppShellProps = {
@@ -24,6 +25,10 @@ export type AppShellProps = {
   /** Id of the page, the target of the skip link. */
   mainId?: string;
   mainProps?: Omit<ComponentProps<"main">, "id" | "children">;
+  /**
+   * Animates the swap of the page when it changes, e.g. the pathname. Leave out for no transition.
+   */
+  transitionKey?: string | number;
   className?: string;
 };
 
@@ -44,6 +49,7 @@ export function AppShell({
   overlay,
   mainId = "main-content",
   mainProps,
+  transitionKey,
   className,
 }: AppShellProps) {
   const { t } = useLostTranslation();
@@ -92,7 +98,11 @@ export function AppShell({
           )}
           {...restMain}
         >
-          {children}
+          {transitionKey === undefined ? (
+            children
+          ) : (
+            <PageTransition transitionKey={transitionKey}>{children}</PageTransition>
+          )}
         </main>
         {bottomNav}
       </SidebarInset>

@@ -119,4 +119,15 @@ describe("NotificationsPage", () => {
     expect(screen.getByRole("heading", { name: "Notificações" })).toBeInTheDocument();
     expect(screen.getByText("Está tudo em dia.")).toBeInTheDocument();
   });
+
+  it("takes a row out when it leaves the list", async () => {
+    const { rerender } = render(<Playground />);
+    expect(screen.getByText("Order shipped")).toBeInTheDocument();
+
+    const [first] = Playground.args.notifications!;
+    rerender(<Playground notifications={[first!]} />);
+
+    await vi.waitFor(() => expect(screen.queryByText("Order shipped")).toBeNull());
+    expect(screen.getByText("New access request")).toBeInTheDocument();
+  });
 });

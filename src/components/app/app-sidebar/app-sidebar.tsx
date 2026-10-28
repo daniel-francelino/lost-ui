@@ -1,7 +1,9 @@
 import { ChevronRightIcon } from "lucide-react";
+import { MotionConfig, motion } from "motion/react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "../../../lib/cn";
+import { duration, easeOut, stagger } from "../../../lib/motion";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../ui/collapsible";
 import {
   badgeText,
@@ -114,7 +116,7 @@ function Parent({ item, pathname, renderLink, onNavigate }: RowProps) {
         </CollapsibleTrigger>
         <CollapsibleContent>
           <SidebarMenuSub>
-            {item.children?.map((child) => {
+            {item.children?.map((child, index) => {
               const childActive = isNavItemActive(child, pathname);
               const content = (
                 <>
@@ -130,19 +132,29 @@ function Parent({ item, pathname, renderLink, onNavigate }: RowProps) {
               );
               return (
                 <SidebarMenuSubItem key={navItemKey(child)}>
-                  <SidebarMenuSubButton asChild isActive={childActive}>
-                    {child.to !== undefined ? (
-                      renderLink({
-                        item: child,
-                        href: child.to,
-                        "aria-current": childActive ? "page" : undefined,
-                        onClick: () => onNavigate(child),
-                        children: content,
-                      })
-                    ) : (
-                      <span>{content}</span>
-                    )}
-                  </SidebarMenuSubButton>
+                  <motion.div
+                    initial={{ opacity: 0, x: -6 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: duration.fast + 0.01,
+                      delay: stagger(index),
+                      ease: easeOut,
+                    }}
+                  >
+                    <SidebarMenuSubButton asChild isActive={childActive}>
+                      {child.to !== undefined ? (
+                        renderLink({
+                          item: child,
+                          href: child.to,
+                          "aria-current": childActive ? "page" : undefined,
+                          onClick: () => onNavigate(child),
+                          children: content,
+                        })
+                      ) : (
+                        <span>{content}</span>
+                      )}
+                    </SidebarMenuSubButton>
+                  </motion.div>
                 </SidebarMenuSubItem>
               );
             })}
@@ -179,29 +191,36 @@ export function AppSidebar({
   };
 
   return (
-    <Sidebar data-slot="app-sidebar" collapsible={collapsible} className={cn(className)} {...props}>
-      {header && <SidebarHeader>{header}</SidebarHeader>}
-      <SidebarContent className="gap-0">
-        {sections.map((section, index) => (
-          <SidebarGroup key={section.label ?? index} className="py-1">
-            {section.label && <SidebarGroupLabel>{section.label}</SidebarGroupLabel>}
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {section.items.map((item) => {
-                  const row = { item, pathname: current, renderLink, onNavigate: navigate };
-                  return item.children ? (
-                    <Parent key={navItemKey(item)} {...row} />
-                  ) : (
-                    <Leaf key={navItemKey(item)} {...row} />
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
-      </SidebarContent>
-      {footer && <SidebarFooter>{footer}</SidebarFooter>}
-      {rail && <SidebarRail />}
-    </Sidebar>
+    <MotionConfig reducedMotion="user">
+      <Sidebar
+        data-slot="app-sidebar"
+        collapsible={collapsible}
+        className={cn(className)}
+        {...props}
+      >
+        {header && <SidebarHeader>{header}</SidebarHeader>}
+        <SidebarContent className="gap-0">
+          {sections.map((section, index) => (
+            <SidebarGroup key={section.label ?? index} className="py-1">
+              {section.label && <SidebarGroupLabel>{section.label}</SidebarGroupLabel>}
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {section.items.map((item) => {
+                    const row = { item, pathname: current, renderLink, onNavigate: navigate };
+                    return item.children ? (
+                      <Parent key={navItemKey(item)} {...row} />
+                    ) : (
+                      <Leaf key={navItemKey(item)} {...row} />
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          ))}
+        </SidebarContent>
+        {footer && <SidebarFooter>{footer}</SidebarFooter>}
+        {rail && <SidebarRail />}
+      </Sidebar>
+    </MotionConfig>
   );
 }

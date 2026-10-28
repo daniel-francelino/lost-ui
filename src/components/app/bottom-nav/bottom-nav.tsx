@@ -1,8 +1,10 @@
 import { MenuIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
+import { useEffect, useId, useState } from "react";
 
 import { useLostTranslation } from "../../../i18n/use-lost-translation";
 import { cn } from "../../../lib/cn";
+import { duration, easeOut, indicatorSpring } from "../../../lib/motion";
 import {
   badgeText,
   defaultRenderLink,
@@ -49,6 +51,7 @@ export function BottomNav({
 }: BottomNavProps) {
   const { t } = useLostTranslation();
   const [moreOpen, setMoreOpen] = useState(false);
+  const indicatorId = useId();
   const current = pathname ?? (typeof window === "undefined" ? "" : window.location.pathname);
   const shown = contextItems.length > 0 ? contextItems : items;
   const hasMore = moreItems.length > 0 && contextItems.length === 0;
@@ -77,14 +80,23 @@ export function BottomNav({
 
   const itemClass = (active: boolean) =>
     cn(
-      "flex min-h-14 min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-0.5 rounded-xl px-2 text-center transition-colors [&_svg]:size-5 [&_svg]:shrink-0",
-      active ? "text-primary" : "text-muted-foreground active:bg-accent",
+      "relative isolate flex min-h-14 min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-0.5 rounded-xl px-2 text-center transition-[color,transform] active:scale-95 [&_svg]:size-5 [&_svg]:shrink-0",
+      active ? "text-primary" : "text-muted-foreground",
     );
 
-  const content = (item: NavItem) => {
+  const content = (item: NavItem, active: boolean) => {
     const text = badgeText(item.badge, 9);
     return (
       <>
+        {active && (
+          <motion.span
+            layoutId={`${indicatorId}-active`}
+            aria-hidden="true"
+            data-slot="bottom-nav-indicator"
+            className="absolute inset-x-1 inset-y-1 -z-10 rounded-xl bg-primary/10"
+            transition={indicatorSpring}
+          />
+        )}
         <span className="relative flex">
           {item.icon}
           {text && (
@@ -102,14 +114,21 @@ export function BottomNav({
   };
 
   return (
-    <>
-      {moreOpen && (
-        <div
-          data-slot="bottom-nav-backdrop"
-          className="fixed inset-0 z-40 bg-black/30 lg:hidden"
-          onClick={() => setMoreOpen(false)}
-        />
-      )}
+    <MotionConfig reducedMotion="user">
+      <AnimatePresence>
+        {moreOpen && (
+          <motion.div
+            key="backdrop"
+            data-slot="bottom-nav-backdrop"
+            className="fixed inset-0 z-40 bg-black/30 lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: duration.base }}
+            onClick={() => setMoreOpen(false)}
+          />
+        )}
+      </AnimatePresence>
       <div
         data-slot="bottom-nav"
         className={cn(
@@ -117,53 +136,60 @@ export function BottomNav({
           className,
         )}
       >
-        {moreOpen && (
-          <div
-            id="bottom-nav-more"
-            className="absolute inset-x-0 bottom-full grid grid-cols-3 gap-1 border-t border-border bg-popover p-3 shadow-lg"
-          >
-            {moreItems.map((item) => {
-              const active = isNavItemActive(item, current);
-              const body = (
-                <>
-                  {item.icon}
-                  <span className="text-xs font-medium">{item.title}</span>
-                </>
-              );
-              const cls = cn(
-                "flex flex-col items-center gap-1.5 rounded-lg p-3 transition-colors [&_svg]:size-5",
-                active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent",
-              );
-              return item.to !== undefined ? (
-                <div key={navItemKey(item)} className="contents">
-                  {renderLink({
-                    item,
-                    href: item.to,
-                    className: cls,
-                    "aria-current": active ? "page" : undefined,
-                    onClick: () => {
+        <AnimatePresence>
+          {moreOpen && (
+            <motion.div
+              key="more"
+              id="bottom-nav-more"
+              className="absolute inset-x-0 bottom-full grid grid-cols-3 gap-1 border-t border-border bg-popover p-3 shadow-lg"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              transition={{ duration: duration.base, ease: easeOut }}
+            >
+              {moreItems.map((item) => {
+                const active = isNavItemActive(item, current);
+                const body = (
+                  <>
+                    {item.icon}
+                    <span className="text-xs font-medium">{item.title}</span>
+                  </>
+                );
+                const cls = cn(
+                  "flex flex-col items-center gap-1.5 rounded-lg p-3 transition-colors [&_svg]:size-5",
+                  active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent",
+                );
+                return item.to !== undefined ? (
+                  <div key={navItemKey(item)} className="contents">
+                    {renderLink({
+                      item,
+                      href: item.to,
+                      className: cls,
+                      "aria-current": active ? "page" : undefined,
+                      onClick: () => {
+                        item.onSelect?.();
+                        setMoreOpen(false);
+                      },
+                      children: body,
+                    })}
+                  </div>
+                ) : (
+                  <button
+                    key={navItemKey(item)}
+                    type="button"
+                    className={cls}
+                    onClick={() => {
                       item.onSelect?.();
                       setMoreOpen(false);
-                    },
-                    children: body,
-                  })}
-                </div>
-              ) : (
-                <button
-                  key={navItemKey(item)}
-                  type="button"
-                  className={cls}
-                  onClick={() => {
-                    item.onSelect?.();
-                    setMoreOpen(false);
-                  }}
-                >
-                  {body}
-                </button>
-              );
-            })}
-          </div>
-        )}
+                    }}
+                  >
+                    {body}
+                  </button>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
         <nav
           aria-label={label ?? t("appShell.bottomNavigation")}
           className="flex items-center overflow-x-auto px-2 py-1.5 [scrollbar-width:none]"
@@ -181,7 +207,7 @@ export function BottomNav({
                     item.onSelect?.();
                     setMoreOpen(false);
                   },
-                  children: content(item),
+                  children: content(item, active),
                 })}
               </div>
             ) : (
@@ -193,7 +219,7 @@ export function BottomNav({
                 className={itemClass(active)}
                 onClick={() => item.onSelect?.()}
               >
-                {content(item)}
+                {content(item, active)}
               </button>
             );
           })}
@@ -213,6 +239,6 @@ export function BottomNav({
           )}
         </nav>
       </div>
-    </>
+    </MotionConfig>
   );
 }

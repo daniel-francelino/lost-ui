@@ -1,11 +1,15 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { setProjectAnnotations } from "@storybook/react-vite";
+import { MotionGlobalConfig } from "motion/react";
 import { afterEach, vi } from "vitest";
 
 import * as previewAnnotations from "../../.storybook/preview";
 
 setProjectAnnotations([previewAnnotations]);
+
+// animations finish at once, so a test does not wait for an exit or a swap
+MotionGlobalConfig.skipAnimations = true;
 
 class ObserverStub {
   observe() {}

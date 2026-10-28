@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 
 import { useLostTranslation } from "../../i18n/use-lost-translation";
 import type { RenderNavLink } from "../../components/app/app-nav";
+import { PageTransition } from "../../components/elements/page-transition";
 import { Form } from "../../components/forms/form";
 import { FormInput } from "../../components/forms/form-input";
 import { rules } from "../../components/forms/rules";
@@ -45,47 +46,42 @@ export function ForgotPasswordPage({
     </TemplateLink>
   );
 
-  if (sent) {
-    return (
-      <AuthLayout
-        {...layout}
-        title={t("auth.linkSentTitle")}
-        description={t("auth.linkSentDescription")}
-        footer={back}
-      >
-        <MailCheckIcon aria-hidden="true" className="mx-auto size-10 text-muted-foreground" />
-      </AuthLayout>
-    );
-  }
-
   return (
     <AuthLayout
       {...layout}
-      title={title ?? t("auth.forgotTitle")}
-      description={description ?? t("auth.forgotDescription")}
+      title={sent ? t("auth.linkSentTitle") : (title ?? t("auth.forgotTitle"))}
+      description={
+        sent ? t("auth.linkSentDescription") : (description ?? t("auth.forgotDescription"))
+      }
       footer={back}
     >
-      <Form
-        className="space-y-4"
-        noValidate
-        onSubmit={() => void run({ email }).then((ok) => ok && setSent(true))}
-      >
-        <FormInput
-          name="email"
-          label={t("auth.email")}
-          type="email"
-          autoComplete="email"
-          autoFocus
-          required
-          rules={[rules.required(), rules.email()]}
-          value={email}
-          onValueChange={setEmail}
-        />
-        <FormError message={error} />
-        <SubmitButton busy={busy} className="w-full">
-          {t("auth.sendLink")}
-        </SubmitButton>
-      </Form>
+      <PageTransition transitionKey={sent ? "sent" : "form"} variant="fade">
+        {sent ? (
+          <MailCheckIcon aria-hidden="true" className="mx-auto size-10 text-muted-foreground" />
+        ) : (
+          <Form
+            className="space-y-4"
+            noValidate
+            onSubmit={() => void run({ email }).then((ok) => ok && setSent(true))}
+          >
+            <FormInput
+              name="email"
+              label={t("auth.email")}
+              type="email"
+              autoComplete="email"
+              autoFocus
+              required
+              rules={[rules.required(), rules.email()]}
+              value={email}
+              onValueChange={setEmail}
+            />
+            <FormError message={error} />
+            <SubmitButton busy={busy} className="w-full">
+              {t("auth.sendLink")}
+            </SubmitButton>
+          </Form>
+        )}
+      </PageTransition>
     </AuthLayout>
   );
 }
