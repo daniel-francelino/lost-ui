@@ -3,6 +3,7 @@ import { ChevronsUpDownIcon } from "lucide-react";
 import { isValidPhoneNumber } from "libphonenumber-js/min";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
@@ -48,6 +49,7 @@ export function isValidPhone(value: string): boolean {
  * Needs the optional peers `libphonenumber-js` and `country-flag-icons`.
  */
 export function FormInputPhone(props: FormInputPhoneProps) {
+  const { t } = useLostTranslation();
   const [
     fieldProps,
     {
@@ -56,10 +58,10 @@ export function FormInputPhone(props: FormInputPhoneProps) {
       defaultCountry,
       country: controlledCountry,
       onCountryChange,
-      countryLabel = "Country calling code",
-      searchPlaceholder = "Search a country",
+      countryLabel,
+      searchPlaceholder,
       emptyText,
-      placeholder = "Phone number",
+      placeholder,
       onFocus,
       onBlur,
       ...rest
@@ -137,7 +139,7 @@ export function FormInputPhone(props: FormInputPhoneProps) {
               type="button"
               variant="outline"
               role="combobox"
-              aria-label={countryLabel}
+              aria-label={countryLabel ?? t("phone.countryLabel")}
               aria-expanded={open}
               aria-controls={listId}
               disabled={locked}
@@ -156,12 +158,12 @@ export function FormInputPhone(props: FormInputPhoneProps) {
             <Input
               autoFocus
               role="searchbox"
-              aria-label="Search"
+              aria-label={t("common.search")}
               aria-controls={listId}
               aria-activedescendant={
                 navigation.activeIndex >= 0 ? optionId(listId, navigation.activeIndex) : undefined
               }
-              placeholder={searchPlaceholder}
+              placeholder={searchPlaceholder ?? t("phone.searchPlaceholder")}
               value={query}
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -192,7 +194,7 @@ export function FormInputPhone(props: FormInputPhoneProps) {
           type="tel"
           inputMode="tel"
           autoComplete="tel-national"
-          placeholder={placeholder}
+          placeholder={placeholder ?? t("phone.placeholder")}
           value={national}
           disabled={fieldProps.disabled}
           readOnly={fieldProps.readOnly}

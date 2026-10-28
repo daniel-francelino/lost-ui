@@ -1,8 +1,10 @@
 import { useRef, useState, type DragEvent, type ReactNode } from "react";
 import { FileIcon, UploadIcon, XIcon } from "lucide-react";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 
 import { cn } from "../../lib/cn";
 import { FormField } from "../form-field";
+import { formatSize, matchesAccept } from "../lib/files";
 import type { FieldProps } from "../lib/field-props";
 import { splitFieldProps } from "../lib/split-field-props";
 import { useField } from "../lib/use-field";
@@ -17,27 +19,8 @@ export type FormFileUploadProps = FieldProps<File[]> & {
   onReject?: (files: File[], reason: FileRejection) => void;
 };
 
-function matchesAccept(file: File, accept?: string) {
-  if (!accept) return true;
-
-  return accept
-    .split(",")
-    .map((token) => token.trim().toLowerCase())
-    .filter(Boolean)
-    .some((token) => {
-      if (token.startsWith(".")) return file.name.toLowerCase().endsWith(token);
-      if (token.endsWith("/*")) return file.type.toLowerCase().startsWith(token.slice(0, -1));
-      return file.type.toLowerCase() === token;
-    });
-}
-
-function formatSize(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
 export function FormFileUpload(props: FormFileUploadProps) {
+  const { t } = useLostTranslation();
   const [fieldProps, { accept, multiple = false, maxSize, dropzoneText, onReject }] =
     splitFieldProps<File[], FormFileUploadProps>(props);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -87,7 +70,7 @@ export function FormFileUpload(props: FormFileUploadProps) {
         )}
       >
         <UploadIcon className="size-6" aria-hidden="true" />
-        <span>{dropzoneText ?? "Drop files here or click to browse"}</span>
+        <span>{dropzoneText ?? t("file.dropzone")}</span>
         <input
           ref={inputRef}
           {...controlProps}
@@ -116,7 +99,7 @@ export function FormFileUpload(props: FormFileUploadProps) {
               {!locked && (
                 <button
                   type="button"
-                  aria-label={`Remove ${file.name}`}
+                  aria-label={t("file.remove", { name: file.name })}
                   onClick={() => field.setValue(field.value.filter((_, at) => at !== index))}
                   className="rounded-sm outline-none hover:text-destructive focus-visible:ring-1 focus-visible:ring-ring"
                 >

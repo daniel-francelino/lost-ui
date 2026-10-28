@@ -2,6 +2,7 @@ import { useRef, useState, type ReactNode } from "react";
 import { ChevronsUpDownIcon } from "lucide-react";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
@@ -24,10 +25,9 @@ export type FormSelectMenuProps = FieldProps<FormSelectMenuValue> & {
 };
 
 export function FormSelectMenu(props: FormSelectMenuProps) {
-  const [
-    fieldProps,
-    { items, multiple = false, placeholder = "Select…", searchPlaceholder = "Search…", emptyText },
-  ] = splitFieldProps<FormSelectMenuValue, FormSelectMenuProps>(props);
+  const { t } = useLostTranslation();
+  const [fieldProps, { items, multiple = false, placeholder, searchPlaceholder, emptyText }] =
+    splitFieldProps<FormSelectMenuValue, FormSelectMenuProps>(props);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const field = useField<FormSelectMenuValue>(fieldProps, {
     fallback: multiple ? [] : "",
@@ -105,9 +105,9 @@ export function FormSelectMenu(props: FormSelectMenuProps) {
               className={cn("truncate", labels.length === 0 && "text-muted-foreground")}
             >
               {labels.length === 0
-                ? placeholder
+                ? (placeholder ?? t("selectMenu.placeholder"))
                 : multiple && labels.length > 2
-                  ? `${labels.length} selected`
+                  ? t("selectMenu.selected", { count: labels.length })
                   : labels.join(", ")}
             </span>
             <ChevronsUpDownIcon className="size-4 shrink-0 opacity-50" />
@@ -117,12 +117,12 @@ export function FormSelectMenu(props: FormSelectMenuProps) {
           <Input
             autoFocus
             role="searchbox"
-            aria-label="Search"
+            aria-label={t("common.search")}
             aria-controls={listId}
             aria-activedescendant={
               navigation.activeIndex >= 0 ? optionId(listId, navigation.activeIndex) : undefined
             }
-            placeholder={searchPlaceholder}
+            placeholder={searchPlaceholder ?? t("selectMenu.searchPlaceholder")}
             value={query}
             onChange={(event) => {
               setQuery(event.target.value);

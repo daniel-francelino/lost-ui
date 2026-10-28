@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { XIcon } from "lucide-react";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 
 import { cn } from "../../lib/cn";
 import { Badge } from "../../ui/badge";
@@ -17,6 +18,7 @@ export type FormInputTagsProps = FieldProps<string[]> & {
 };
 
 export function FormInputTags(props: FormInputTagsProps) {
+  const { t } = useLostTranslation();
   const [
     fieldProps,
     { placeholder, max, delimiter = ",", allowDuplicates = false, addOnBlur = true },
@@ -64,7 +66,7 @@ export function FormInputTags(props: FormInputTagsProps) {
             {!locked && (
               <button
                 type="button"
-                aria-label={`Remove ${tag}`}
+                aria-label={t("tags.remove", { tag })}
                 onClick={(event) => {
                   event.stopPropagation();
                   field.setValue(field.value.filter((item) => item !== tag));

@@ -62,7 +62,7 @@ function fill(input: string, { slots }: Compiled): MaskResult {
   let trailing = 0;
   let at = 0;
 
-  for (const slot of slots) {
+  for (const [index, slot] of slots.entries()) {
     if (at >= input.length) break;
 
     if ("token" in slot) {
@@ -75,6 +75,14 @@ function fill(input: string, { slots }: Compiled): MaskResult {
       trailing = 0;
       at++;
     } else {
+      // A literal appears only when the text goes on, or when the user typed it.
+      const next = slots.slice(index + 1).find((item) => "token" in item);
+      const goesOn =
+        next !== undefined &&
+        "token" in next &&
+        Array.from(input.slice(at)).some((char) => next.token.pattern.test(char));
+      if (!goesOn && input.charAt(at) !== slot.literal) break;
+
       text += slot.literal;
       trailing++;
       if (input.charAt(at) === slot.literal) at++;

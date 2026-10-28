@@ -1,0 +1,95 @@
+import type { Messages } from "./en";
+
+export const pt: Messages = {
+  common: {
+    close: "Fechar",
+    loading: "Carregando",
+    search: "Pesquisar",
+    noResults: "Nenhum resultado",
+  },
+  form: {
+    submit: "Enviar",
+    reset: "Limpar",
+  },
+  inputMenu: {
+    create: "Criar “{{query}}”",
+  },
+  selectMenu: {
+    placeholder: "Selecionar…",
+    searchPlaceholder: "Pesquisar…",
+    selected: "{{count}} selecionados",
+  },
+  date: {
+    placeholder: "Escolher uma data",
+    clear: "Limpar data",
+    time: "Hora",
+    done: "Concluir",
+  },
+  number: {
+    increment: "Aumentar",
+    decrement: "Diminuir",
+  },
+  phone: {
+    placeholder: "Número de telefone",
+    countryLabel: "Código do país",
+    searchPlaceholder: "Pesquisar um país",
+  },
+  country: {
+    placeholder: "Pesquisar um país",
+  },
+  emoji: {
+    placeholder: "Escolher um emoji",
+    searchPlaceholder: "Pesquisar emoji",
+    clear: "Limpar emoji",
+  },
+  color: {
+    pick: "Escolher uma cor",
+    swatches: "Amostras",
+    use: "Usar {{color}}",
+  },
+  file: {
+    dropzone: "Solte os arquivos aqui ou clique para escolher",
+    remove: "Remover {{name}}",
+  },
+  tags: {
+    remove: "Remover {{tag}}",
+  },
+  breadcrumb: {
+    more: "Mais",
+  },
+  carousel: {
+    previous: "Slide anterior",
+    next: "Próximo slide",
+  },
+  pagination: {
+    previous: "Ir para a página anterior",
+    previousLabel: "Anterior",
+    nextLabel: "Próxima",
+    next: "Ir para a próxima página",
+    more: "Mais páginas",
+  },
+  sidebar: {
+    toggle: "Mostrar ou ocultar a barra lateral",
+  },
+  rules: {
+    required: "Este campo é obrigatório",
+    requiredIf: "Este campo é obrigatório",
+    minLength: "Use pelo menos {{limit}} caracteres",
+    maxLength: "Use no máximo {{limit}} caracteres",
+    minItems: "Escolha pelo menos {{limit}} itens",
+    maxItems: "Escolha no máximo {{limit}} itens",
+    min: "Deve ser no mínimo {{limit}}",
+    max: "Deve ser no máximo {{limit}}",
+    between: "Deve estar entre {{min}} e {{max}}",
+    integer: "Deve ser um número inteiro",
+    email: "Informe um e-mail válido",
+    url: "Informe uma URL válida",
+    pattern: "Formato inválido",
+    oneOf: "Escolha uma opção válida",
+    matches: "Os valores não coincidem",
+    minDate: "Escolha {{limit}} ou uma data posterior",
+    maxDate: "Escolha {{limit}} ou uma data anterior",
+    fileSize: "Cada arquivo deve ter no máximo {{limit}}",
+    fileType: "Tipo de arquivo não permitido",
+  },
+};

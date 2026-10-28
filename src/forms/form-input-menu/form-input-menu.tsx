@@ -1,6 +1,7 @@
 import { useRef, useState, type ReactNode } from "react";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { Input } from "../../ui/input";
 import { FormField } from "../form-field";
 import { FormOptionList, optionId } from "../form-option-list";
@@ -18,6 +19,7 @@ export type FormInputMenuProps = FieldProps<string> & {
 };
 
 export function FormInputMenu(props: FormInputMenuProps) {
+  const { t } = useLostTranslation();
   const [fieldProps, { items, placeholder, creatable = false, emptyText }] = splitFieldProps<
     string,
     FormInputMenuProps
@@ -120,7 +122,7 @@ export function FormInputMenu(props: FormInputMenuProps) {
               items={filtered}
               selected={[field.value]}
               activeIndex={navigation.activeIndex}
-              emptyText={creatable && query ? `Create “${query}”` : emptyText}
+              emptyText={creatable && query ? t("inputMenu.create", { query }) : emptyText}
               onActiveChange={navigation.setActiveIndex}
               onSelect={(item) => choose(filtered.indexOf(item))}
             />

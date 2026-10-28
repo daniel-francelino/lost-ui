@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 
 import { cn } from "../../lib/cn";
 import { Input } from "../../ui/input";
@@ -13,6 +14,7 @@ export type FormColorPickerProps = FieldProps<string> & {
 };
 
 export function FormColorPicker(props: FormColorPickerProps) {
+  const { t } = useLostTranslation();
   const [fieldProps, { swatches, placeholder = "#000000" }] = splitFieldProps<
     string,
     FormColorPickerProps
@@ -32,7 +34,7 @@ export function FormColorPicker(props: FormColorPickerProps) {
       <div className="flex items-center gap-2">
         <input
           type="color"
-          aria-label="Pick a color"
+          aria-label={t("color.pick")}
           value={valid ? field.value : "#000000"}
           disabled={locked}
           onChange={(event) => field.setValue(event.target.value)}
@@ -55,12 +57,12 @@ export function FormColorPicker(props: FormColorPickerProps) {
         />
       </div>
       {swatches && swatches.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Swatches">
+        <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label={t("color.swatches")}>
           {swatches.map((color) => (
             <button
               key={color}
               type="button"
-              aria-label={`Use ${color}`}
+              aria-label={t("color.use", { color })}
               aria-pressed={field.value.toLowerCase() === color.toLowerCase()}
               disabled={locked}
               onClick={() => field.setValue(color)}

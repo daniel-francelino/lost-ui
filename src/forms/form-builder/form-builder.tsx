@@ -2,6 +2,7 @@ import { useRef, useState, type ComponentType, type ReactNode, type Ref } from "
 import { LoaderCircleIcon } from "lucide-react";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { FormCheckbox, type FormCheckboxProps } from "../form-checkbox";
 import { FormCheckboxGroup, type FormCheckboxGroupProps } from "../form-checkbox-group";
@@ -134,8 +135,8 @@ export function FormBuilder({
   onSubmit,
   onReset,
   columns = 1,
-  submitLabel = "Submit",
-  resetLabel = "Reset",
+  submitLabel,
+  resetLabel,
   showReset = false,
   loading = false,
   actions,
@@ -143,6 +144,7 @@ export function FormBuilder({
   className,
   ...formProps
 }: FormBuilderProps) {
+  const { t } = useLostTranslation();
   const initial = useRef(defaultValues ?? {});
   const [innerValues, setInnerValues] = useState<FormValues>(initial.current);
   const values = controlledValues ?? innerValues;
@@ -188,11 +190,11 @@ export function FormBuilder({
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <Button type="submit" disabled={loading}>
           {loading && <LoaderCircleIcon className="animate-spin" aria-hidden="true" />}
-          {submitLabel}
+          {submitLabel ?? t("form.submit")}
         </Button>
         {showReset && (
           <Button type="reset" variant="outline" disabled={loading}>
-            {resetLabel}
+            {resetLabel ?? t("form.reset")}
           </Button>
         )}
         {actions}

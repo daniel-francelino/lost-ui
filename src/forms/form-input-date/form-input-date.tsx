@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { CalendarIcon, XIcon } from "lucide-react";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { Calendar } from "../../ui/calendar";
 import { Input } from "../../ui/input";
@@ -44,18 +45,19 @@ function clockTime(date: Date) {
 }
 
 export function FormInputDate(props: FormInputDateProps) {
+  const { t } = useLostTranslation();
   const [
     fieldProps,
     {
       mode = "single",
-      placeholder = "Pick a date",
+      placeholder,
       min,
       max,
       locale,
       clearable = false,
       numberOfMonths,
       time: withTime = false,
-      timeLabel = "Time",
+      timeLabel,
     },
   ] = splitFieldProps<FormInputDateValue, FormInputDateProps>(props);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -115,7 +117,7 @@ export function FormInputDate(props: FormInputDateProps) {
               )}
             >
               <CalendarIcon className="size-4" />
-              <span id={`${ids.id}-value`}>{label || placeholder}</span>
+              <span id={`${ids.id}-value`}>{label || (placeholder ?? t("date.placeholder"))}</span>
             </Button>
           </PopoverTrigger>
           <PopoverContent align="start" className="w-auto p-0">
@@ -166,7 +168,7 @@ export function FormInputDate(props: FormInputDateProps) {
               <div className="flex items-center gap-2 border-t p-3">
                 <Input
                   type="time"
-                  aria-label={timeLabel}
+                  aria-label={timeLabel ?? t("date.time")}
                   disabled={!single}
                   value={single ? clockTime(single) : ""}
                   onChange={(event) => {
@@ -186,14 +188,20 @@ export function FormInputDate(props: FormInputDateProps) {
                     controlProps.onBlur();
                   }}
                 >
-                  Done
+                  {t("date.done")}
                 </Button>
               </div>
             )}
           </PopoverContent>
         </Popover>
         {clearable && hasValue && !locked && (
-          <Button type="button" variant="ghost" size="icon" aria-label="Clear date" onClick={clear}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={t("date.clear")}
+            onClick={clear}
+          >
             <XIcon />
           </Button>
         )}

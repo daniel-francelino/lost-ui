@@ -59,6 +59,7 @@ writeFileSync(
     'export { useIsDark } from "./lib/use-is-dark";',
     'export * from "./ui";',
     'export * from "./effects";',
+    'export * from "./i18n";',
     "",
   ].join("\n"),
 );

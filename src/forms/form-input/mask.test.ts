@@ -20,6 +20,11 @@ describe("applyMask", () => {
     expect(applyMask("1a2b3", "##/##").text).toBe("12/3");
   });
 
+  it("does not add a literal for characters that no slot accepts", () => {
+    expect(applyMask("12b", "(##) ###").text).toBe("(12");
+    expect(applyMask("(12)", "(##) ###").text).toBe("(12)");
+  });
+
   it("stops when the mask is full", () => {
     expect(applyMask("123456", "##/##").text).toBe("12/34");
   });

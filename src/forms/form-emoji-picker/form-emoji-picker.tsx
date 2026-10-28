@@ -3,6 +3,7 @@ import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 import { SmileIcon, XIcon } from "lucide-react";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { FormField } from "../form-field";
@@ -23,15 +24,9 @@ export type FormEmojiPickerProps = FieldProps<string> & {
  * Needs the optional peer `emoji-picker-react`.
  */
 export function FormEmojiPicker(props: FormEmojiPickerProps) {
-  const [
-    fieldProps,
-    {
-      placeholder = "Pick an emoji",
-      searchPlaceholder = "Search emoji",
-      clearable = false,
-      pickerProps,
-    },
-  ] = splitFieldProps<string, FormEmojiPickerProps>(props);
+  const { t } = useLostTranslation();
+  const [fieldProps, { placeholder, searchPlaceholder, clearable = false, pickerProps }] =
+    splitFieldProps<string, FormEmojiPickerProps>(props);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const field = useField<string>(fieldProps, {
     fallback: "",
@@ -71,7 +66,9 @@ export function FormEmojiPicker(props: FormEmojiPickerProps) {
               )}
             >
               {field.value ? null : <SmileIcon className="size-4" />}
-              <span id={`${ids.id}-value`}>{field.value || placeholder}</span>
+              <span id={`${ids.id}-value`}>
+                {field.value || (placeholder ?? t("emoji.placeholder"))}
+              </span>
             </Button>
           </PopoverTrigger>
           <PopoverContent align="start" className="w-auto border-0 p-0">
@@ -83,7 +80,7 @@ export function FormEmojiPicker(props: FormEmojiPickerProps) {
               width={320}
               height={380}
               {...pickerProps}
-              searchPlaceholder={searchPlaceholder}
+              searchPlaceholder={searchPlaceholder ?? t("emoji.searchPlaceholder")}
               onEmojiClick={(emoji) => {
                 field.setValue(emoji.emoji);
                 setOpen(false);
@@ -97,7 +94,7 @@ export function FormEmojiPicker(props: FormEmojiPickerProps) {
             type="button"
             variant="ghost"
             size="icon"
-            aria-label="Clear emoji"
+            aria-label={t("emoji.clear")}
             onClick={() => field.setValue("")}
           >
             <XIcon />

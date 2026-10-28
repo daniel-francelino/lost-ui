@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ComponentProps } from "react";
 import { MinusIcon, PlusIcon } from "lucide-react";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { FormField } from "../form-field";
@@ -34,6 +35,7 @@ function show(value: number | null) {
 }
 
 export function FormInputNumber(props: FormInputNumberProps) {
+  const { t } = useLostTranslation();
   const [fieldProps, { min, max, step = 1, showControls = true, onFocus, onBlur, ...rest }] =
     splitFieldProps<number | null, FormInputNumberProps>(props);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -72,7 +74,7 @@ export function FormInputNumber(props: FormInputNumberProps) {
             type="button"
             variant="outline"
             size="icon"
-            aria-label="Decrement"
+            aria-label={t("number.decrement")}
             disabled={locked || (min !== undefined && (field.value ?? 0) <= min)}
             onClick={() => bump(-1)}
             className="shrink-0"
@@ -131,7 +133,7 @@ export function FormInputNumber(props: FormInputNumberProps) {
             type="button"
             variant="outline"
             size="icon"
-            aria-label="Increment"
+            aria-label={t("number.increment")}
             disabled={locked || (max !== undefined && (field.value ?? 0) >= max)}
             onClick={() => bump(1)}
             className="shrink-0"

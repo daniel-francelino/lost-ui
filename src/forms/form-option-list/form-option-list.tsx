@@ -2,6 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { CheckIcon } from "lucide-react";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import type { FieldItem } from "../lib/items";
 
 export type FormOptionListProps = {
@@ -28,17 +29,19 @@ export function FormOptionList({
   selected,
   activeIndex = -1,
   multiple = false,
-  emptyText = "No results",
+  emptyText,
   className,
   onSelect,
   onActiveChange,
   "aria-label": ariaLabel,
   listProps,
 }: FormOptionListProps) {
+  const { t } = useLostTranslation();
+
   if (items.length === 0) {
     return (
       <div role="status" className="px-2 py-3 text-center text-sm text-muted-foreground">
-        {emptyText}
+        {emptyText ?? t("common.noResults")}
       </div>
     );
   }

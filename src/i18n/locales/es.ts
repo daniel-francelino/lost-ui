@@ -1,0 +1,95 @@
+import type { Messages } from "./en";
+
+export const es: Messages = {
+  common: {
+    close: "Cerrar",
+    loading: "Cargando",
+    search: "Buscar",
+    noResults: "Sin resultados",
+  },
+  form: {
+    submit: "Enviar",
+    reset: "Restablecer",
+  },
+  inputMenu: {
+    create: "Crear “{{query}}”",
+  },
+  selectMenu: {
+    placeholder: "Seleccionar…",
+    searchPlaceholder: "Buscar…",
+    selected: "{{count}} seleccionados",
+  },
+  date: {
+    placeholder: "Elegir una fecha",
+    clear: "Borrar fecha",
+    time: "Hora",
+    done: "Listo",
+  },
+  number: {
+    increment: "Aumentar",
+    decrement: "Disminuir",
+  },
+  phone: {
+    placeholder: "Número de teléfono",
+    countryLabel: "Prefijo del país",
+    searchPlaceholder: "Buscar un país",
+  },
+  country: {
+    placeholder: "Buscar un país",
+  },
+  emoji: {
+    placeholder: "Elegir un emoji",
+    searchPlaceholder: "Buscar emoji",
+    clear: "Borrar emoji",
+  },
+  color: {
+    pick: "Elegir un color",
+    swatches: "Muestras",
+    use: "Usar {{color}}",
+  },
+  file: {
+    dropzone: "Suelta los archivos aquí o haz clic para elegirlos",
+    remove: "Quitar {{name}}",
+  },
+  tags: {
+    remove: "Quitar {{tag}}",
+  },
+  breadcrumb: {
+    more: "Más",
+  },
+  carousel: {
+    previous: "Diapositiva anterior",
+    next: "Diapositiva siguiente",
+  },
+  pagination: {
+    previous: "Ir a la página anterior",
+    previousLabel: "Anterior",
+    nextLabel: "Siguiente",
+    next: "Ir a la página siguiente",
+    more: "Más páginas",
+  },
+  sidebar: {
+    toggle: "Mostrar u ocultar la barra lateral",
+  },
+  rules: {
+    required: "Este campo es obligatorio",
+    requiredIf: "Este campo es obligatorio",
+    minLength: "Usa al menos {{limit}} caracteres",
+    maxLength: "Usa como máximo {{limit}} caracteres",
+    minItems: "Elige al menos {{limit}} elementos",
+    maxItems: "Elige como máximo {{limit}} elementos",
+    min: "Debe ser al menos {{limit}}",
+    max: "Debe ser como máximo {{limit}}",
+    between: "Debe estar entre {{min}} y {{max}}",
+    integer: "Debe ser un número entero",
+    email: "Introduce un correo electrónico válido",
+    url: "Introduce una URL válida",
+    pattern: "Formato no válido",
+    oneOf: "Elige una opción válida",
+    matches: "Los valores no coinciden",
+    minDate: "Elige {{limit}} o una fecha posterior",
+    maxDate: "Elige {{limit}} o una fecha anterior",
+    fileSize: "Cada archivo debe pesar como máximo {{limit}}",
+    fileType: "Tipo de archivo no permitido",
+  },
+};

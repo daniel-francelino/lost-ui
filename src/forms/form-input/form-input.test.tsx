@@ -325,8 +325,8 @@ describe("FormInput", () => {
       const input = screen.getByLabelText("Phone") as HTMLInputElement;
       await user.type(input, "9", { initialSelectionStart: 3, initialSelectionEnd: 3 });
 
-      expect(input).toHaveValue("(19) 18765");
-      expect(input.selectionStart).toBe(4);
+      expect(input).toHaveValue("(11) 99876-5");
+      expect(input.selectionStart).toBe(6);
     });
 
     it("keeps only the typed characters in the value with unmask", async () => {

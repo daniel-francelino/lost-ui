@@ -54,6 +54,10 @@
     "./forms/*": {
       "types": "./dist/forms/*/index.d.ts",
       "import": "./dist/forms/*/index.js"
+    },
+    "./i18n": {
+      "types": "./dist/i18n/index.d.ts",
+      "import": "./dist/i18n/index.js"
     }
   },
   "scripts": {
@@ -184,7 +188,9 @@
     "@radix-ui/react-tooltip": "^1.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "i18next": "^26.5.11",
     "lucide-react": "^0.575.0",
+    "react-i18next": "^17.1.9",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {

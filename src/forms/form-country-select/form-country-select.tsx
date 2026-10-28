@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 
 import { FormInputMenu, type FormInputMenuProps } from "../form-input-menu";
 import { getCountries, type Country } from "../lib/countries";
@@ -17,9 +18,10 @@ export type FormCountrySelectProps = Omit<FormInputMenuProps, "items" | "creatab
 export function FormCountrySelect({
   countries,
   locale,
-  placeholder = "Search a country",
+  placeholder,
   ...props
 }: FormCountrySelectProps) {
+  const { t } = useLostTranslation();
   const items = useMemo(
     () =>
       (countries ?? getCountries(locale)).map((country) => ({
@@ -30,5 +32,7 @@ export function FormCountrySelect({
     [countries, locale],
   );
 
-  return <FormInputMenu {...props} placeholder={placeholder} items={items} />;
+  return (
+    <FormInputMenu {...props} placeholder={placeholder ?? t("country.placeholder")} items={items} />
+  );
 }

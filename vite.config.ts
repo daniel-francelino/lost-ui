@@ -40,6 +40,7 @@ export default defineConfig({
         "ui/index": resolve(root, "src/ui/index.ts"),
         "charts/index": resolve(root, "src/charts/index.ts"),
         "forms/index": resolve(root, "src/forms/index.ts"),
+        "i18n/index": resolve(root, "src/i18n/index.ts"),
         ...componentEntries("effects"),
         ...componentEntries("ui"),
         ...componentEntries("charts"),

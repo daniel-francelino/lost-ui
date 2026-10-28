@@ -2,6 +2,7 @@ import { useLayoutEffect, useMemo, useRef, type ComponentProps, type ReactNode }
 import { LoaderCircle } from "lucide-react";
 
 import { cn } from "../../lib/cn";
+import { useLostTranslation } from "../../i18n/use-lost-translation";
 import { Input } from "../../ui/input";
 import { FormField } from "../form-field";
 import { fieldControlSize, type FieldProps } from "../lib/field-props";
@@ -28,6 +29,7 @@ export type FormInputProps = FieldProps<string> &
   };
 
 export function FormInput(props: FormInputProps) {
+  const { t } = useLostTranslation();
   const [
     fieldProps,
     {
@@ -103,7 +105,7 @@ export function FormInput(props: FormInputProps) {
         {(trailing || loading) && (
           <span className="absolute right-3 flex items-center text-muted-foreground">
             {loading ? (
-              <LoaderCircle aria-label="Loading" className="size-4 animate-spin" />
+              <LoaderCircle aria-label={t("common.loading")} className="size-4 animate-spin" />
             ) : (
               trailing
             )}

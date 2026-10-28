@@ -104,7 +104,29 @@ import { Form, FormInput, rules } from "lost-ui/forms";
 </Form>;
 ```
 
-Helpers in `rules`: `required`, `minLength`, `maxLength`, `min`, `max`, `email`, `url`, `pattern`, `oneOf`, `matches`. Length and format helpers pass on an empty value, so they combine with `required` instead of repeating it. `patterns` (also passed as the second argument of every rule) holds `email`, `url`, `date`, `time`, `fulltime`, `hexColor`, `hexaColor`, `hexOrHexaColor`, `rgbColor`, `integer`, `number`.
+Helpers in `rules` (a rule with no message argument writes its message in the current language, see [i18n.md](i18n.md)):
+
+| Group       | Rules                                                                                         |
+| ----------- | --------------------------------------------------------------------------------------------- |
+| Presence    | `required`, `requiredIf(condition)`                                                           |
+| Text/lists  | `minLength`, `maxLength` (characters of a text, items of a list), `minItems`, `maxItems`      |
+| Numbers     | `min`, `max`, `between`, `integer`                                                            |
+| Format      | `email`, `url`, `pattern`, `oneOf` (also a list whose items are all allowed), `matches`       |
+| Dates       | `minDate`, `maxDate` (a `Date`, or both ends of a `{ from, to }` range)                       |
+| Files       | `fileSize(bytes)`, `fileType(accept)` for a `File[]`                                          |
+| Combinators | `when(condition, rule)`, `debounce(rule, delay)` for a request that must not fire on each key |
+
+Length, number, date, file and format helpers pass on an empty value, so they combine with `required` instead of repeating it. A phone number is checked with `isValidPhone` from `lost-ui/forms/form-input-phone`.
+
+```tsx
+rules={[
+  rules.required(),                                      // default message, in the language set
+  rules.requiredIf(() => business),                      // only while "business" is on
+  rules.debounce(async (value) => (await isFree(value)) || "Already registered", 400),
+]}
+```
+
+`debounce` keeps a timer, so make one per field and do not share it. Rules read the language when they run, so a field already on screen shows the new language at its next validation. `patterns` (also passed as the second argument of every rule) holds `email`, `url`, `date`, `time`, `fulltime`, `hexColor`, `hexaColor`, `hexOrHexaColor`, `rgbColor`, `integer`, `number`.
 
 Calling the form from code:
 
@@ -113,6 +135,29 @@ const form = useRef<FormHandle>(null);
 await form.current?.validate(); // true or false, focuses the first invalid field
 form.current?.resetValidation();
 ```
+
+### Masks
+
+`FormInput` takes a `mask`, after Quasar's `QInput`:
+
+```tsx
+<FormInput label="Phone" mask="(##) #####-####" />
+<FormInput label="CPF or CNPJ" mask={["###.###.###-##", "##.###.###/####-##"]} />
+<FormInput label="Plate" mask="AAA-#X##" unmask />
+<FormInput
+  mask="#HHHHHH"
+  maskTokens={{ H: { pattern: /[0-9a-f]/i, transform: (char) => char.toUpperCase() } }}
+/>
+```
+
+| Slot | Accepts             |     | Slot | Accepts                       |
+| ---- | ------------------- | --- | ---- | ----------------------------- |
+| `#`  | a digit             |     | `A`  | a letter, in upper case       |
+| `S`  | a letter            |     | `a`  | a letter, in lower case       |
+| `N`  | a letter or a digit |     | `X`  | a letter or digit, upper case |
+|      |                     |     | `x`  | a letter or digit, lower case |
+
+Any other character is a literal; `` before a slot character makes it a literal. `maskTokens` adds slots or replaces one. An array of masks uses the shortest one that holds everything typed. By default the value keeps the literals (`(11) 98765-4321`); with `unmask` the value is only what was typed (`11987654321`), the input still shows the mask, and a `name` is submitted without the literals. Rules run on the value, so with `unmask` they see the unmasked text. `applyMask` and `unmaskValue` are exported for use outside the field.
 
 ## 6. FormBuilder
 
