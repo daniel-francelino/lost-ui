@@ -31,6 +31,6 @@ export const proseClasses = [
   "[&_th]:border [&_th]:bg-muted [&_th]:p-2 [&_th]:text-left [&_th]:font-medium",
   "[&_td]:border [&_td]:p-2 [&_td]:align-top",
   "[&_.selectedCell]:bg-accent",
-  "[&_p.is-editor-empty:first-child]:before:pointer-events-none [&_p.is-editor-empty:first-child]:before:float-left [&_p.is-editor-empty:first-child]:before:h-0 [&_p.is-editor-empty:first-child]:before:text-muted-foreground [&_p.is-editor-empty:first-child]:before:content-[attr(data-placeholder)]",
+  "[&_p.is-editor-empty:first-child]:before:pointer-events-none [&_p.is-editor-empty:first-child]:before:float-left [&_p.is-editor-empty:first-child]:before:h-0 [&_p.is-editor-empty:first-child]:before:text-muted-foreground [&_p.is-editor-empty:first-child]:before:opacity-60 [&_p.is-editor-empty:first-child]:before:content-[attr(data-placeholder)]",
   "[&_.is-empty]:before:pointer-events-none",
 ].join(" ");
