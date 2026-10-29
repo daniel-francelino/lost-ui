@@ -73,6 +73,7 @@ export const en = {
       toggle: { title: "Toggle", description: "Hide content under a line" },
       table: { title: "Table", description: "Rows and columns" },
       image: { title: "Image", description: "Upload an image" },
+      file: { title: "File", description: "Attach a document" },
     },
     bubble: {
       label: "Text formatting",
@@ -114,6 +115,7 @@ export const en = {
       toggleHeader: "Header row",
       deleteTable: "Delete table",
     },
+    upload: { uploading: "Uploading {{name}}…", failed: "Could not upload {{name}}", dismiss: "Dismiss", download: "Open {{name}}" },
     toggleOpen: "Expand",
     toggleClose: "Collapse",
     uploadFailed: "The image could not be uploaded.",

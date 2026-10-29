@@ -265,7 +265,7 @@ describe("RichTextEditor", () => {
     fireEvent.change(container.querySelector("[data-slot='rich-text-editor-image-input']")!, {
       target: { files: [new File(["x"], "a.png", { type: "image/png" })] },
     });
-    await waitFor(() => expect(onUploadError).toHaveBeenCalledWith(failure));
+    await waitFor(() => expect(onUploadError).toHaveBeenCalledWith(failure, expect.any(File)));
   });
 
   it("has a toolbar for the selected text that formats it", async () => {

@@ -75,6 +75,7 @@ export const es: Messages = {
       toggle: { title: "Desplegable", description: "Oculta contenido bajo una línea" },
       table: { title: "Tabla", description: "Filas y columnas" },
       image: { title: "Imagen", description: "Sube una imagen" },
+      file: { title: "Archivo", description: "Adjunta un documento" },
     },
     bubble: {
       label: "Formato del texto",
@@ -116,6 +117,7 @@ export const es: Messages = {
       toggleHeader: "Fila de encabezado",
       deleteTable: "Eliminar tabla",
     },
+    upload: { uploading: "Subiendo {{name}}…", failed: "No se pudo subir {{name}}", dismiss: "Descartar", download: "Abrir {{name}}" },
     toggleOpen: "Expandir",
     toggleClose: "Contraer",
     uploadFailed: "No se pudo subir la imagen.",

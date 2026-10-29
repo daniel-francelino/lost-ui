@@ -21,8 +21,25 @@ import { useLostTranslation } from "../../../i18n/use-lost-translation";
 import { Button } from "../../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 
+/** The tools of the toolbar over the selected text. */
+export type EditorBubbleTool =
+  "bold" | "italic" | "underline" | "strike" | "code" | "highlight" | "color" | "link";
+
+export const editorBubbleTools: readonly EditorBubbleTool[] = [
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "code",
+  "highlight",
+  "color",
+  "link",
+];
+
 export type EditorBubbleMenuProps = {
   editor: Editor | null;
+  /** Which of the default tools to show, in their usual order. All of them by default. */
+  tools?: readonly EditorBubbleTool[] | undefined;
   /** Replaces the default tools: your own buttons for the selected text. */
   children?: ReactNode;
 };
@@ -65,7 +82,7 @@ function Tool({
 }
 
 /** The toolbar that floats over the selected text: bold, italic, underline, strike, code, highlight, colour, link. */
-export function EditorBubbleMenu({ editor, children }: EditorBubbleMenuProps) {
+export function EditorBubbleMenu({ editor, tools, children }: EditorBubbleMenuProps) {
   const { t } = useLostTranslation();
   const [linking, setLinking] = useState(false);
   const [url, setUrl] = useState("");
@@ -85,6 +102,8 @@ export function EditorBubbleMenu({ editor, children }: EditorBubbleMenuProps) {
   });
 
   if (!editor || !state) return null;
+
+  const has = (tool: EditorBubbleTool) => !tools || tools.includes(tool);
 
   const applyLink = () => {
     const href = url.trim();
@@ -137,101 +156,116 @@ export function EditorBubbleMenu({ editor, children }: EditorBubbleMenuProps) {
           </form>
         ) : (
           <>
-            <Tool
-              label={t("editor.bubble.bold")}
-              active={state.bold}
-              onClick={() => editor.chain().focus().toggleBold().run()}
-            >
-              <BoldIcon />
-            </Tool>
-            <Tool
-              label={t("editor.bubble.italic")}
-              active={state.italic}
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-            >
-              <ItalicIcon />
-            </Tool>
-            <Tool
-              label={t("editor.bubble.underline")}
-              active={state.underline}
-              onClick={() => editor.chain().focus().toggleUnderline().run()}
-            >
-              <UnderlineIcon />
-            </Tool>
-            <Tool
-              label={t("editor.bubble.strike")}
-              active={state.strike}
-              onClick={() => editor.chain().focus().toggleStrike().run()}
-            >
-              <StrikethroughIcon />
-            </Tool>
-            <Tool
-              label={t("editor.bubble.code")}
-              active={state.code}
-              onClick={() => editor.chain().focus().toggleCode().run()}
-            >
-              <CodeIcon />
-            </Tool>
-            <Tool
-              label={t("editor.bubble.highlight")}
-              active={state.highlight}
-              onClick={() => editor.chain().focus().toggleHighlight().run()}
-            >
-              <HighlighterIcon />
-            </Tool>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  aria-label={t("editor.bubble.textColor")}
-                  title={t("editor.bubble.textColor")}
-                  onMouseDown={(event) => event.preventDefault()}
-                  className="size-8 [&_svg]:size-4"
-                >
-                  <PaletteIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="flex w-auto gap-1 p-1.5"
-                onOpenAutoFocus={(e) => e.preventDefault()}
-              >
-                {colors.map(({ key, value }) => (
-                  <button
-                    key={key}
-                    type="button"
-                    aria-label={t(`editor.bubble.${key}` as LostKey)}
-                    title={t(`editor.bubble.${key}` as LostKey)}
-                    onClick={() => {
-                      if (value) editor.chain().focus().setColor(value).run();
-                      else editor.chain().focus().unsetColor().run();
-                    }}
-                    className="size-6 rounded-full border outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                    style={{ background: value ?? "var(--foreground)" }}
-                  />
-                ))}
-              </PopoverContent>
-            </Popover>
-            {state.link ? (
+            {has("bold") && (
               <Tool
-                label={t("editor.bubble.removeLink")}
-                active
-                onClick={() => editor.chain().focus().extendMarkRange("link").unsetLink().run()}
+                label={t("editor.bubble.bold")}
+                active={state.bold}
+                onClick={() => editor.chain().focus().toggleBold().run()}
               >
-                <UnlinkIcon />
-              </Tool>
-            ) : (
-              <Tool
-                label={t("editor.bubble.link")}
-                onClick={() => {
-                  setUrl(state.href);
-                  setLinking(true);
-                }}
-              >
-                <LinkIcon />
+                <BoldIcon />
               </Tool>
             )}
+            {has("italic") && (
+              <Tool
+                label={t("editor.bubble.italic")}
+                active={state.italic}
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+              >
+                <ItalicIcon />
+              </Tool>
+            )}
+            {has("underline") && (
+              <Tool
+                label={t("editor.bubble.underline")}
+                active={state.underline}
+                onClick={() => editor.chain().focus().toggleUnderline().run()}
+              >
+                <UnderlineIcon />
+              </Tool>
+            )}
+            {has("strike") && (
+              <Tool
+                label={t("editor.bubble.strike")}
+                active={state.strike}
+                onClick={() => editor.chain().focus().toggleStrike().run()}
+              >
+                <StrikethroughIcon />
+              </Tool>
+            )}
+            {has("code") && (
+              <Tool
+                label={t("editor.bubble.code")}
+                active={state.code}
+                onClick={() => editor.chain().focus().toggleCode().run()}
+              >
+                <CodeIcon />
+              </Tool>
+            )}
+            {has("highlight") && (
+              <Tool
+                label={t("editor.bubble.highlight")}
+                active={state.highlight}
+                onClick={() => editor.chain().focus().toggleHighlight().run()}
+              >
+                <HighlighterIcon />
+              </Tool>
+            )}
+            {has("color") && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t("editor.bubble.textColor")}
+                    title={t("editor.bubble.textColor")}
+                    onMouseDown={(event) => event.preventDefault()}
+                    className="size-8 [&_svg]:size-4"
+                  >
+                    <PaletteIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="flex w-auto gap-1 p-1.5"
+                  onOpenAutoFocus={(e) => e.preventDefault()}
+                >
+                  {colors.map(({ key, value }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      aria-label={t(`editor.bubble.${key}` as LostKey)}
+                      title={t(`editor.bubble.${key}` as LostKey)}
+                      onClick={() => {
+                        if (value) editor.chain().focus().setColor(value).run();
+                        else editor.chain().focus().unsetColor().run();
+                      }}
+                      className="size-6 rounded-full border outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                      style={{ background: value ?? "var(--foreground)" }}
+                    />
+                  ))}
+                </PopoverContent>
+              </Popover>
+            )}
+            {has("link") &&
+              (state.link ? (
+                <Tool
+                  label={t("editor.bubble.removeLink")}
+                  active
+                  onClick={() => editor.chain().focus().extendMarkRange("link").unsetLink().run()}
+                >
+                  <UnlinkIcon />
+                </Tool>
+              ) : (
+                <Tool
+                  label={t("editor.bubble.link")}
+                  onClick={() => {
+                    setUrl(state.href);
+                    setLinking(true);
+                  }}
+                >
+                  <LinkIcon />
+                </Tool>
+              ))}
           </>
         )}
       </div>

@@ -2,6 +2,7 @@ import type { Editor, Range } from "@tiptap/core";
 import {
   ChevronRightIcon,
   CodeIcon,
+  FileIcon,
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
@@ -34,6 +35,7 @@ export const EditorBlock = {
   Toggle: "toggle",
   Table: "table",
   Image: "image",
+  File: "file",
 } as const;
 
 export type EditorBlock = (typeof EditorBlock)[keyof typeof EditorBlock];
@@ -67,6 +69,7 @@ export const turnInto: Record<EditorBlock, (editor: Editor) => void> = {
   table: (editor) =>
     void editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
   image: () => {},
+  file: () => {},
 };
 
 const icons: Record<EditorBlock, ReactNode> = {
@@ -84,6 +87,7 @@ const icons: Record<EditorBlock, ReactNode> = {
   toggle: <ChevronRightIcon />,
   table: <TableIcon />,
   image: <ImageIcon />,
+  file: <FileIcon />,
 };
 
 const keywords: Record<EditorBlock, string[]> = {
@@ -101,21 +105,24 @@ const keywords: Record<EditorBlock, string[]> = {
   toggle: ["collapse", "details", "expand"],
   table: ["grid", "rows", "columns"],
   image: ["picture", "photo", "upload"],
+  file: ["pdf", "document", "attachment", "upload"],
 };
 
 /**
- * The blocks of the slash menu. `onImage` is called to pick and upload an image; without it the
- * image block is left out.
+ * The blocks of the slash menu. `onImage` and `onFile` are called to pick and upload a file; without
+ * them the image and file blocks are left out.
  */
 export function createSlashItems(
   t: Translate,
   options: {
     onImage?: ((range: Range) => void) | undefined;
+    onFile?: ((range: Range) => void) | undefined;
     blocks?: EditorBlock[] | undefined;
   } = {},
 ): SlashItem[] {
   const all = Object.values(EditorBlock).filter(
-    (id) => id !== EditorBlock.Image || options.onImage,
+    (id) =>
+      (id !== EditorBlock.Image || options.onImage) && (id !== EditorBlock.File || options.onFile),
   );
   const ids = options.blocks ? all.filter((id) => options.blocks?.includes(id)) : all;
 
@@ -128,6 +135,7 @@ export function createSlashItems(
     run: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
       if (id === EditorBlock.Image) options.onImage?.(range);
+      else if (id === EditorBlock.File) options.onFile?.(range);
       else turnInto[id](editor);
     },
   }));

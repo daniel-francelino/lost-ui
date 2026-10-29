@@ -17,7 +17,11 @@ import {
 } from "../../ui/dropdown-menu";
 import { EditorBlock, turnInto } from "../editor-slash-menu/slash-items";
 
-export type EditorBlockHandleProps = { editor: Editor | null };
+export type EditorBlockHandleProps = {
+  editor: Editor | null;
+  /** The blocks the block can be turned into. All the text blocks by default. */
+  blocks?: readonly EditorBlock[] | undefined;
+};
 
 const turnIntoBlocks = [
   EditorBlock.Paragraph,
@@ -35,7 +39,7 @@ const turnIntoBlocks = [
  * The grip beside each block: drag it to move the block, click it for the menu (turn into,
  * duplicate, delete), and the plus beside it adds a block below.
  */
-export function EditorBlockHandle({ editor }: EditorBlockHandleProps) {
+export function EditorBlockHandle({ editor, blocks }: EditorBlockHandleProps) {
   const { t } = useLostTranslation();
   const current = useRef<{ node: ProseMirrorNode | null; pos: number }>({ node: null, pos: -1 });
 
@@ -114,11 +118,13 @@ export function EditorBlockHandle({ editor }: EditorBlockHandleProps) {
             <DropdownMenuLabel className="text-xs text-muted-foreground">
               {t("editor.handle.turnInto")}
             </DropdownMenuLabel>
-            {turnIntoBlocks.map((id) => (
-              <DropdownMenuItem key={id} onSelect={() => turnInto[id](editor)}>
-                {t(`editor.blocks.${id}.title` as LostKey)}
-              </DropdownMenuItem>
-            ))}
+            {turnIntoBlocks
+              .filter((id) => !blocks || blocks.includes(id))
+              .map((id) => (
+                <DropdownMenuItem key={id} onSelect={() => turnInto[id](editor)}>
+                  {t(`editor.blocks.${id}.title` as LostKey)}
+                </DropdownMenuItem>
+              ))}
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={duplicate}>
               <CopyIcon aria-hidden="true" />

@@ -75,6 +75,7 @@ export const pt: Messages = {
       toggle: { title: "Alternador", description: "Esconda conteúdo sob uma linha" },
       table: { title: "Tabela", description: "Linhas e colunas" },
       image: { title: "Imagem", description: "Envie uma imagem" },
+      file: { title: "Arquivo", description: "Anexe um documento" },
     },
     bubble: {
       label: "Formatação do texto",
@@ -116,6 +117,7 @@ export const pt: Messages = {
       toggleHeader: "Linha de cabeçalho",
       deleteTable: "Excluir tabela",
     },
+    upload: { uploading: "Enviando {{name}}…", failed: "Não foi possível enviar {{name}}", dismiss: "Dispensar", download: "Abrir {{name}}" },
     toggleOpen: "Expandir",
     toggleClose: "Recolher",
     uploadFailed: "Não foi possível enviar a imagem.",
