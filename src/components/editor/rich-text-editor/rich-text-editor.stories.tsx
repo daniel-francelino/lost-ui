@@ -138,3 +138,38 @@ export const YourOwnExtensions: Story = {
 export const WithoutToolbarsAndGrip: Story = {
   args: { bubbleMenu: false, blockHandle: false, defaultValue: "<p>Just writing.</p>" },
 };
+
+/** The set of the planning text of an app: nothing else can be written, by the menu or by paste. */
+export const ClosedSet: Story = {
+  args: {
+    allow: {
+      nodes: ["heading", "bulletList", "orderedList", "image"],
+      marks: ["bold", "italic"],
+    },
+    bubbleMenu: { tools: ["bold", "italic"] },
+    onUploadImage: async (file) => URL.createObjectURL(file),
+    maxImages: 3,
+    onMaxImages: fn(),
+    defaultValue:
+      "<p>Select a word: only bold and italic. Paste a quote or a table: it becomes text.</p>",
+  },
+};
+
+/** Images and files stored by id: the document keeps the id, the editor asks for an address to show. */
+export const WithStoredFiles: Story = {
+  args: {
+    referenceAttributes: ["mediaVersionId"],
+    onUploadImage: async (file) => ({
+      src: `media/${file.name}`,
+      attrs: { mediaVersionId: `mv-${file.name}` },
+    }),
+    onUploadFile: async (file) => ({
+      src: `media/${file.name}`,
+      attrs: { mediaVersionId: `mv-${file.name}` },
+    }),
+    resolveImageSrc: async () => "https://picsum.photos/seed/lost-ui/640/280",
+    resolveFileHref: async (attrs) => `https://example.com/${attrs.src}`,
+    onUploadError: fn(),
+    defaultValue: "<p>Drop or paste images and files here, or press <code>/</code>.</p>",
+  },
+};

@@ -5,7 +5,7 @@ import { translate } from "../../../i18n";
 import { createEditorExtensions } from "../rich-text-editor/extensions";
 import { createSlashItems, EditorBlock, filterSlashItems, turnInto } from "./slash-items";
 
-const items = createSlashItems(translate, { onImage: () => {} });
+const items = createSlashItems(translate, { onImage: () => {}, onFile: () => {} });
 
 function editorWith(html: string) {
   return new Editor({
@@ -27,6 +27,19 @@ describe("slash items", () => {
 
   it("leaves the image block out when nothing can upload", () => {
     expect(createSlashItems(translate).map((item) => item.id)).not.toContain("image");
+  });
+
+  it("leaves the file block out unless something can upload files, and calls onFile when it runs", () => {
+    expect(createSlashItems(translate, { onImage: () => {} }).map((item) => item.id)).not.toContain(
+      "file",
+    );
+    const onFile = vi.fn();
+    const file = createSlashItems(translate, { onFile }).find((item) => item.id === "file")!;
+    expect(file.title).toBe("File");
+    const editor = editorWith("<p>/</p>");
+    file.run({ editor, range: { from: 1, to: 2 } });
+    expect(onFile).toHaveBeenCalledOnce();
+    editor.destroy();
   });
 
   it("keeps only the blocks it is told to, in their order", () => {

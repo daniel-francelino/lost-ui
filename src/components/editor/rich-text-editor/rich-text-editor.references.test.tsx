@@ -1,9 +1,12 @@
+import { composeStories } from "@storybook/react-vite";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { RichTextEditor, type RichTextEditorHandle } from "./rich-text-editor";
+import type { EditorImageAttrs } from "./reference";
+import * as stories from "./rich-text-editor.stories";
 
 const textbox = () => screen.getByRole("textbox", { name: "Rich text editor" });
 
@@ -174,8 +177,7 @@ describe("RichTextEditor, images that point to a stored file", () => {
 
   it("shows the address the resolver gives and keeps the stored one", async () => {
     const resolveImageSrc = vi.fn(
-      async (attrs: { mediaVersionId?: unknown }) =>
-        `https://cdn.test/${String(attrs.mediaVersionId)}`,
+      async (attrs: EditorImageAttrs) => `https://cdn.test/${String(attrs.mediaVersionId)}`,
     );
     const ref = createRef<RichTextEditorHandle>();
     render(
@@ -450,5 +452,24 @@ describe("RichTextEditor, uploading images and files", () => {
     );
     expect(onUploadFile).toHaveBeenCalledOnce();
     expect(onUploadImage).toHaveBeenCalledOnce();
+  });
+});
+
+describe("RichTextEditor, the stories of the closed set and of the stored files", () => {
+  it("draws the closed set with the tools of its toolbar", async () => {
+    const { ClosedSet } = composeStories(stories);
+    const ref = createRef<RichTextEditorHandle>();
+    render(<ClosedSet ref={ref} />);
+    const editor = await ready(ref);
+    expect(editor.schema.nodes).not.toHaveProperty("table");
+    expect(editor.schema.nodes).toHaveProperty("image");
+  });
+
+  it("draws the stored files with their file block", async () => {
+    const { WithStoredFiles } = composeStories(stories);
+    const ref = createRef<RichTextEditorHandle>();
+    render(<WithStoredFiles ref={ref} />);
+    const editor = await ready(ref);
+    expect(editor.schema.nodes).toHaveProperty("file");
   });
 });

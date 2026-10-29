@@ -30,7 +30,7 @@ the pieces of an AI chat screen. No SDK needed: messages have the shape of the V
 
 a Notion-style block editor on Tiptap (`/` menu, selection toolbar, block handle, tables, tasks, callouts, toggles). Needs the Tiptap peers; see `references/editor.md`.
 
-`editor-block-handle`, `editor-bubble-menu`, `editor-slash-menu`, `editor-table-bar`, `rich-text-editor`
+`editor-block-handle`, `editor-bubble-menu`, `editor-slash-menu`, `editor-table-bar`, `rich-text-editor`, `rich-text-view`
 
 ## calendar (`@danielsoaresf/lost-ui/calendar`)
 
