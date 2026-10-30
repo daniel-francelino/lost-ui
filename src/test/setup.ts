@@ -54,7 +54,8 @@ const context2d = new Proxy(
 );
 
 HTMLCanvasElement.prototype.getContext = (() => context2d) as never;
-Element.prototype.scrollIntoView = () => {};
+// current Chrome returns a Promise; effects that return it crash React ("destroy is not a function")
+Element.prototype.scrollIntoView = (() => Promise.resolve()) as never;
 
 // ProseMirror measures the selection with ranges; jsdom has no layout, so they measure nothing
 const emptyRect = { x: 0, y: 0, top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 };

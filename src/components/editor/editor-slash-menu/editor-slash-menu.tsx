@@ -26,14 +26,19 @@ export const EditorSlashMenu = forwardRef<EditorSlashMenuHandle, EditorSlashMenu
     const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
     const active = useRef<HTMLButtonElement>(null);
 
-    useEffect(() => setSelected(0), [items]);
+    useEffect(() => {
+      setSelected(0);
+    }, [items]);
 
     useLayoutEffect(() => {
       const rect = clientRect?.();
       if (rect) setPosition({ left: rect.left, top: rect.bottom + 6 });
     }, [clientRect, items]);
 
-    useEffect(() => active.current?.scrollIntoView({ block: "nearest" }), [selected]);
+    // a block body: current Chrome returns a Promise, and React would treat it as a cleanup function
+    useEffect(() => {
+      active.current?.scrollIntoView({ block: "nearest" });
+    }, [selected]);
 
     useImperativeHandle(ref, () => ({
       onKeyDown: ({ event }) => {
